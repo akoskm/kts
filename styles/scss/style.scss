@@ -1,0 +1,17 @@
+html {
+  font-family: 'Roboto', sans-serif;
+
+  body {
+    margin: 0px;
+
+    div.main-container {
+      margin: 20px;
+    }
+
+    div.kts-navbar {
+      .title {
+        text-transform: uppercase;
+      }
+    }
+  }
+}

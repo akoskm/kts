@@ -1,0 +1,4 @@
+log4js logs directory. log4js is not capable of creating new directories.
+I had to place this under version control so you'll always have it but the contents will be ignored because of .gitignore.
+
+Logs are rotated at midnight.

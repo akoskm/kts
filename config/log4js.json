@@ -1,0 +1,12 @@
+{
+  "appenders": [
+    {
+      "type": "console"
+    },
+    {
+      "type": "dateFile",
+      "filename": "logs/kts.log",
+      "pattern": "-yyyy-MM-dd"
+    }
+  ]
+}
