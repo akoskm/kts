@@ -26,7 +26,6 @@ import webpackConfig from './webpack.config';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
-const PORT = 3003;
 const app = express();
 
 // database and schema
@@ -44,6 +43,7 @@ log4js.configure('config/log4js.json');
 const logger = log4js.getLogger();
 
 const config = require('./config').default;
+const PORT = config.port;
 const mongoStore = connectMongo(session);
 const sessionConfig = {
   // according to https://github.com/expressjs/session#resave
@@ -56,9 +56,7 @@ const sessionConfig = {
 };
 
 if (nodeEnv === 'dev') {
-  console.log('loading hmr stuff');
   const compiler = webpack(webpackConfig);
-  console.log(webpackConfig.output.publicPath);
   app.use(webpackDevMiddleware(compiler, {
     noInfo: true,
     publicPath: webpackConfig.output.publicPath

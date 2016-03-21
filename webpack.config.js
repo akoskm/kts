@@ -1,10 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const babelSettings = { presets: ['react', 'es2015'] };
+const config = require('./config').default;
 
-const PORT = parseInt(process.env.PORT, 10) + 1 || 3003;
+const PORT = config.port;
 const HOST = '0.0.0.0';
-const PUBLIC_PATH = `//${HOST}:${PORT}/assets/`;
 
 module.exports = {
   entry: {
@@ -16,8 +16,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    chunkFilename: '[name].js',
-    publicPath: PUBLIC_PATH
+    publicPath: '/'
   },
   module: {
     loaders: [
