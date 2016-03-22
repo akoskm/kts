@@ -4,9 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node ./server.js",
-    "build": "rm -rf dist && babel-node ./node_modules/.bin/webpack --config ./webpack.config.js",
-    "dev": "TARGET=dev webpack-dev-server --progress --colors --hot --inline --history-api-fallback --content-base www",
-    "deploy": "TARGET=build webpack -p -d"
+    "build": "rm -rf dist && babel-node ./node_modules/.bin/webpack --config ./webpack.config.js"
   },
   "keywords": [
     "react",

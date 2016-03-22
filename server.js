@@ -9,41 +9,40 @@ import connectMongo from 'connect-mongo';
 import Sequelize from 'sequelize';
 import passport from 'passport';
 import csrf from 'csurf';
-
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { match, RoutingContext } from 'react-router';
 import log4js from 'log4js';
-
 import CustomStrategy from './strategy-local';
 import { routes } from './routes';
 import { api } from './api';
 import schema from './schema';
 import DataWrapper from './datawrapper';
-
 import webpack from 'webpack';
 import webpackConfig from './webpack.config';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
+// determine environment type
+const nodeEnv = process.env.NODE_ENV || 'dev';
+
+// app configuration
+const config = require('./config').default;
+const PORT = config.port;
+
+// initialize the express app
 const app = express();
 
-// database and schema
+// postgresql connection
 const db = new Sequelize('postgres://kts:kts@localhost/kts');
-app.schema = schema(db);
-app.db = db;
 
-const nodeEnv = process.env.NODE_ENV || 'dev';
+// passpost strategy
 const LocalStrategy = require('passport-local').Strategy;
-
-const publicPath = path.join(__dirname, 'dist');
 
 // logger configuration
 log4js.configure('config/log4js.json');
 const logger = log4js.getLogger();
 
-const config = require('./config').default;
-const PORT = config.port;
 const mongoStore = connectMongo(session);
 const sessionConfig = {
   // according to https://github.com/expressjs/session#resave
@@ -55,17 +54,26 @@ const sessionConfig = {
   cookie: {}
 };
 
+app.schema = schema(db);
+app.db = db;
+
 if (nodeEnv === 'dev') {
   const compiler = webpack(webpackConfig);
   app.use(webpackDevMiddleware(compiler, {
-    noInfo: true,
-    publicPath: webpackConfig.output.publicPath
+    // Dev middleware can't access config, so we provide publicPath
+    publicPath: webpackConfig.output.publicPath,
+
+    // pretty colored output
+    stats: { colors: true },
+
+    // Set to false to display a list of each file that is being bundled.
+    noInfo: true
   }));
 
   app.use(webpackHotMiddleware(compiler));
 }
 
-app.use(express.static(publicPath));
+app.use(express.static(path.join(__dirname, 'dist')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(config.cryptoKey));

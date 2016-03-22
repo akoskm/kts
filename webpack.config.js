@@ -1,15 +1,15 @@
 const path = require('path');
 const webpack = require('webpack');
 const babelSettings = { presets: ['react', 'es2015'] };
-const config = require('./config').default;
-
-const PORT = config.port;
-const HOST = '0.0.0.0';
 
 module.exports = {
+  debug: true,
+  // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
+  devtool: 'cheap-module-eval-source-map',
+  noInfo: true, // set to false to see a list of every file being bundled.
   entry: {
     app: [
-      `webpack-hot-middleware/client?path=//${HOST}:${PORT}/__webpack_hmr`,
+      `webpack-hot-middleware/client`,
       './client-render.js'
     ]
   },
