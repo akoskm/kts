@@ -8,9 +8,6 @@ import type Immutable from 'immutable';
 import User from '../stores/user/User';
 import UserStore from '../stores/user/UserStore';
 
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import MyRawTheme from '../styles/mui-theme';
-
 import Header from './header';
 
 class AppComponent extends React.Component {
@@ -19,12 +16,6 @@ class AppComponent extends React.Component {
     super(props);
     this.state = {
       user: {}
-    };
-  }
-
-  getChildContext() {
-    return {
-      muiTheme: ThemeManager.getMuiTheme(MyRawTheme)
     };
   }
 

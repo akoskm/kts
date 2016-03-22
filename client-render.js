@@ -9,6 +9,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import './styles/scss/style.scss';
 import 'react-flexgrid/lib/flexgrid.css';
+import 'bootstrap/less/bootstrap.less';
 
 injectTapEventPlugin();
 

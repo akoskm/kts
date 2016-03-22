@@ -3,8 +3,10 @@ import $ from 'jquery';
 import { Navigation } from 'react-router';
 import { dispatch } from '../stores/user/UserDispatcher';
 
-import RaisedButton from 'material-ui/lib/raised-button';
-import TextField from 'material-ui/lib/text-field';
+import Button from 'react-bootstrap/lib/Button';
+import Input from 'react-bootstrap/lib/Input';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 
 class SignInComponent extends React.Component {
 
@@ -59,33 +61,29 @@ class SignInComponent extends React.Component {
 
   render() {
     return (
-      <div>
-        <form className='registrationForm' onSubmit={this.handleSubmit}>
-          <div>
-            <TextField
+      <Row>
+        <Col md={3}>
+          <form className='registrationForm' onSubmit={this.handleSubmit}>
+            <Input
               id='email'
-              hintText='Username'
+              placeholder='Username'
               type='text'
               value={this.state.email}
               onChange={this.handleEmailChange}
               errorText={this.state.emailError}
             />
-          </div>
-          <div>
-            <TextField
+            <Input
               id='passw'
-              hintText='Password'
+              placeholder='Password'
               type='password'
               value={this.state.passw}
               onChange={this.handlePassChange}
               errorText={this.state.passwError}
             />
-          </div>
-          <div>
-            <RaisedButton type='submit' label='Log in' secondary/>
-          </div>
-        </form>
-      </div>
+            <Button type='submit' secondary>Log in</Button>
+          </form>
+        </Col>
+      </Row>
     );
   }
 }

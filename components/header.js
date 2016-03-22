@@ -6,19 +6,12 @@ import { Link } from 'react-router';
 
 import $ from 'jquery';
 
-import ThemeManager from 'material-ui/lib/styles/theme-manager';
-import MyRawTheme from '../styles/mui-theme';
-import IconMenu from 'material-ui/lib/menus/icon-menu';
-import IconButton from 'material-ui/lib/icon-button';
-import FontIcon from 'material-ui/lib/font-icon';
-import NavigationExpandMoreIcon from 'material-ui/lib/svg-icons/navigation/expand-more';
-import MenuItem from 'material-ui/lib/menus/menu-item';
-import DropDownMenu from 'material-ui/lib/DropDownMenu';
-import RaisedButton from 'material-ui/lib/raised-button';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
-import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator';
-import ToolbarTitle from 'material-ui/lib/toolbar/toolbar-title';
+import Nav from 'react-bootstrap/lib/Nav';
+import Navbar from 'react-bootstrap/lib/Navbar';
+import Button from 'react-bootstrap/lib/Button';
+import NavItem from 'react-bootstrap/lib/NavItem';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 class HeaderComponent extends React.Component {
 
@@ -79,34 +72,33 @@ class HeaderComponent extends React.Component {
     let userMenu;
     let signUpButton;
     if (username !== 'Sign In') {
-      userMenu =
-      <IconMenu
-        iconButtonElement={
-          <IconButton touch>
-            <NavigationExpandMoreIcon />
-          </IconButton>
-        }
-      >
-        <MenuItem primaryText='Help' />
-        <MenuItem primaryText='Sign Out' onClick={this.signOut} />
-      </IconMenu>;
+      userMenu = (
+        <NavDropdown eventKey={3} title={username} id='basic-nav-dropdown'>
+          <MenuItem eventKey={3.1}>Help</MenuItem>
+          <MenuItem divider />
+          <MenuItem eventKey={3.3} onClick={this.signOut}>Sign Out</MenuItem>
+        </NavDropdown>
+      );
     } else {
-      signUpButton = <RaisedButton onClick={this.goToSignUp} label='Sign Up'/>;
+      signUpButton = (
+        <Nav pullRight>
+          <NavItem onClick={this.goToSignUp}>Sign Up</NavItem>
+          <NavItem primary onClick={this.goToSignIn}>Sign In</NavItem>
+        </Nav>
+      );
     }
     return (
-      <Toolbar
-        className='kts-navbar'
-      >
-        <ToolbarGroup float='left'>
-          <ToolbarTitle className='title' text='KTS Project' />
-        </ToolbarGroup>
-        <ToolbarGroup float='right'>
-          <FontIcon className='muidocs-icon-custom-sort' />
+      <Navbar>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <a href='/'>KTS</a>
+          </Navbar.Brand>
+        </Navbar.Header>
+        <Nav pullRight>
           {userMenu}
-          <RaisedButton primary onClick={this.goToSignIn} label={username}/>
-          {signUpButton}
-        </ToolbarGroup>
-      </Toolbar>
+        </Nav>
+        {signUpButton}
+      </Navbar>
     );
   }
 }

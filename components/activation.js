@@ -1,8 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
 
-import RaisedButton from 'material-ui/lib/raised-button';
-import TextField from 'material-ui/lib/text-field';
+import Button from 'react-bootstrap/lib/Button';
+import Input from 'react-bootstrap/lib/Input';
 
 class ActivationComponent extends React.Component {
 
@@ -42,25 +42,25 @@ class ActivationComponent extends React.Component {
         <p>Hi!</p>
         <form className='activationForm' onSubmit={this.handleSubmit}>
           <div>
-            <TextField
+            <Input
               id='pass'
-              hintText='Password'
+              placeholder='Password'
               type='password'
               value={this.state.pass}
               onChange={this.handlePassChange}
             />
           </div>
           <div>
-            <TextField
+            <Input
               id='repass'
-              hintText='Repeat Password'
+              placeholder='Repeat Password'
               type='password'
               value={this.state.repass}
               onChange={this.handleRePassChange}
             />
           </div>
           <div>
-            <RaisedButton type='submit' label='Activate' secondary/>
+            <Button type='submit' secondary>Activate</Button>
           </div>
         </form>
       </div>
