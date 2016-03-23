@@ -173,7 +173,7 @@ app.get('*', (req, res) => {
 
         <body>
           <div id="app">${markup}</div>
-          <script src="/app.js"></script>
+          <script src="/dist/bundle.js"></script>
         </body>
       </html>
       `);

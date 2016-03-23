@@ -7,16 +7,14 @@ module.exports = {
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
   devtool: 'cheap-module-eval-source-map',
   noInfo: true, // set to false to see a list of every file being bundled.
-  entry: {
-    app: [
-      `webpack-hot-middleware/client`,
-      './client-render.js'
-    ]
-  },
+  entry: [
+    `webpack-hot-middleware/client`,
+    './client-render.js'
+  ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
-    publicPath: '/'
+    filename: 'bundle.js',
+    publicPath: '/dist/'
   },
   module: {
     loaders: [
@@ -49,6 +47,11 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
