@@ -29,7 +29,75 @@ class AboutComponent extends React.Component {
   }
 
   upload() {
-    console.log(this.state.files);
+    let submitForm = function (event, data) {
+      // Create a jQuery object from the form
+      let $form = $(event.target);
+
+      // Serialize the form data
+      let formData = $form.serialize();
+
+      // You should sterilise the file names
+      $.each(data.files, function (key, value) {
+        formData = formData + '&filenames[]=' + value;
+      });
+
+      $.ajax({
+        url: '/api/profile/img',
+        type: 'POST',
+        data: formData,
+        cache: false,
+        dataType: 'json',
+        success(data, textStatus, jqXHR) {
+          if (typeof data.error === 'undefined') {
+            // Success so call function to process the form
+            console.log('SUCCESS: ' + data.success);
+          } else {
+            // Handle errors here
+            console.log('ERRORS: ' + data.error);
+          }
+        },
+        error(jqXHR, textStatus, errorThrown) {
+          // Handle errors here
+          console.log('ERRORS: ' + textStatus);
+        },
+        complete() {
+          // STOP LOADING SPINNER
+        }
+      });
+    };
+
+    let data = new FormData();
+    let files = this.state.files;
+    if (files && files.length > 0) {
+      this.state.files.forEach(function (value, i) {
+        data.append(i, value);
+      });
+      $.ajax({
+        url: '/api/profile/img',
+        type: 'POST',
+        data,
+        cache: false,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        success(data, textStatus, jqXHR) {
+          if (typeof data.error === 'undefined') {
+            // Success so call function to process the form
+            submitForm(event, data);
+          } else {
+            // Handle errors here
+            console.log('ERRORS: ' + data.error);
+          }
+        },
+        error(jqXHR, textStatus, errorThrown) {
+          // Handle errors here
+          console.log('ERRORS: ' + textStatus);
+          // STOP LOADING SPINNER
+        }
+      });
+    } else {
+      alert('nothing to upload!');
+    }
   }
 
   render() {
