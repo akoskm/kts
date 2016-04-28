@@ -1,6 +1,23 @@
 const path = require('path');
 const webpack = require('webpack');
-const babelSettings = { presets: ['react', 'es2015'] };
+const babelSettings = {
+  presets: ['react', 'es2015'],
+  env: {
+    development: {
+      plugins: [
+        ['react-transform', {
+          transforms: [
+            {
+              transform: 'react-transform-hmr',
+              imports: ['react'],
+              locals: ['module']
+            }
+          ]
+        }]
+      ]
+    }
+  }
+};
 
 module.exports = {
   debug: true,
