@@ -7,6 +7,8 @@ import Input from 'react-bootstrap/lib/Input';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
+import ListItem from './ListItem';
+
 class AboutComponent extends React.Component {
 
   constructor(props) {
@@ -18,7 +20,7 @@ class AboutComponent extends React.Component {
 
     this.onDrop = this.onDrop.bind(this);
     this.upload = this.upload.bind(this);
-    this.removePicture = this.removePicture.bind(this);
+    this.onItemClick = this.onItemClick.bind(this);
   }
 
   onDrop(files) {
@@ -29,8 +31,11 @@ class AboutComponent extends React.Component {
     });
   }
 
-  removePicture(i) {
-    console.log(i);
+  onItemClick(i) {
+    this.state.files.splice(i, 1);
+    this.setState({
+      files: this.state.files
+    });
   }
 
   upload() {
@@ -121,23 +126,9 @@ class AboutComponent extends React.Component {
           <Row>
             {
               this.state.files.map((file, i) =>
-                <Col xd={4} md={4} lg={4}>
-                  <div className='thumbnail'>
-                    <img  key={file.name} src={file.preview} />
-                  </div>
-                  <div className='caption'>
-                    {file.name}
-                    <p>
-                      <button onClick={this.removePicture}
-                        className='btn btn-primary'
-                        role='button'
-                        type='button'
-                      >
-                        Remove
-                      </button>
-                    </p>
-                  </div>
-                </Col>
+                <ListItem key={file.name} index={i} item={file}
+                  onItemClick={this.onItemClick}
+                />
               )
             }
           </Row>

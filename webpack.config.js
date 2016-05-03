@@ -22,7 +22,8 @@ const babelSettings = {
 module.exports = {
   debug: true,
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-  devtool: 'eval', // eval cuts size to 50%
+  // eval cuts size to 50%, alternative is cheap-module-eval-source-map
+  devtool: 'cheap-module-eval-source-map',
   noInfo: true, // set to false to see a list of every file being bundled.
   entry: [
     `webpack-hot-middleware/client`,
