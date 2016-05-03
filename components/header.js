@@ -20,7 +20,8 @@ class HeaderComponent extends React.Component {
 
     this.state = {
       open: false,
-      labelText: 'Sign In'
+      labelText: 'Sign In',
+      username: ''
     };
 
     this.goToSignIn = this.goToSignIn.bind(this);
@@ -62,6 +63,9 @@ class HeaderComponent extends React.Component {
         dispatch({
           type: 'user/logout'
         });
+        self.setState({
+          username: ''
+        });
         self.props.history.pushState(null, '/');
       }
     });
@@ -71,7 +75,7 @@ class HeaderComponent extends React.Component {
     const { username } = this.props;
     let userMenu;
     let signUpButton;
-    if (username !== 'Sign In') {
+    if (username) {
       userMenu = (
         <NavDropdown eventKey={3} title={username} id='basic-nav-dropdown'>
           <MenuItem eventKey={3.1}>Help</MenuItem>

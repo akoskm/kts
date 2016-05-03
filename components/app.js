@@ -52,7 +52,7 @@ class AppComponent extends React.Component {
       username = this.state.user.username;
     }
     if (!username) {
-      username = 'Sign In';
+      username = null;
     }
     return (
       <div>
