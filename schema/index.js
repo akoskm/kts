@@ -41,11 +41,32 @@ export default(db) => {
     freezeTableName: true
   });
 
+  let Image = db.define('image', {
+    id: {
+      type: Sequelize.BIGINT,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    filename: {
+      type: Sequelize.TEXT
+    },
+    filesize: {
+      type: Sequelize.BIGINT
+    },
+    mimetype: {
+      type: Sequelize.TEXT
+    },
+    freezeTableName: true
+  });
+
   User.hasMany(Token);
   Token.belongsTo(User, { foreignKey: 'account_id' });
+  Image.belongsTo(User, { foreignKey: 'image_id' });
 
   return {
     user: User,
-    token: Token
+    token: Token,
+    image: Image
   };
 };

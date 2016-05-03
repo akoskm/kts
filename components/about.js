@@ -1,6 +1,7 @@
+import ReactDOM from 'react-dom';
 import React from 'react';
 import $ from 'jquery';
-import Dropzone from 'react-dropzone';
+import DropzoneComponent from 'react-dropzone-component';
 
 import Button from 'react-bootstrap/lib/Button';
 import Input from 'react-bootstrap/lib/Input';
@@ -112,30 +113,29 @@ class AboutComponent extends React.Component {
   }
 
   render() {
-    let preview;
-    if (this.state.files.length > 0) {
-      preview = (
-        <div>
-          <p>{this.state.files.length} to upload...</p>
-          <Row>
-            <Col xd={12} md={12} lg={12}>
-              <div className='form-group'>
-                <Button primary onClick={this.upload}>Start upload!</Button>
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            {
-              this.state.files.map((file, i) =>
-                <ListItem key={file.name} index={i} item={file}
-                  onItemClick={this.onItemClick}
-                />
-              )
-            }
-          </Row>
-        </div>
-      );
-    }
+    let callbackArray = [
+      function () {
+        console.log('Look Ma, I\'m a callback in an array!');
+      },
+      function () {
+        console.log('Wooooow!');
+      }
+    ];
+    let eventHandlers = {
+      // All of these receive the event as first parameter:
+      drop: callbackArray
+    };
+    let componentConfig = {
+      iconFiletypes: ['.jpg', '.png', '.gif'],
+      showFiletypeIcon: true,
+      postUrl: '/api/profile/img'
+    };
+
+    let djsConfig = {
+      addRemoveLinks: true,
+      acceptedFiles: 'image/jpeg,image/png,image/gif'
+    };
+
     return (
       <div>
         <Row>
@@ -160,13 +160,11 @@ class AboutComponent extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={12} md={12} lg={12}>
-            <form className='uploadZone' onSubmit={this.upload}>
-              <Dropzone ref='photo' onDrop={this.onDrop}>
-                <div>Try dropping some files here, or click to select files to upload.</div>
-              </Dropzone>
-              {preview}
-            </form>
+          <Col md={12}>
+            <DropzoneComponent djsConfig={djsConfig}
+              config={componentConfig}
+              eventHandlers={eventHandlers}
+            />
           </Col>
         </Row>
       </div>

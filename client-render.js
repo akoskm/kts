@@ -9,7 +9,9 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import './styles/scss/style.scss';
 import 'react-flexgrid/lib/flexgrid.css';
 import 'bootstrap/less/bootstrap.less';
-import 'react-select/scss/default.scss';
+import 'react-dropzone-component/styles/filepicker.css';
+import 'react-dropzone-component/example/styles/example.css';
+import 'react-dropzone-component/node_modules/dropzone/dist/dropzone.css';
 
 ReactDOM.render(
   <Router routes={routes} history={createBrowserHistory()} />,

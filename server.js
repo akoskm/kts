@@ -168,7 +168,7 @@ app.post('/api/activate', api.activate);
 app.post('/api/login', api.signin);
 app.post('/api/logout', api.signout);
 app.get('/api/profile', api.profile);
-app.post('/api/profile/img', upload.single('photo'), api.image);
+app.post('/api/profile/img', upload.single('file'), api.image);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
 app.get('*', (req, res) => {
