@@ -47,7 +47,7 @@
     "react-dropzone": "^3.3.2",
     "react-flexgrid": "^0.7.0",
     "react-router": "^1.0.0",
-    "react-select2-wrapper": "^0.6.1",
+    "react-select": "^1.0.0-beta13",
     "sequelize": "^3.17.3",
     "serve-favicon": "^2.3.0"
   },

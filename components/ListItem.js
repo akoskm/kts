@@ -8,17 +8,27 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Image from 'react-bootstrap/lib/Image';
-import Select2 from 'react-select2-wrapper';
+import Select from 'react-select';
 
 class ListItem extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      tags: []
+    };
+
     this._onClick = this._onClick.bind(this);
+    this._handleSelectChange = this._handleSelectChange.bind(this);
   }
 
   _onClick() {
     this.props.onItemClick(this.props.index);
+  }
+
+  _handleSelectChange(value) {
+    this.setState({ tags: value });
   }
 
   render() {
@@ -32,15 +42,15 @@ class ListItem extends React.Component {
           {file.name}
           <FormGroup>
             <ControlLabel>Tags</ControlLabel>
-            <Select2
-              className='form-control'
-              multiple
-              data={['bug', 'feature', 'documents', 'discussion']}
-              options={
-                {
-                  placeholder: 'search by tags'
-                }
-              }
+            <Select
+              multi
+              value={this.state.tags}
+              placeholder='Select your tags'
+              onChange={this._handleSelectChange}
+              options={[
+                { value: 'one', label: 'One' },
+                { value: 'two', label: 'Two' }
+              ]}
             />
           </FormGroup>
           <p>
