@@ -42,7 +42,8 @@ export default (req, res) => {
       username: req.body.email,
       email: req.body.email,
       password: wf.token,
-      status: 'PENDING'
+      status: 'PENDING',
+      token: wf.token
     }, function (err, user) {
       if (err) {
         req.app.logger.error('Error while creating user', err);
@@ -59,48 +60,29 @@ export default (req, res) => {
   });
 
   wf.on('sendActivationEmail', function () {
-    mongoose.model('Token').create({
-      user: wf.user,
-      tokenString: wf.token
-    }, function (err, token) {
-      req.app.logger.info('New signup request! Email sent to', req.body.email);
-
-      if (err) {
-        req.app.logger.error('Failed to create Token', err);
-        wf.outcome.errors.push('Unable to send verification token');
+    sendmail(req, res, {
+      from: req.app.config.smtp.from.name + ' <' + req.app.config.smtp.from.address + '>',
+      to: req.body.email,
+      subject: 'Sign Up to ' + req.app.config.projectName,
+      textPath: 'signup/email-text',
+      htmlPath: 'signup/email-html',
+      locals: {
+        username: req.body.email,
+        link: req.protocol + '://' + req.headers.host + '/activation/' + wf.token + '/',
+        projectName: req.app.config.projectName
+      },
+      success(message) {
+        req.app.logger.info(message);
+        wf.outcome.result = {
+          success: true, message: 'Request sent, check your Inbox!'
+        };
+        return wf.emit('response');
+      },
+      error(err) {
+        req.app.logger.error(err);
+        wf.outcome.errors.push('Failed to send signup email');
         return wf.emit('response');
       }
-
-      if (!token) {
-        req.app.logger.error('Failed to create Token. Token is empty', token);
-        wf.outcome.errors.push('Unable to create verification token');
-        return wf.emit('response');
-      }
-
-      sendmail(req, res, {
-        from: req.app.config.smtp.from.name + ' <' + req.app.config.smtp.from.address + '>',
-        to: req.body.email,
-        subject: 'Sign Up to ' + req.app.config.projectName,
-        textPath: 'signup/email-text',
-        htmlPath: 'signup/email-html',
-        locals: {
-          username: req.body.email,
-          link: req.protocol + '://' + req.headers.host + '/activation/' + token.tokenString + '/',
-          projectName: req.app.config.projectName
-        },
-        success(message) {
-          req.app.logger.info(message);
-          wf.outcome.result = {
-            success: true, message: 'Request sent, check your Inbox!'
-          };
-          return wf.emit('response');
-        },
-        error(err) {
-          req.app.logger.error(err);
-          wf.outcome.errors.push('Failed to send signup email');
-          return wf.emit('response');
-        }
-      });
     });
   });
 

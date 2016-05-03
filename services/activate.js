@@ -28,25 +28,7 @@ export default (req, res) => {
       return workflow.emit('response');
     }
 
-    return workflow.emit('findToken');
-  });
-
-  workflow.on('findToken', function () {
-    mongoose.model('Token').findOne({
-      tokenString: req.body.token
-    }).populate('user').exec(function (err, token) {
-      if (err) {
-        req.app.logger.error('Cannot lookup token', err);
-      }
-      if (!token) {
-        workflow.outcome.errors.push('Token not found');
-      }
-      if (workflow.hasErrors()) {
-        return workflow.emit('response');
-      }
-      workflow.token = token;
-      return workflow.emit('hash');
-    });
+    return workflow.emit('hash');
   });
 
   workflow.on('hash', function () {
@@ -68,13 +50,14 @@ export default (req, res) => {
   });
 
   workflow.on('activateUser', function () {
-    let userId = workflow.token.user._id;
     mongoose.model('User').findOneAndUpdate({
-      _id: userId,
+      token: req.body.token,
+      password: req.body.token,
       status: 'PENDING'
     }, {
       password: workflow.hash,
-      status: 'ACTIVE'
+      status: 'ACTIVE',
+      token: null
     }, function (err, user) {
       if (err) {
         req.app.logger.error('error during settings active flag and password', err);
