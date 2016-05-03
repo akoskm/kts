@@ -28,10 +28,10 @@ import multer  from 'multer';
 // configure storage for photos
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user._id) {
       cb('User not found');
     } else {
-      const userdir = path.join(__dirname, 'uploads/', req.user.id);
+      const userdir = path.join(__dirname, 'uploads/', req.user._id + '_img');
       fs.mkdir(userdir, function (err) { // returns with error if already exists
         cb(null, userdir);
       });
