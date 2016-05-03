@@ -1,4 +1,5 @@
-import path    from 'path';
+import fs from 'fs';
+import path from 'path';
 import express from 'express';
 import http from 'http';
 import bodyParser from 'body-parser';
@@ -22,6 +23,22 @@ import webpack from 'webpack';
 import webpackConfig from './webpack.config';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import multer  from 'multer';
+
+// configure storage for photos
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    if (!req.user || !req.user.id) {
+      cb('User not found');
+    } else {
+      const userdir = path.join(__dirname, 'uploads/', req.user.id);
+      fs.mkdir(userdir, function (err) { // returns with error if already exists
+        cb(null, userdir);
+      });
+    }
+  }
+});
+const upload = multer({ storage });
 
 // determine environment type
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -56,7 +73,6 @@ const sessionConfig = {
 
 app.schema = schema(db);
 app.db = db;
-console.log(nodeEnv);
 if (nodeEnv === 'development') {
   const compiler = webpack(webpackConfig);
   app.use(webpackDevMiddleware(compiler, {
@@ -152,7 +168,7 @@ app.post('/api/activate', api.activate);
 app.post('/api/login', api.signin);
 app.post('/api/logout', api.signout);
 app.get('/api/profile', api.profile);
-app.post('/api/profile/img', api.image);
+app.post('/api/profile/img', upload.single('photo'), api.image);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
 app.get('*', (req, res) => {

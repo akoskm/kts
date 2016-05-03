@@ -11,28 +11,32 @@ const profileApi = {
   },
 
   uploadProfilePicture(req, res, next) {
-    let file = req.files.file;
-    let options = { new: true };
+    const wf = workflow(req, res);
+    const file = req.file;
 
-    fs.readFile(file.path, function (err, data) {
-      if (err) {
-        return workflow.emit('exception', err);
-      }
+    wf.on('upload', function () {
+      fs.readFile(file.path, function (err, data) {
+        if (err) {
+          return wf.emit('exception', err);
+        }
 
-      let query = {
-        data,
-        name: file.name,
-        contentType: file.type
-      };
+        let query = {
+          data,
+          name: file.originalname,
+          contentType: file.mimetype
+        };
 
-      if (file.size / 1000000 > 1) {
-        workflow.outcome.errors.push('Maximum file size is 1MB');
-        return workflow.emit('response');
-      }
+        if (file.size / 1000000 > 1) {
+          wf.outcome.errors.push('Maximum file size is 1MB');
+          return wf.emit('response');
+        }
 
-      workflow.outcome.result = 'Uploaded';
-      return workflow.emit('response');
+        wf.outcome.result = 'Uploaded';
+        return wf.emit('response');
+      });
     });
+
+    wf.emit('upload');
   }
 };
 

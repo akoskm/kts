@@ -37,6 +37,7 @@
     "immutable": "^3.7.6",
     "jquery": "^2.2.0",
     "log4js": "^0.6.29",
+    "multer": "^1.1.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^4.4.3",

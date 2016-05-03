@@ -49,7 +49,10 @@ class ListItem extends React.Component {
               onChange={this._handleSelectChange}
               options={[
                 { value: 'one', label: 'One' },
-                { value: 'two', label: 'Two' }
+                { value: 'two', label: 'Two' },
+                { value: 'three', label: 'Three' },
+                { value: 'four', label: 'Four' },
+                { value: 'five', label: 'Five' }
               ]}
             />
           </FormGroup>

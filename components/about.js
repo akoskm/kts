@@ -80,7 +80,7 @@ class AboutComponent extends React.Component {
     let files = this.state.files;
     if (files && files.length > 0) {
       this.state.files.forEach(function (value, i) {
-        data.append(i, value);
+        data.append('photo', value);
       });
       $.ajax({
         url: '/api/profile/img',
@@ -93,7 +93,8 @@ class AboutComponent extends React.Component {
         success(data, textStatus, jqXHR) {
           if (typeof data.error === 'undefined') {
             // Success so call function to process the form
-            submitForm(event, data);
+            // submitForm(event, data);
+            console.log('uploaded');
           } else {
             // Handle errors here
             console.log('ERRORS: ' + data.error);
@@ -139,7 +140,7 @@ class AboutComponent extends React.Component {
       <div>
         <Row>
           <Col xs={12} md={6} lg={6}>
-            <h1>A little bit about me:</h1>
+            <h1>Profile:</h1>
             <div>
               <Input
                 type='text'
@@ -161,7 +162,7 @@ class AboutComponent extends React.Component {
         <Row>
           <Col xs={12} md={12} lg={12}>
             <form className='uploadZone' onSubmit={this.upload}>
-              <Dropzone onDrop={this.onDrop}>
+              <Dropzone ref='photo' onDrop={this.onDrop}>
                 <div>Try dropping some files here, or click to select files to upload.</div>
               </Dropzone>
               {preview}
