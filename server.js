@@ -24,7 +24,7 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
 // determine environment type
-const nodeEnv = process.env.NODE_ENV || 'dev';
+const nodeEnv = process.env.NODE_ENV || 'development';
 
 // app configuration
 const config = require('./config').default;
@@ -56,8 +56,8 @@ const sessionConfig = {
 
 app.schema = schema(db);
 app.db = db;
-
-if (nodeEnv === 'dev') {
+console.log(nodeEnv);
+if (nodeEnv === 'development') {
   const compiler = webpack(webpackConfig);
   app.use(webpackDevMiddleware(compiler, {
     // Dev middleware can't access config, so we provide publicPath

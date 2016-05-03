@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node ./server.js",
+    "start": "export NODE_ENV=development && babel-node ./server.js",
     "build": "rm -rf dist && ./node_modules/babel-cli/bin/babel-node.js ./node_modules/.bin/webpack --config ./webpack.config.js"
   },
   "keywords": [
