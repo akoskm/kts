@@ -18,6 +18,7 @@ class AboutComponent extends React.Component {
 
     this.onDrop = this.onDrop.bind(this);
     this.upload = this.upload.bind(this);
+    this.removePicture = this.removePicture.bind(this);
   }
 
   onDrop(files) {
@@ -26,6 +27,10 @@ class AboutComponent extends React.Component {
     this.setState({
       files
     });
+  }
+
+  removePicture(i) {
+    console.log(i);
   }
 
   upload() {
@@ -106,43 +111,73 @@ class AboutComponent extends React.Component {
       preview = (
         <div>
           <p>{this.state.files.length} to upload...</p>
-          <Button primary onClick={this.upload}>Start upload!</Button>
-          <div>
-            {this.state.files.map((file) => <img key={file.name} src={file.preview} />)}
-          </div>
+          <Row>
+            <Col xd={12} md={12} lg={12}>
+              <div className='form-group'>
+                <Button primary onClick={this.upload}>Start upload!</Button>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            {
+              this.state.files.map((file, i) =>
+                <Col xd={4} md={4} lg={4}>
+                  <div className='thumbnail'>
+                    <img  key={file.name} src={file.preview} />
+                  </div>
+                  <div className='caption'>
+                    {file.name}
+                    <p>
+                      <button onClick={this.removePicture}
+                        className='btn btn-primary'
+                        role='button'
+                        type='button'
+                      >
+                        Remove
+                      </button>
+                    </p>
+                  </div>
+                </Col>
+              )
+            }
+          </Row>
         </div>
       );
     }
     return (
-      <Row>
-        <Col xs={12} md={6} lg={6}>
-          <h1>A little bit about me:</h1>
-          <div>
-            <Input
-              type='text'
-              placeholder='Short Name'
-            />
-            <Input
-              type='text'
-              placeholder='Default Value'
-            />
-            <Input
-              type='textarea'
-              placeholder='Address comes here'
-              rows={2}
-              rowsMax={4}
-            /><br/>
-          </div>
-        </Col>
-        <Col xs={12} md={6} lg={6}>
-          <form className='uploadZone' onSubmit={this.upload}>
-            <Dropzone onDrop={this.onDrop}>
-              <div>Try dropping some files here, or click to select files to upload.</div>
-            </Dropzone>
-            {preview}
-          </form>
-        </Col>
-      </Row>
+      <div>
+        <Row>
+          <Col xs={12} md={6} lg={6}>
+            <h1>A little bit about me:</h1>
+            <div>
+              <Input
+                type='text'
+                placeholder='Short Name'
+              />
+              <Input
+                type='text'
+                placeholder='Default Value'
+              />
+              <Input
+                type='textarea'
+                placeholder='Address comes here'
+                rows={2}
+                rowsMax={4}
+              /><br/>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} md={12} lg={12}>
+            <form className='uploadZone' onSubmit={this.upload}>
+              <Dropzone onDrop={this.onDrop}>
+                <div>Try dropping some files here, or click to select files to upload.</div>
+              </Dropzone>
+              {preview}
+            </form>
+          </Col>
+        </Row>
+      </div>
     );
   }
 }
