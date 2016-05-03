@@ -1,79 +1,108 @@
-import Sequelize from 'sequelize';
 import sendmail from '../util/sendmail';
+import workflow from '../util/workflow';
+import mongoose from 'mongoose';
 
 const crypto = require('crypto');
 
 export default (req, res) => {
-  crypto.randomBytes(21, function (err, buf) {
-    if (err) {
-      req.app.logger.err('Error generating random bytes:', err);
-    }
+  const wf = workflow(req, res);
 
-    let token = buf.toString('hex');
+  wf.on('checkEmail', function () {
+    mongoose.model('User').findOne({
+      username: req.body.email
+    }, function (err, user) {
+      if (err) {
+        req.app.logger.error('Cannot lookup email', err);
+      }
+      if (user) {
+        wf.outcome.errors.push('Email is already taken');
+        return wf.emit('response');
+      }
+      return wf.emit('createToken');
+    });
+  });
 
-    return req.app.db.transaction(function (t) {
+  wf.on('createToken', function () {
+    crypto.randomBytes(21, function (err, buf) {
+      if (err) {
+        req.app.logger.error('Error generating random bytes:', err);
+      }
 
-      return req.app.schema.user.create({
-        username: req.body.email,
-        email: req.body.email,
-        password: token,
-        status: 'PENDING'
-      }, { transaction: t }).then(function (user) {
-        return req.app.schema.token.create({
-          account_id: user.get('id'),
-          token_string: token
-        }, { transaction: t });
-      }).then(function (result) {
-        req.app.logger.info('New signup request! Email sent to', req.body.email);
+      let token = buf.toString('hex');
+      if (!token) {
+        wf.outcome.errors.push('Failed to generate token');
+      }
+      wf.token = token;
+      return wf.emit('createUser');
+    });
+  });
 
-        sendmail(req, res, {
-          from: req.app.config.smtp.from.name + ' <' + req.app.config.smtp.from.address + '>',
-          to: req.body.email,
-          subject: 'Sign Up to ' + req.app.config.projectName,
-          textPath: 'signup/email-text',
-          htmlPath: 'signup/email-html',
-          locals: {
-            username: req.body.email,
-            link: req.protocol + '://' + req.headers.host + '/activation/' + token + '/',
-            projectName: req.app.config.projectName
-          },
-          success(message) {
-            req.app.logger.info(message);
-          },
-          error(err) {
-            req.app.logger.error(err);
-          }
-        });
+  wf.on('createUser', function () {
+    mongoose.model('User').create({
+      username: req.body.email,
+      email: req.body.email,
+      password: wf.token,
+      status: 'PENDING'
+    }, function (err, user) {
+      if (err) {
+        req.app.logger.error('Error while creating user', err);
+        wf.outcome.errors.push('Unable to create User');
+      }
 
-        res.status(200).json({
-          success: true, message: 'Request sent, check your Inbox!'
-        });
-      }).catch(function (err) {
-        req.app.logger.error('Signup request rolled back, cause:', err);
+      if (wf.hasErrors()) {
+        return wf.emit('response');
+      }
 
-        let emailInUse = false;
+      wf.user = user;
+      return wf.emit('sendActivationEmail');
+    });
+  });
 
-        if (err.name === 'SequelizeUniqueConstraintError') {
-          let email = err.errors.filter(function (e) {
-            if (e.path === 'email') {
-              return e;
-            }
-          });
-          if (email.length > 0) {
-            res.status(200).json({
-              success: false, message: 'Email ' + email[0].value + ' is already in use'
-            });
-            emailInUse = true;
-          }
-        }
+  wf.on('sendActivationEmail', function () {
+    mongoose.model('Token').create({
+      user: wf.user,
+      tokenString: wf.token
+    }, function (err, token) {
+      req.app.logger.info('New signup request! Email sent to', req.body.email);
 
-        // unknown error
-        if (!emailInUse) {
-          res.status(200).json({
-            success: false, message: 'Ooops, something went wrong'
-          });
+      if (err) {
+        req.app.logger.error('Failed to create Token', err);
+        wf.outcome.errors.push('Unable to send verification token');
+        return wf.emit('response');
+      }
+
+      if (!token) {
+        req.app.logger.error('Failed to create Token. Token is empty', token);
+        wf.outcome.errors.push('Unable to create verification token');
+        return wf.emit('response');
+      }
+
+      sendmail(req, res, {
+        from: req.app.config.smtp.from.name + ' <' + req.app.config.smtp.from.address + '>',
+        to: req.body.email,
+        subject: 'Sign Up to ' + req.app.config.projectName,
+        textPath: 'signup/email-text',
+        htmlPath: 'signup/email-html',
+        locals: {
+          username: req.body.email,
+          link: req.protocol + '://' + req.headers.host + '/activation/' + token.tokenString + '/',
+          projectName: req.app.config.projectName
+        },
+        success(message) {
+          req.app.logger.info(message);
+          wf.outcome.result = {
+            success: true, message: 'Request sent, check your Inbox!'
+          };
+          return wf.emit('response');
+        },
+        error(err) {
+          req.app.logger.error(err);
+          wf.outcome.errors.push('Failed to send signup email');
+          return wf.emit('response');
         }
       });
     });
   });
+
+  wf.emit('checkEmail');
 };

@@ -1,95 +1,94 @@
+import mongoose from 'mongoose';
+import workflowFactory from '../util/workflow';
+
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 
 export default (req, res) => {
+  const workflow = workflowFactory(req, res);
+  const password = req.body.pass;
+  const rePassword = req.body.repass;
+  const returnUnknownException = function () {
+    return workflow.emit('exception', 'Unknown error occurred');
+  };
 
-  let password = req.body.pass;
-  let rePassword = req.body.repass;
+  workflow.on('validatePassword', function () {
+    if (!password) {
+      workflow.outcome.errfor.pass = 'required';
+    }
+    if (!rePassword) {
+      workflow.outcome.errfor.repass = 'required';
+    }
+    if (workflow.hasErrors()) {
+      return workflow.emit('response');
+    }
 
-  if (!password || !rePassword) {
-    res.status(200).json({
-      success: false, message: 'Password is required'
-    });
-  } else if (password !== rePassword) {
-    res.status(200).json({
-      success: false, message: 'Passwords don\'t match'
-    });
-  } else {
-    let token = req.app.schema.token.find({
-      attributes: ['account_id'],
-      where: {
-        token_string: req.body.token
+    if (password !== rePassword) {
+      workflow.outcome.errors.push('Passwords don\'t match');
+      return workflow.emit('response');
+    }
+
+    return workflow.emit('findToken');
+  });
+
+  workflow.on('findToken', function () {
+    mongoose.model('Token').findOne({
+      tokenString: req.body.token
+    }).populate('user').exec(function (err, token) {
+      if (err) {
+        req.app.logger.error('Cannot lookup token', err);
       }
-    }).then(function (result) {
-      if (!result) {
-        res.status(200).json({
-          success: false, message: 'Invalid activation token'
-        });
-      } else {
-        req.app.schema.user.find({
-          where: {
-            id: result.get('account_id'),
-            status: 'PENDING'
-          }
-        }).then(function (result) {
-          if (!result) {
-            res.status(200).json({
-              success: false, message: 'Invalid account'
-            });
-          } else {
-            /**
-             * activation token valid, account exists, set password and activate
-             */
-            bcrypt.genSalt(10, function (err, salt) {
-              if (err) {
-                req.app.logger.err('error generating salt:', err);
-              }
-
-              bcrypt.hash(password, salt, function (err, hash) {
-                if (err) {
-                  req.app.logger.err('error generating hash', err);
-                }
-
-                return req.app.db.transaction(function (t) {
-                  return req.app.schema.user.update(
-                    {
-                      status: 'ACTIVE',
-                      password: hash
-                    }, {
-                      where: {
-                        id: result.get('id')
-                      }
-                    }, {
-                      transaction: t
-                    }
-                  ).then(function (user) {
-                    return req.app.schema.token.destroy(
-                      {
-                        where: {
-                          token_string: req.body.token,
-                          account_id: result.get('id')
-                        }
-                      }, {
-                        transaction: t
-                      }
-                    );
-                  });
-                }).then(function (result) {
-                  req.app.logger.info(result);
-                  res.status(200).json({
-                    success: true, message: 'Activated'
-                  });
-                }).catch(function (err) {
-                  req.app.logger.error(result);
-                  res.status(200).json({
-                    success: false, message: 'Activation failed'
-                  });
-                });
-              });
-            });
-          }
-        });
+      if (!token) {
+        workflow.outcome.errors.push('Token not found');
       }
+      if (workflow.hasErrors()) {
+        return workflow.emit('response');
+      }
+      workflow.token = token;
+      return workflow.emit('hash');
     });
-  }
+  });
+
+  workflow.on('hash', function () {
+    bcrypt.genSalt(10, function (err, salt) {
+      if (err) {
+        req.app.logger.error('error generating salt:', err);
+        return returnUnknownException();
+      }
+
+      bcrypt.hash(password, salt, function (err, hash) {
+        if (err) {
+          req.app.logger.error('error generating hash', err);
+          return returnUnknownException();
+        }
+        workflow.hash = hash;
+        return workflow.emit('activateUser');
+      });
+    });
+  });
+
+  workflow.on('activateUser', function () {
+    let userId = workflow.token.user._id;
+    mongoose.model('User').findOneAndUpdate({
+      _id: userId,
+      status: 'PENDING'
+    }, {
+      password: workflow.hash,
+      status: 'ACTIVE'
+    }, function (err, user) {
+      if (err) {
+        req.app.logger.error('error during settings active flag and password', err);
+        workflow.outcome.errors.push('User activation failed');
+        return workflow.emit('response');
+      }
+      if (!user) {
+        workflow.outcome.errors.push('User is already active');
+        return workflow.emit('response');
+      }
+      workflow.outcome.result = 'User activation successful';
+      return workflow.emit('response');
+    });
+  });
+
+  workflow.emit('validatePassword');
 };

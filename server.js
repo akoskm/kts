@@ -7,7 +7,7 @@ import favicon from 'serve-favicon';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
-import Sequelize from 'sequelize';
+import mongoose from 'mongoose';
 import passport from 'passport';
 import csrf from 'csurf';
 import React from 'react';
@@ -51,7 +51,8 @@ const PORT = config.port;
 const app = express();
 
 // postgresql connection
-const db = new Sequelize('postgres://kts:kts@localhost/kts');
+// const db = new Sequelize('postgres://kts:kts@localhost/kts');
+mongoose.connect('mongodb://localhost/kts');
 
 // passpost strategy
 const LocalStrategy = require('passport-local').Strategy;
@@ -71,8 +72,6 @@ const sessionConfig = {
   cookie: {}
 };
 
-app.schema = schema(db);
-app.db = db;
 if (nodeEnv === 'development') {
   const compiler = webpack(webpackConfig);
   app.use(webpackDevMiddleware(compiler, {
@@ -138,7 +137,7 @@ app.locals.cacheBreaker = 'br34k-01';
 
 app.set('view engine', 'ejs');
 
-let localStragety = new CustomStrategy(app.schema);
+let localStragety = new CustomStrategy();
 
 // passport setup
 passport.use(new LocalStrategy({
@@ -147,19 +146,22 @@ passport.use(new LocalStrategy({
 }, localStragety.authenticate));
 
 passport.serializeUser(function (user, done) {
-  done(null, user.id);
+  done(null, user._id);
 });
 
 passport.deserializeUser(function (id, done) {
-  app.schema.user.find({
-    where: {
-      id
-    }
-  }).then(function (user, err) {
-    if (user) {
-      done(err, user.toJSON());
-    }
-  });
+  if (mongoose.Types.ObjectId.isValid(id)) {
+    mongoose.model('User').findById(id, function (err, user) {
+      if (err) {
+        done(err, null);
+      }
+      if (user) {
+        done(null, user.toJSON());
+      }
+    });
+  } else {
+    done('Invalid authentication request', null);
+  }
 });
 
 /* non-react routes */
