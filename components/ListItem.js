@@ -5,8 +5,10 @@ import Input from 'react-bootstrap/lib/Input';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
+import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Image from 'react-bootstrap/lib/Image';
+import Select2 from 'react-select2-wrapper';
 
 class ListItem extends React.Component {
 
@@ -30,6 +32,16 @@ class ListItem extends React.Component {
           {file.name}
           <FormGroup>
             <ControlLabel>Tags</ControlLabel>
+            <Select2
+              className='form-control'
+              multiple
+              data={['bug', 'feature', 'documents', 'discussion']}
+              options={
+                {
+                  placeholder: 'search by tags'
+                }
+              }
+            />
           </FormGroup>
           <p>
             <Button onClick={this._onClick}

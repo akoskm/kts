@@ -9,6 +9,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import './styles/scss/style.scss';
 import 'react-flexgrid/lib/flexgrid.css';
 import 'bootstrap/less/bootstrap.less';
+import 'react-select2-wrapper/css/select2.css';
 
 ReactDOM.render(
   <Router routes={routes} history={createBrowserHistory()} />,
