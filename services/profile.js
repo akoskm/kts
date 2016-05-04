@@ -28,7 +28,7 @@ const profileApi = {
 
         let query = {
           $push: {
-            images: {
+            photos: {
               filename: file.filename,
               name: file.originalname,
               contentType: file.mimetype,
@@ -54,15 +54,15 @@ const profileApi = {
     wf.emit('upload');
   },
 
-  getProfileImages(req, res, next) {
+  getProfilePhotos(req, res, next) {
     const wf = workflow(req, res);
 
     wf.on('imageLookup', function () {
       mongoose.model('User').findOne({
         _id: req.user._id
-      }, '_id images', function (err, doc) {
+      }, '_id photos', function (err, doc) {
         if (err) {
-          req.app.logger.error('Cannot get images', err);
+          req.app.logger.error('Cannot get photos', err);
         }
         wf.outcome.result = doc;
         return wf.emit('response');

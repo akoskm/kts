@@ -10,7 +10,7 @@ export default class {
       username: user.username,
       email: user.email,
       status: user.status,
-      images: user.images
+      photos: user.photos
     };
   }
 

@@ -5,22 +5,22 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Image from 'react-bootstrap/lib/Image';
 
-class Images extends React.Component {
+class Photos extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      images: []
+      photos: []
     };
   }
 
   componentDidMount() {
-    this.serverRequest = $.get('/api/profile/images', function (response) {
+    this.serverRequest = $.get('/api/profile/photos', function (response) {
       let data = response.result;
       this.setState({
         _id: data._id,
-        images: data.images
+        photos: data.photos
       });
     }.bind(this));
   }
@@ -34,7 +34,7 @@ class Images extends React.Component {
     return (
       <div>
         <Row>
-          {this.state.images.map(function (image) {
+          {this.state.photos.map(function (image) {
             let url = '/static/' + self.state._id + '_img/' + image.filename;
             console.log(url);
             return (
@@ -49,4 +49,4 @@ class Images extends React.Component {
   }
 }
 
-export default Images;
+export default Photos;

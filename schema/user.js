@@ -6,7 +6,7 @@ let userSchema = new mongoose.Schema({
   email: { type: String, unique: true, index: true, required: true },
   status: { type: String, default: 'PENDING', required: true },
   token: { type: String, unique: true, index: true },
-  images: [{
+  photos: [{
     filename: { type: String },
     name: { type: String },
     contentType: { type: String },
