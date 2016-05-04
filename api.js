@@ -11,6 +11,7 @@ const api = {
   signout,
   profile: profileApi.profile,
   uploadImage: profileApi.uploadProfilePicture,
+  deleteImage: profileApi.deleteProfilePicture,
   getPhotos: profileApi.getProfilePhotos
 };
 

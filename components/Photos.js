@@ -31,8 +31,18 @@ class Photos extends React.Component {
     this.serverRequest.abort();
   }
 
-  onItemClick(i) {
-    console.log(i);
+  onItemClick(photoid, index) {
+    this.state.photos.splice(index, 1);
+    this.setState({
+      photos: this.state.photos
+    });
+    return $.ajax({
+      url: '/api/profile/photos/' + photoid,
+      type: 'DELETE',
+      success(response) {
+        console.log(response);
+      }
+    });
   }
 
   render() {
@@ -40,11 +50,14 @@ class Photos extends React.Component {
     return (
       <div>
         <Row>
-          {this.state.photos.map(function (image) {
-            let url = '/static/' + self.state._id + '_img/' + image.filename;
-            console.log(url);
+          {this.state.photos.map(function (image, i) {
             return (
-              <Photo url={url} onItemClick={self.onItemClick}/>
+              <Photo index={i}
+                photoid={image._id}
+                userid={self.state._id}
+                filename={image.filename}
+                onItemClick={self.onItemClick}
+              />
             );
           })}
         </Row>

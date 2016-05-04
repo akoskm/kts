@@ -24,7 +24,7 @@ class Photo extends React.Component {
   }
 
   _onClick() {
-    this.props.onItemClick(this.props.index);
+    this.props.onItemClick(this.props.photoid, this.props.index);
   }
 
   _handleSelectChange(value) {
@@ -32,7 +32,7 @@ class Photo extends React.Component {
   }
 
   render() {
-    let url = this.props.url;
+    let url = '/static/' + this.props.userid + '_img/' + this.props.filename;
     return (
       <Col xd={3} md={3} lg={3}>
         <div className='thumbnail'>
@@ -61,7 +61,7 @@ class Photo extends React.Component {
               role='button'
               type='button'
             >
-              Remove
+              Delete
             </Button>
           </p>
         </div>
@@ -71,7 +71,11 @@ class Photo extends React.Component {
 }
 
 Photo.propTypes = {
-  url: React.PropTypes.object.isRequired
+  userid: React.PropTypes.object.isRequired,
+  filename: React.PropTypes.object.isRequired,
+  index: React.PropTypes.object.isRequired,
+  photoid: React.PropTypes.object.isRequired,
+  onItemClick: React.PropTypes.object.isRequired
 };
 
 export default Photo;

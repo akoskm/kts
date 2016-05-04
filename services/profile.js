@@ -54,6 +54,34 @@ const profileApi = {
     wf.emit('upload');
   },
 
+  deleteProfilePicture(req, res, next) {
+    const wf = workflow(req, res);
+
+    wf.on('deletePicture', function () {
+      let query = {
+        $pull: {
+          photos: {
+            _id: req.params.photoid
+          }
+        }
+      };
+
+      mongoose.model('User').findOneAndUpdate({
+        _id: req.user._id
+      }, query, function (err, doc) {
+        if (err) {
+          req.app.logger.error('Error while removing image', err);
+          wf.outcome.errors.push('Cannot delete image');
+          return wf.emit('response');
+        }
+        wf.outcome.result = 'Deleted';
+        return wf.emit('response');
+      });
+    });
+
+    wf.emit('deletePicture');
+  },
+
   getProfilePhotos(req, res, next) {
     const wf = workflow(req, res);
 
