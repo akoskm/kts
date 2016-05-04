@@ -10,7 +10,8 @@ let userSchema = new mongoose.Schema({
     filename: { type: String },
     name: { type: String },
     contentType: { type: String },
-    size: { type: Number }
+    size: { type: Number },
+    tags: []
   }]
 });
 userSchema.set('autoIndex', (process.env.NODE_ENV === 'development'));

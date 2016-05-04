@@ -10,7 +10,7 @@ import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Image from 'react-bootstrap/lib/Image';
 import Select from 'react-select';
 
-class ListItem extends React.Component {
+class Photo extends React.Component {
 
   constructor(props) {
     super(props);
@@ -70,8 +70,8 @@ class ListItem extends React.Component {
   }
 }
 
-ListItem.propTypes = {
+Photo.propTypes = {
   url: React.PropTypes.object.isRequired
 };
 
-export default ListItem;
+export default Photo;
