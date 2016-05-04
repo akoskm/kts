@@ -3,7 +3,7 @@ import $ from 'jquery';
 
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import Image from 'react-bootstrap/lib/Image';
+import Photo from './Photo';
 
 class Photos extends React.Component {
 
@@ -13,6 +13,8 @@ class Photos extends React.Component {
     this.state = {
       photos: []
     };
+
+    this.onItemClick = this.onItemClick.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +31,10 @@ class Photos extends React.Component {
     this.serverRequest.abort();
   }
 
+  onItemClick(i) {
+    console.log(i);
+  }
+
   render() {
     let self = this;
     return (
@@ -38,9 +44,7 @@ class Photos extends React.Component {
             let url = '/static/' + self.state._id + '_img/' + image.filename;
             console.log(url);
             return (
-              <Col xs={6} md={4} lg={4}>
-                <Image src={url} thumbnail/>
-              </Col>
+              <Photo url={url} onItemClick={self.onItemClick}/>
             );
           })}
         </Row>

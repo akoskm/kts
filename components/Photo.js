@@ -32,14 +32,13 @@ class ListItem extends React.Component {
   }
 
   render() {
-    let file = this.props.item;
+    let url = this.props.url;
     return (
       <Col xd={3} md={3} lg={3}>
         <div className='thumbnail'>
-          <Image key={file.name} src={file.preview}/>
+          <Image src={url}/>
         </div>
         <div className='caption'>
-          {file.name}
           <FormGroup>
             <ControlLabel>Tags</ControlLabel>
             <Select
@@ -72,9 +71,7 @@ class ListItem extends React.Component {
 }
 
 ListItem.propTypes = {
-  item: React.PropTypes.object.isRequired,
-  index: React.PropTypes.object.isRequired,
-  onItemClick: React.PropTypes.object.isRequired
+  url: React.PropTypes.object.isRequired
 };
 
 export default ListItem;
