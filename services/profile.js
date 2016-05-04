@@ -52,6 +52,24 @@ const profileApi = {
     });
 
     wf.emit('upload');
+  },
+
+  getProfileImages(req, res, next) {
+    const wf = workflow(req, res);
+
+    wf.on('imageLookup', function () {
+      mongoose.model('User').findOne({
+        _id: req.user._id
+      }, '_id images', function (err, doc) {
+        if (err) {
+          req.app.logger.error('Cannot get images', err);
+        }
+        wf.outcome.result = doc;
+        return wf.emit('response');
+      });
+    });
+
+    wf.emit('imageLookup');
   }
 };
 

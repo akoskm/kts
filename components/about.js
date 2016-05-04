@@ -5,6 +5,7 @@ import DropzoneComponent from 'react-dropzone-component';
 
 import Button from 'react-bootstrap/lib/Button';
 import Input from 'react-bootstrap/lib/Input';
+import Images from './Images';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
@@ -140,7 +141,6 @@ class AboutComponent extends React.Component {
       <div>
         <Row>
           <Col xs={12} md={6} lg={6}>
-            <h1>Profile:</h1>
             <div>
               <Input
                 type='text'
@@ -158,15 +158,14 @@ class AboutComponent extends React.Component {
               /><br/>
             </div>
           </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
+          <Col xs={12} md={6} lg={6}>
             <DropzoneComponent djsConfig={djsConfig}
               config={componentConfig}
               eventHandlers={eventHandlers}
             />
           </Col>
         </Row>
+        <Images />
       </div>
     );
   }

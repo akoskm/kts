@@ -10,7 +10,8 @@ const api = {
   signin,
   signout,
   profile: profileApi.profile,
-  image: profileApi.uploadProfilePicture
+  uploadImage: profileApi.uploadProfilePicture,
+  getImages: profileApi.getProfileImages
 };
 
 export { api };

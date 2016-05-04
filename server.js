@@ -89,6 +89,7 @@ if (nodeEnv === 'development') {
 }
 
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use('/static', express.static(path.join(__dirname, 'uploads')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(config.cryptoKey));
@@ -170,7 +171,8 @@ app.post('/api/activate', api.activate);
 app.post('/api/login', api.signin);
 app.post('/api/logout', api.signout);
 app.get('/api/profile', api.profile);
-app.post('/api/profile/img', upload.single('file'), api.image);
+app.get('/api/profile/images', api.getImages);
+app.post('/api/profile/img', upload.single('file'), api.uploadImage);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
 app.get('*', (req, res) => {
