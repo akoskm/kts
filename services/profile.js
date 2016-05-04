@@ -1,5 +1,6 @@
 import fs from 'fs';
 import workflow from '../util/workflow';
+import mongoose from 'mongoose';
 
 const profileApi = {
   profile(req, res) {
@@ -20,19 +21,33 @@ const profileApi = {
           return wf.emit('exception', err);
         }
 
-        let query = {
-          data,
-          name: file.originalname,
-          contentType: file.mimetype
-        };
-
         if (file.size / 1000000 > 1) {
           wf.outcome.errors.push('Maximum file size is 1MB');
           return wf.emit('response');
         }
 
-        wf.outcome.result = 'Uploaded';
-        return wf.emit('response');
+        let query = {
+          $push: {
+            images: {
+              filename: file.filename,
+              name: file.originalname,
+              contentType: file.mimetype,
+              size: file.size
+            }
+          }
+        };
+
+        mongoose.model('User').findOneAndUpdate({
+          _id: req.user._id
+        }, query, function (err, doc) {
+          if (err) {
+            req.app.logger.error('Error while saving image', err);
+            wf.outcome.errors.push('Cannot save image');
+            return wf.emit('response');
+          }
+          wf.outcome.result = 'Uploaded';
+          return wf.emit('response');
+        });
       });
     });
 

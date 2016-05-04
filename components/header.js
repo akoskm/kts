@@ -26,6 +26,8 @@ class HeaderComponent extends React.Component {
 
     this.goToSignIn = this.goToSignIn.bind(this);
     this.goToSignUp = this.goToSignUp.bind(this);
+    this.goToProfile = this.goToProfile.bind(this);
+    this.goToLanding = this.goToLanding.bind(this);
     this.signOut = this.signOut.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
   }
@@ -56,6 +58,14 @@ class HeaderComponent extends React.Component {
     this.props.history.pushState(null, '/signup');
   }
 
+  goToProfile(e) {
+    this.props.history.pushState(null, '/about');
+  }
+
+  goToLanding(e) {
+    this.props.history.pushState(null, '/');
+  }
+
   signOut(e) {
     let self = this;
     $.post('/api/logout', this.state).done(function (data) {
@@ -78,7 +88,8 @@ class HeaderComponent extends React.Component {
     if (username) {
       userMenu = (
         <NavDropdown eventKey={3} title={username} id='basic-nav-dropdown'>
-          <MenuItem eventKey={3.1}>Help</MenuItem>
+          <MenuItem eventKey={3.1} onClick={this.goToProfile}>Profile</MenuItem>
+          <MenuItem eventKey={3.2}>Help</MenuItem>
           <MenuItem divider />
           <MenuItem eventKey={3.3} onClick={this.signOut}>Sign Out</MenuItem>
         </NavDropdown>
@@ -95,7 +106,7 @@ class HeaderComponent extends React.Component {
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href='/'>KTS</a>
+            <a onClick={this.goToLanding}>KTS</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav pullRight>
