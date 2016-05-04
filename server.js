@@ -149,14 +149,14 @@ passport.serializeUser(function (user, done) {
   done(null, user._id);
 });
 
-passport.deserializeUser(function (id, done) {
-  if (mongoose.Types.ObjectId.isValid(id)) {
-    mongoose.model('User').findById(id, function (err, user) {
+passport.deserializeUser(function (_id, done) {
+  if (mongoose.Types.ObjectId.isValid(_id)) {
+    mongoose.model('User').findById(_id, function (err, user) {
       if (err) {
         done(err, null);
       }
       if (user) {
-        done(null, user.toJSON());
+        done(null, localStragety.filterUser(user.toJSON()));
       }
     });
   } else {

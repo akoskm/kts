@@ -2,18 +2,19 @@ import mongoose from 'mongoose';
 
 const bcrypt = require('bcrypt');
 
-const filterUser = function (user) {
-  return {
-    _id: user._id,
-    username: user.username,
-    email: user.email,
-    status: user.status
-  };
-};
-
 export default class {
 
+  filterUser(user) {
+    return {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      status: user.status
+    };
+  }
+
   get authenticate() {
+    let self = this;
     return (username, password, done) => {
       mongoose.model('User').findOne({
         email: username
@@ -28,7 +29,7 @@ export default class {
             if (!result) {
               return done(null, false, { message: 'Incorrect email or password.' });
             } else {
-              return done(null, filterUser(user.toJSON()));
+              return done(null, self.filterUser(user.toJSON()));
             }
           });
         }
