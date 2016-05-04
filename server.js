@@ -172,8 +172,8 @@ app.post('/api/login', api.signin);
 app.post('/api/logout', api.signout);
 app.get('/api/profile', api.profile);
 app.get('/api/profile/photos', api.getPhotos);
-app.delete('/api/profile/photos/:photoid', api.deleteImage);
-app.post('/api/profile/img', upload.single('file'), api.uploadImage);
+app.delete('/api/profile/photos/:photoid', api.deletePhoto);
+app.post('/api/profile/img', upload.single('file'), api.uploadPhoto);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
 app.get('*', (req, res) => {

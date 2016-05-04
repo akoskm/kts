@@ -11,7 +11,7 @@ const profileApi = {
     });
   },
 
-  uploadProfilePicture(req, res, next) {
+  uploadPhoto(req, res, next) {
     const wf = workflow(req, res);
     const file = req.file;
 
@@ -54,7 +54,7 @@ const profileApi = {
     wf.emit('upload');
   },
 
-  deleteProfilePicture(req, res, next) {
+  deletePhoto(req, res, next) {
     const wf = workflow(req, res);
 
     wf.on('deletePicture', function () {

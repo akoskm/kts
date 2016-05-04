@@ -10,8 +10,8 @@ const api = {
   signin,
   signout,
   profile: profileApi.profile,
-  uploadImage: profileApi.uploadProfilePicture,
-  deleteImage: profileApi.deleteProfilePicture,
+  uploadPhoto: profileApi.uploadPhoto,
+  deletePhoto: profileApi.deletePhoto,
   getPhotos: profileApi.getProfilePhotos
 };
 
