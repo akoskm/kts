@@ -1,7 +1,6 @@
 import React from 'react';
 import { dispatch } from '../stores/user/UserDispatcher';
 import UserStore from '../stores/user/UserStore';
-import { Container } from 'flux/utils';
 import { Link } from 'react-router';
 
 import $ from 'jquery';
@@ -29,25 +28,6 @@ class HeaderComponent extends React.Component {
     this.goToProfile = this.goToProfile.bind(this);
     this.goToLanding = this.goToLanding.bind(this);
     this.signOut = this.signOut.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
-  }
-
-  static getStores() {
-    return [UserStore];
-  }
-
-  static calculateState(prevState) {
-    let currentState = {
-      user: UserStore.getState(),
-      isLoggedIn: UserStore.isLoggedIn()
-    };
-    return currentState;
-  }
-
-  handleToggle() {
-    this.setState({
-      open: !this.state.open
-    });
   }
 
   goToSignIn(e) {
@@ -59,7 +39,7 @@ class HeaderComponent extends React.Component {
   }
 
   goToProfile(e) {
-    this.props.history.pushState(null, '/about');
+    this.props.history.pushState(null, '/profile');
   }
 
   goToLanding(e) {
@@ -122,7 +102,5 @@ HeaderComponent.propTypes = {
   history: React.PropTypes.object.isRequired,
   username: React.PropTypes.string.isRequired
 };
-
-const container = Container.create(HeaderComponent);
 
 export default HeaderComponent;
