@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import type Immutable from 'immutable';
 import User from '../stores/user/User';
 import UserStore from '../stores/user/UserStore';
+import { dispatch } from '../stores/user/UserDispatcher';
 
 import Header from './header';
 
@@ -23,8 +24,13 @@ class AppComponent extends React.Component {
     let self = this;
     $.get('/api/profile').done(function (data) {
       if (data.success) {
+        let user = data.user;
+        dispatch({
+          type: 'user/login',
+          user
+        });
         self.setState({
-          user: data.user
+          user
         });
       }
     });
@@ -44,15 +50,9 @@ class AppComponent extends React.Component {
 
   render() {
     let currentUser = UserStore.getLoggedInUser();
-    let username;
+    let username = null;
     if (currentUser.username) {
       username = currentUser.username;
-    }
-    if (!username && this.state.user) {
-      username = this.state.user.username;
-    }
-    if (!username) {
-      username = null;
     }
     return (
       <div>
