@@ -45,15 +45,15 @@ class SignInComponent extends React.Component {
       $.post('/api/login', this.state).done(function (data) {
         if (data.success) {
           let user = data.user;
-          this.state = {
+          self.setState({
             username: user.username,
             status: user.status
-          };
+          });
           dispatch({
             type: 'user/login',
             user
           });
-          self.props.history.pushState(null, '/about');
+          self.props.history.pushState(null, '/profile');
         }
       });
     }

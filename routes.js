@@ -2,6 +2,7 @@ import AppComponent from './components/app';
 import IndexComponent from './components/index';
 import RegisterComponent from './components/register';
 import AboutComponent from './components/about';
+import ProfileComponent from './components/profile';
 import ActivationComponent from './components/activation';
 import SignInComponent from './components/signin';
 
@@ -20,6 +21,10 @@ const routes = {
     {
       path: '/signin',
       component: SignInComponent
+    },
+    {
+      path: '/profile',
+      component: ProfileComponent
     },
     {
       path: '/about',
