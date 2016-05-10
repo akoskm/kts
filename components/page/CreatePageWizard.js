@@ -14,6 +14,7 @@ import StartWizard from './StartWizard';
 import NameForm from './NameForm';
 import AddressForm from './AddressForm';
 import SummaryForm from './SummaryForm';
+import WizardResult from './WizardResult';
 
 export default class CreatePageWizard extends React.Component {
 
@@ -23,7 +24,8 @@ export default class CreatePageWizard extends React.Component {
     this.state = {
       step: 1,
       page: {
-        name: ''
+        name: '',
+        addr: ''
       }
     };
 
@@ -31,6 +33,7 @@ export default class CreatePageWizard extends React.Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.validateNotEmpty = this.validateNotEmpty.bind(this);
   }
 
   getNameValidationState() {
@@ -45,22 +48,6 @@ export default class CreatePageWizard extends React.Component {
     } else {
       return 'error';
     }
-  }
-
-  getAdd1ValidationState() {
-    let addr1 = this.state.page.addr1;
-    if (!addr1) {
-      return 'error';
-    }
-    return 'success';
-  }
-
-  getAdd2ValidationState() {
-    let addr2 = this.state.page.addr2;
-    if (!addr2) {
-      return 'error';
-    }
-    return 'success';
   }
 
   startWizard() {
@@ -93,6 +80,14 @@ export default class CreatePageWizard extends React.Component {
     }
   }
 
+  validateNotEmpty(field) {
+    const page = this.state.page;
+    if (!page[field]) {
+      return 'error';
+    }
+    return 'success';
+  }
+
   render() {
     switch (this.state.step) {
     case 1:
@@ -112,21 +107,28 @@ export default class CreatePageWizard extends React.Component {
     case 3:
       return (
         <AddressForm
-          addr1Validation={this.getAdd1ValidationState()}
-          addr2Validation={this.getAdd2ValidationState()}
           page={this.state.page}
           handleChange={this.handleChange}
           handlePrevious={this.previous}
           handleNext={this.next}
+          validateNotEmpty={this.validateNotEmpty}
         />
       );
     case 4:
       return (
-        <SummaryForm page={this.state.page} />
+        <SummaryForm
+          page={this.state.page}
+          handlePrevious={this.previous}
+          handleNext={this.next}
+        />
+      );
+    case 5:
+      return (
+        <WizardResult result={this.state.result}/>
       );
     default:
       return (
-        <StartWizard />
+        <StartWizard startWizard={this.startWizard}/>
       );
     }
   }

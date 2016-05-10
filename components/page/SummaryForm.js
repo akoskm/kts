@@ -25,12 +25,8 @@ class SummaryForm extends React.Component {
           <p>{this.props.page.name}</p>
         </FormGroup>
         <FormGroup controlId='formBasicText'>
-          <ControlLabel>Address Line 1</ControlLabel>
-          <p>{this.props.page.addr1}</p>
-        </FormGroup>
-        <FormGroup controlId='formBasicText'>
-          <ControlLabel>Address Line 2</ControlLabel>
-          <p>{this.props.page.addr2}</p>
+          <ControlLabel>Address</ControlLabel>
+          <pre>{this.props.page.addr}</pre>
         </FormGroup>
         <ButtonToolbar>
           <Button onClick={this.props.handlePrevious}>Back</Button>

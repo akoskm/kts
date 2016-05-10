@@ -21,28 +21,15 @@ class AddressForm extends React.Component {
     return (
       <form>
         <FormGroup
-          controlId='formBasicText'
-          validationState={this.props.addr1Validation}
+          controlId='addr'
+          validationState={this.props.validateNotEmpty('addr')}
         >
-          <ControlLabel>Address Line 1</ControlLabel>
+          <ControlLabel>Address</ControlLabel>
           <FormControl
+            componentClass='textarea'
             type='text'
-            value={this.props.page.addr1}
-            data-name='addr1'
-            onChange={this.props.handleChange}
-          />
-          <FormControl.Feedback />
-          <HelpBlock>Required.</HelpBlock>
-        </FormGroup>
-        <FormGroup
-          controlId='formBasicText'
-          validationState={this.props.addr2Validation}
-        >
-          <ControlLabel>Address Line 2</ControlLabel>
-          <FormControl
-            type='text'
-            value={this.props.page.addr2}
-            data-name='addr2'
+            value={this.props.page.addr}
+            data-name='addr'
             onChange={this.props.handleChange}
           />
           <FormControl.Feedback />
@@ -58,8 +45,7 @@ class AddressForm extends React.Component {
 }
 
 AddressForm.propTypes = {
-  addr1Validation: React.PropTypes.object.isRequired,
-  addr2Validation: React.PropTypes.object.isRequired,
+  validateNotEmpty: React.PropTypes.object.isRequired,
   page: React.PropTypes.object.isRequired,
   handleChange: React.PropTypes.object.isRequired,
   handlePrevious: React.PropTypes.object.isRequired,
