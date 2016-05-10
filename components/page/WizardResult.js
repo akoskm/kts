@@ -7,9 +7,9 @@ class WizardResult extends React.Component {
 
   render() {
     return (
-      <Alert bsStyle='success' onDismiss={this.handleAlertDismiss}>
+      <Alert bsStyle='success'>
           <h4>Success!</h4>
-          <p>Your page has been created!</p>
+          <p>{this.props.page.name} has been created.</p>
           <p>
             <Button bsStyle='primary'>Show me</Button>
             <span> or </span>
@@ -19,5 +19,9 @@ class WizardResult extends React.Component {
     );
   }
 }
+
+WizardResult.propTypes = {
+  page: React.PropTypes.object.isRequired
+};
 
 export default WizardResult;

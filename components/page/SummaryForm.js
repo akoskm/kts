@@ -13,10 +13,6 @@ import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 
 class SummaryForm extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <form>

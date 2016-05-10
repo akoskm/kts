@@ -124,7 +124,7 @@ export default class CreatePageWizard extends React.Component {
       );
     case 5:
       return (
-        <WizardResult result={this.state.result}/>
+        <WizardResult page={this.state.page} result={this.state.result}/>
       );
     default:
       return (
