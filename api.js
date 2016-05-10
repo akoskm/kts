@@ -3,6 +3,7 @@ import activate from './services/activate';
 import signin from './services/signin';
 import signout from './services/signout';
 import { profileApi } from './services/profile';
+import { pageApi } from './services/page';
 
 const api = {
   register,
@@ -12,7 +13,8 @@ const api = {
   profile: profileApi.profile,
   uploadPhoto: profileApi.uploadPhoto,
   deletePhoto: profileApi.deletePhoto,
-  getPhotos: profileApi.getProfilePhotos
+  getPhotos: profileApi.getProfilePhotos,
+  createPage: pageApi.createPage
 };
 
 export { api };

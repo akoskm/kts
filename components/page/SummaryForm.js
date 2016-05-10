@@ -28,7 +28,7 @@ class SummaryForm extends React.Component {
           <Button onClick={this.props.handlePrevious}>Back</Button>
           <Button
             bsStyle='primary'
-            onClick={this.props.handleNext}
+            onClick={this.props.handleSubmit}
           >Looks good, create the page</Button>
         </ButtonToolbar>
       </form>
@@ -39,7 +39,7 @@ class SummaryForm extends React.Component {
 SummaryForm.propTypes = {
   page: React.PropTypes.object.isRequired,
   handlePrevious: React.PropTypes.object.isRequired,
-  handleNext: React.PropTypes.object.handleNext
+  handleSubmit: React.PropTypes.object.isRequired
 };
 
 export default SummaryForm;

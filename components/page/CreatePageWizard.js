@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 
 import Button from 'react-bootstrap/lib/Button';
 import Input from 'react-bootstrap/lib/Input';
@@ -30,6 +31,7 @@ export default class CreatePageWizard extends React.Component {
     };
 
     this.startWizard = this.startWizard.bind(this);
+    this.submitWizard = this.submitWizard.bind(this);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -53,6 +55,14 @@ export default class CreatePageWizard extends React.Component {
   startWizard() {
     this.setState({
       step: 2
+    });
+  }
+
+  submitWizard() {
+    const self = this;
+    console.log('send to server', this.state.page);
+    $.post('/api/page', this.state.page).done(function (data) {
+      self.next();
     });
   }
 
@@ -119,7 +129,7 @@ export default class CreatePageWizard extends React.Component {
         <SummaryForm
           page={this.state.page}
           handlePrevious={this.previous}
-          handleNext={this.next}
+          handleSubmit={this.submitWizard}
         />
       );
     case 5:

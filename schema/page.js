@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 let pageSchema = new mongoose.Schema({
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   members: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  name: { type: String, required: true, unique: true },
   address: { type: String, required: true },
   photos: [{
     filename: { type: String },
