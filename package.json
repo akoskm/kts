@@ -38,6 +38,7 @@
     "jquery": "^2.2.0",
     "log4js": "^0.6.29",
     "mongoose": "^4.4.14",
+    "mongoose-url-slugs": "^0.2.1",
     "multer": "^1.1.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",

@@ -32,6 +32,7 @@ export default class CreatePageWizard extends React.Component {
 
     this.startWizard = this.startWizard.bind(this);
     this.submitWizard = this.submitWizard.bind(this);
+    this.closeWizard = this.closeWizard.bind(this);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -62,7 +63,18 @@ export default class CreatePageWizard extends React.Component {
     const self = this;
     console.log('send to server', this.state.page);
     $.post('/api/page', this.state.page).done(function (data) {
-      self.next();
+      if (data.success) {
+        self.setState({
+          step: self.state.step + 1,
+          url: '/' + data.result.nameslug
+        });
+      }
+    });
+  }
+
+  closeWizard() {
+    this.setState({
+      step: 1
     });
   }
 
@@ -134,7 +146,7 @@ export default class CreatePageWizard extends React.Component {
       );
     case 5:
       return (
-        <WizardResult page={this.state.page} result={this.state.result}/>
+        <WizardResult page={this.state.page} url={this.state.url} closeWizard={this.closeWizard}/>
       );
     default:
       return (

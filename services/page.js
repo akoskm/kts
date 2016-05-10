@@ -28,7 +28,8 @@ const pageApi = {
     workflow.on('createPage', function () {
       mongoose.model('Page').create({
         name: req.body.name,
-        address: req.body.addr
+        address: req.body.addr,
+        owner: req.user
       }, function (err, doc) {
         if (err) {
           req.app.logger.error('Error while saving image', err);

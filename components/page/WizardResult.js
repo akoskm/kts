@@ -11,9 +11,9 @@ class WizardResult extends React.Component {
           <h4>Success!</h4>
           <p>{this.props.page.name} has been created.</p>
           <p>
-            <Button bsStyle='primary'>Show me</Button>
+            <Button bsStyle='primary' href={this.props.url}>Show me</Button>
             <span> or </span>
-            <Button onClick={this.handleAlertDismiss}>Close this wizard</Button>
+            <Button onClick={this.props.closeWizard}>Close this wizard</Button>
           </p>
         </Alert>
     );
@@ -21,7 +21,9 @@ class WizardResult extends React.Component {
 }
 
 WizardResult.propTypes = {
-  page: React.PropTypes.object.isRequired
+  closeWizard: React.PropTypes.object.isRequired,
+  page: React.PropTypes.object.isRequired,
+  url: React.PropTypes.object.isRequired
 };
 
 export default WizardResult;
