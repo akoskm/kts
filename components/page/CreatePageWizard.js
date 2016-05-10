@@ -40,7 +40,7 @@ export default class CreatePageWizard extends React.Component {
     let name = this.state.page.name;
     if (name) {
       const length = name.length;
-      if (length < 6) {
+      if (length < 5) {
         return 'error';
       } else {
         return 'success';

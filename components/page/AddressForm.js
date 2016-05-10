@@ -33,7 +33,11 @@ class AddressForm extends React.Component {
         </FormGroup>
         <ButtonToolbar>
           <Button onClick={this.props.handlePrevious}>Back</Button>
-          <Button bsStyle='primary' onClick={this.props.handleNext}>Next</Button>
+          <Button
+            bsStyle='primary'
+            onClick={this.props.handleNext}
+            disabled={this.props.validateNotEmpty('addr') !== 'success'}
+          >Next</Button>
         </ButtonToolbar>
       </form>
     );
