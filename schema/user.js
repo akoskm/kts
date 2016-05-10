@@ -5,14 +5,7 @@ let userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   email: { type: String, unique: true, index: true, required: true },
   status: { type: String, default: 'PENDING', required: true },
-  token: { type: String, unique: true, index: true },
-  photos: [{
-    filename: { type: String },
-    name: { type: String },
-    contentType: { type: String },
-    size: { type: Number },
-    tags: []
-  }]
+  token: { type: String, unique: true, index: true }
 });
 userSchema.set('autoIndex', (process.env.NODE_ENV === 'development'));
 
