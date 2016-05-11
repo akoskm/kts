@@ -18,12 +18,15 @@ class Photos extends React.Component {
   }
 
   componentDidMount() {
-    this.serverRequest = $.get('/api/profile/photos', function (response) {
+    let nameslug = this.props.nameslug;
+    this.serverRequest = $.get('/api/pages/' + nameslug + '/photos', function (response) {
       let data = response.result;
-      this.setState({
-        _id: data._id,
-        photos: data.photos
-      });
+      if (response.success && data) {
+        this.setState({
+          _id: data._id,
+          photos: data.photos
+        });
+      }
     }.bind(this));
   }
 
@@ -47,23 +50,32 @@ class Photos extends React.Component {
 
   render() {
     let self = this;
+    let photos = this.state.photos;
+    let markup;
+    if (photos && photos.length > 0) {
+      markup = photos.map(function (image, i) {
+        return (
+          <Photo index={i}
+            photoid={image._id}
+            userid={self.state._id}
+            filename={image.filename}
+            onItemClick={self.onItemClick}
+          />
+        );
+      });
+    } else {
+      markup = <Col md={12}>No Photos found.</Col>;
+    }
     return (
-      <div>
-        <Row>
-          {this.state.photos.map(function (image, i) {
-            return (
-              <Photo index={i}
-                photoid={image._id}
-                userid={self.state._id}
-                filename={image.filename}
-                onItemClick={self.onItemClick}
-              />
-            );
-          })}
-        </Row>
-      </div>
+      <Row>
+        {markup}
+      </Row>
     );
   }
 }
+
+Photos.propTypes = {
+  nameslug: React.PropTypes.object.isRequired
+};
 
 export default Photos;

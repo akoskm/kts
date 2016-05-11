@@ -91,6 +91,24 @@ const pageApi = {
 
       return cb(null, doc);
     });
+  },
+
+  getPhotos(req, res, next) {
+    const workflow = workflowFactory(req, res);
+
+    workflow.on('imageLookup', function () {
+      mongoose.model('User').findOne({
+        nameslug: req.params.nameslug
+      }, '_id photos', function (err, doc) {
+        if (err) {
+          req.app.logger.error('Cannot get photos', err);
+        }
+        workflow.outcome.result = doc;
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.emit('imageLookup');
   }
 };
 

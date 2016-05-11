@@ -13,11 +13,13 @@ const api = {
   profile: profileApi.profile,
   uploadPhoto: profileApi.uploadPhoto,
   deletePhoto: profileApi.deletePhoto,
-  getPhotos: profileApi.getProfilePhotos,
+
+  // page API
   createPage: pageApi.createPage,
   getPages: pageApi.getPages,
   findPage: pageApi.findPage,
-  _findPage: pageApi._findPage
+  _findPage: pageApi._findPage,
+  getPhotos: pageApi.getPhotos
 };
 
 export { api };

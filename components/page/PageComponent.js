@@ -4,6 +4,8 @@ import $ from 'jquery';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
+import Photos from '../Photos';
+
 class PageComponent extends React.Component {
 
   constructor(props, context) {
@@ -36,11 +38,19 @@ class PageComponent extends React.Component {
 
   render() {
     return (
-      <Row>
-        <Col xs={12} lg={12} md={12}>
-          <h1>{this.state.page.name}</h1>
-        </Col>
-      </Row>
+      <div>
+        <Row>
+          <Col xs={12} lg={12} md={12}>
+            <h1>{this.state.page.name}</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <h4>Photos</h4>
+          </Col>
+        </Row>
+        <Photos nameslug={this.props.routeParams.nameslug}/>
+      </div>
     );
   }
 }

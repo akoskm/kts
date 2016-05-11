@@ -171,12 +171,14 @@ app.post('/api/activate', api.activate);
 app.post('/api/login', api.signin);
 app.post('/api/logout', api.signout);
 app.get('/api/profile', api.profile);
-app.get('/api/profile/photos', api.getPhotos);
+
 app.delete('/api/profile/photos/:photoid', api.deletePhoto);
 app.post('/api/profile/img', upload.single('file'), api.uploadPhoto);
+
 app.post('/api/pages', api.createPage);
 app.get('/api/pages', api.getPages);
 app.get('/api/pages/:nameslug', api.findPage);
+app.get('/api/pages/:nameslug/photos', api.getPhotos);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
 let sendHtml = function (res, props, context) {
