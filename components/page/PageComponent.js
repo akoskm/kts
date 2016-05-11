@@ -32,6 +32,7 @@ class PageComponent extends React.Component {
 }
 
 PageComponent.propTypes = {
+  params: React.PropTypes.object.isRequired,
   routeParams: React.PropTypes.object.isRequired
 };
 
