@@ -16,6 +16,7 @@ import NameForm from './NameForm';
 import AddressForm from './AddressForm';
 import SummaryForm from './SummaryForm';
 import WizardResult from './WizardResult';
+import Progress from './Progress';
 
 export default class CreatePageWizard extends React.Component {
 
@@ -23,7 +24,7 @@ export default class CreatePageWizard extends React.Component {
     super(props);
 
     this.state = {
-      step: 1,
+      step: 0,
       page: {
         name: '',
         addr: ''
@@ -55,7 +56,7 @@ export default class CreatePageWizard extends React.Component {
 
   startWizard() {
     this.setState({
-      step: 2
+      step: 1
     });
   }
 
@@ -112,39 +113,48 @@ export default class CreatePageWizard extends React.Component {
 
   render() {
     switch (this.state.step) {
-    case 1:
+    case 0:
       return (
         <StartWizard startWizard={this.startWizard}/>
       );
+    case 1:
+      return (
+        <div>
+          <Progress step={this.state.step}/>
+          <NameForm
+            validationState={this.getNameValidationState()}
+            value={this.state.page.name}
+            handleChange={this.handleChange}
+            handlePrevious={this.previous}
+            handleNext={this.next}
+          />
+        </div>
+      );
     case 2:
       return (
-        <NameForm
-          validationState={this.getNameValidationState()}
-          value={this.state.page.name}
-          handleChange={this.handleChange}
-          handlePrevious={this.previous}
-          handleNext={this.next}
-        />
+        <div>
+          <Progress step={this.state.step}/>
+          <AddressForm
+            page={this.state.page}
+            handleChange={this.handleChange}
+            handlePrevious={this.previous}
+            handleNext={this.next}
+            validateNotEmpty={this.validateNotEmpty}
+          />
+        </div>
       );
     case 3:
       return (
-        <AddressForm
-          page={this.state.page}
-          handleChange={this.handleChange}
-          handlePrevious={this.previous}
-          handleNext={this.next}
-          validateNotEmpty={this.validateNotEmpty}
-        />
+        <div>
+          <Progress step={this.state.step}/>
+          <SummaryForm
+            page={this.state.page}
+            handlePrevious={this.previous}
+            handleSubmit={this.submitWizard}
+          />
+        </div>
       );
     case 4:
-      return (
-        <SummaryForm
-          page={this.state.page}
-          handlePrevious={this.previous}
-          handleSubmit={this.submitWizard}
-        />
-      );
-    case 5:
       return (
         <WizardResult page={this.state.page} url={this.state.url} closeWizard={this.closeWizard}/>
       );
