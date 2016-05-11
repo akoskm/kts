@@ -176,31 +176,46 @@ app.delete('/api/profile/photos/:photoid', api.deletePhoto);
 app.post('/api/profile/img', upload.single('file'), api.uploadPhoto);
 app.post('/api/pages', api.createPage);
 app.get('/api/pages', api.getPages);
+app.get('/api/pages/:nameslug', api.findPage);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
-app.get('*', (req, res) => {
+let sendHtml = function (res, props, context) {
+  const markup = renderToString(<RoutingContext {...props} params={{ context }}/>);
+  res.send(`
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <title>KTS</title>
+      <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
+    </head>
+    <script>
+      window.APP_STATE = ${context};
+    </script>
+    <body>
+      <div id="app">${markup}</div>
+      <script src="/dist/bundle.js"></script>
+    </body>
+  </html>
+  `);
+};
+
+app.get('*', (req, res, next) => {
   match({ routes, location: req.url }, (err, redirectLocation, props) => {
     if (err) {
       res.status(500).send(err.message);
     } else if (redirectLocation) {
       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
     } else if (props) {
-      const markup = renderToString(<RoutingContext {...props}/>);
+      let context = '';
 
-      res.send(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>KTS</title>
-          <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
-        </head>
-
-        <body>
-          <div id="app">${markup}</div>
-          <script src="/dist/bundle.js"></script>
-        </body>
-      </html>
-      `);
+      if (props.params.nameslug) {
+        api._findPage(props.params.nameslug, logger, function (err, doc) {
+          context = JSON.stringify(doc);
+          sendHtml(res, props, context);
+        });
+      } else {
+        sendHtml(res, props, context);
+      }
 
     } else {
       res.sendStatus(404);

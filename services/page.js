@@ -61,6 +61,36 @@ const pageApi = {
     });
 
     workflow.emit('getPages');
+  },
+
+  findPage(req, res, next) {
+    const workflow = workflowFactory(req, res);
+    const self = this;
+
+    workflow.on('findPage', function () {
+      self._findPage(req.params.nameslug, req.app.logger, function (err, doc) {
+        if (err) {
+          workflow.outcome.errors.push(err);
+          return workflow.emit('response');
+        }
+
+        workflow.outcome.result = doc;
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.emit('findPage');
+  },
+
+  _findPage(nameslug, logger, cb) {
+    mongoose.model('Page').findOne({ nameslug }, function (err, doc) {
+      if (err) {
+        logger.error('Error while fetching pages', err);
+        return cb('Cannot fetch pages', null);
+      }
+
+      return cb(null, doc);
+    });
   }
 };
 

@@ -15,7 +15,9 @@ const api = {
   deletePhoto: profileApi.deletePhoto,
   getPhotos: profileApi.getProfilePhotos,
   createPage: pageApi.createPage,
-  getPages: pageApi.getPages
+  getPages: pageApi.getPages,
+  findPage: pageApi.findPage,
+  _findPage: pageApi._findPage
 };
 
 export { api };

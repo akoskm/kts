@@ -5,6 +5,7 @@ import AboutComponent from './components/about';
 import ProfileComponent from './components/profile';
 import ActivationComponent from './components/activation';
 import SignInComponent from './components/signin';
+import PageComponent from './components/page/PageComponent';
 
 const routes = {
   path: '',
@@ -33,6 +34,10 @@ const routes = {
     {
       path: '/activation/:token',
       component: ActivationComponent
+    },
+    {
+      path: '/:nameslug',
+      component: PageComponent
     }
   ]
 };
