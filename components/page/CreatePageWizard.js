@@ -11,12 +11,13 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 
-import StartWizard from './StartWizard';
+import WizardWelcome from './WizardWelcome';
 import NameForm from './NameForm';
 import AddressForm from './AddressForm';
 import SummaryForm from './SummaryForm';
 import WizardResult from './WizardResult';
 import Progress from './Progress';
+import Controls from './Controls';
 
 export default class CreatePageWizard extends React.Component {
 
@@ -31,13 +32,13 @@ export default class CreatePageWizard extends React.Component {
       }
     };
 
-    this.startWizard = this.startWizard.bind(this);
+    this.handleStartWizard = this.handleStartWizard.bind(this);
     this.submitWizard = this.submitWizard.bind(this);
-    this.closeWizard = this.closeWizard.bind(this);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.validateNotEmpty = this.validateNotEmpty.bind(this);
+    this.resetWizard = this.resetWizard.bind(this);
   }
 
   getNameValidationState() {
@@ -54,7 +55,7 @@ export default class CreatePageWizard extends React.Component {
     }
   }
 
-  startWizard() {
+  handleStartWizard() {
     this.setState({
       step: 1
     });
@@ -73,12 +74,6 @@ export default class CreatePageWizard extends React.Component {
     });
   }
 
-  closeWizard() {
-    this.setState({
-      step: 1
-    });
-  }
-
   next() {
     this.setState({
       step: this.state.step + 1
@@ -88,6 +83,12 @@ export default class CreatePageWizard extends React.Component {
   previous() {
     this.setState({
       step: this.state.step - 1
+    });
+  }
+
+  resetWizard() {
+    this.setState({
+      step: 0
     });
   }
 
@@ -115,7 +116,7 @@ export default class CreatePageWizard extends React.Component {
     switch (this.state.step) {
     case 0:
       return (
-        <StartWizard startWizard={this.startWizard}/>
+        <WizardWelcome startWizard={this.handleStartWizard}/>
       );
     case 1:
       return (
@@ -125,8 +126,12 @@ export default class CreatePageWizard extends React.Component {
             validationState={this.getNameValidationState()}
             value={this.state.page.name}
             handleChange={this.handleChange}
+          />
+          <Controls
             handlePrevious={this.previous}
             handleNext={this.next}
+            disabled={this.getNameValidationState()  !== 'success'}
+            resetWizard={this.resetWizard}
           />
         </div>
       );
@@ -137,9 +142,13 @@ export default class CreatePageWizard extends React.Component {
           <AddressForm
             page={this.state.page}
             handleChange={this.handleChange}
+            validateNotEmpty={this.validateNotEmpty}
+          />
+          <Controls
             handlePrevious={this.previous}
             handleNext={this.next}
-            validateNotEmpty={this.validateNotEmpty}
+            disabled={this.validateNotEmpty('addr') !== 'success'}
+            resetWizard={this.resetWizard}
           />
         </div>
       );
@@ -149,18 +158,23 @@ export default class CreatePageWizard extends React.Component {
           <Progress step={this.state.step}/>
           <SummaryForm
             page={this.state.page}
+          />
+          <Controls
             handlePrevious={this.previous}
-            handleSubmit={this.submitWizard}
+            handleNext={this.submitWizard}
+            nextText='Submit'
+            disabled={this.validateNotEmpty('addr') !== 'success'}
+            resetWizard={this.resetWizard}
           />
         </div>
       );
     case 4:
       return (
-        <WizardResult page={this.state.page} url={this.state.url} closeWizard={this.closeWizard}/>
+        <WizardResult page={this.state.page} url={this.state.url} closeWizard={this.resetWizard}/>
       );
     default:
       return (
-        <StartWizard startWizard={this.startWizard}/>
+        <WizardWelcome startWizard={this.handleStartWizard}/>
       );
     }
   }

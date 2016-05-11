@@ -24,13 +24,6 @@ class SummaryForm extends React.Component {
           <ControlLabel>Address</ControlLabel>
           <pre>{this.props.page.addr}</pre>
         </FormGroup>
-        <ButtonToolbar>
-          <Button onClick={this.props.handlePrevious}>Back</Button>
-          <Button
-            bsStyle='primary'
-            onClick={this.props.handleSubmit}
-          >Looks good, create the page</Button>
-        </ButtonToolbar>
       </form>
     );
   }

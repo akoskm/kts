@@ -30,14 +30,6 @@ class NameForm extends React.Component {
             <FormControl.Feedback />
             <HelpBlock>Name must be at least 5 characters long.</HelpBlock>
           </FormGroup>
-          <ButtonToolbar>
-            <Button onClick={this.props.handlePrevious}>Back</Button>
-            <Button
-              bsStyle='primary'
-              onClick={this.props.handleNext}
-              disabled={this.props.validationState !== 'success'}
-            >Next</Button>
-          </ButtonToolbar>
         </form>
     );
   }
@@ -48,7 +40,8 @@ NameForm.propTypes = {
   value: React.PropTypes.object.isRequired,
   handleChange: React.PropTypes.object.isRequired,
   handlePrevious: React.PropTypes.object.isRequired,
-  handleNext: React.PropTypes.object.isRequired
+  handleNext: React.PropTypes.object.isRequired,
+  resetWizard: React.PropTypes.func.isRequired
 };
 
 export default NameForm;

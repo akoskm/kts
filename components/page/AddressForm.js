@@ -31,25 +31,18 @@ class AddressForm extends React.Component {
           <FormControl.Feedback />
           <HelpBlock>Required.</HelpBlock>
         </FormGroup>
-        <ButtonToolbar>
-          <Button onClick={this.props.handlePrevious}>Back</Button>
-          <Button
-            bsStyle='primary'
-            onClick={this.props.handleNext}
-            disabled={this.props.validateNotEmpty('addr') !== 'success'}
-          >Next</Button>
-        </ButtonToolbar>
       </form>
     );
   }
 }
 
 AddressForm.propTypes = {
-  validateNotEmpty: React.PropTypes.object.isRequired,
+  validateNotEmpty: React.PropTypes.func.isRequired,
+  disabled: React.PropTypes.object.isRequired,
   page: React.PropTypes.object.isRequired,
-  handleChange: React.PropTypes.object.isRequired,
-  handlePrevious: React.PropTypes.object.isRequired,
-  handleNext: React.PropTypes.object.isRequired
+  handleChange: React.PropTypes.func.isRequired,
+  handlePrevious: React.PropTypes.func.isRequired,
+  handleNext: React.PropTypes.func.isRequired
 };
 
 export default AddressForm;

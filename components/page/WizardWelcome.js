@@ -24,7 +24,7 @@ class StartWizard extends React.Component {
 }
 
 StartWizard.propTypes = {
-  startWizard: React.PropTypes.object.isRequired
+  startWizard: React.PropTypes.func.isRequired
 };
 
 export default StartWizard;
