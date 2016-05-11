@@ -63,7 +63,7 @@ export default class CreatePageWizard extends React.Component {
   submitWizard() {
     const self = this;
     console.log('send to server', this.state.page);
-    $.post('/api/page', this.state.page).done(function (data) {
+    $.post('/api/pages', this.state.page).done(function (data) {
       if (data.success) {
         self.setState({
           step: self.state.step + 1,
