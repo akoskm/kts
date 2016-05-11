@@ -36,7 +36,7 @@ const routes = {
       component: ActivationComponent
     },
     {
-      path: '/:nameslug',
+      path: '/page/:nameslug',
       component: PageComponent
     }
   ]

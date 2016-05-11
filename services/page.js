@@ -68,7 +68,7 @@ const pageApi = {
     const self = this;
 
     workflow.on('findPage', function () {
-      self._findPage(req.params.nameslug, req.app.logger, function (err, doc) {
+      pageApi._findPage(req.params.nameslug, req.app.logger, function (err, doc) {
         if (err) {
           workflow.outcome.errors.push(err);
           return workflow.emit('response');

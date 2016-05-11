@@ -33,7 +33,7 @@ class Pages extends React.Component {
           return (
             <div>
               <a index={i}
-                href={'/' + page.nameslug}
+                href={'/page/' + page.nameslug}
               >
               {page.name}
               </a>
