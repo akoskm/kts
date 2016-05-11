@@ -8,6 +8,7 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
 import CreatePageWizard from './page/CreatePageWizard';
+import Pages from './page/Pages';
 
 export default class IndexComponent extends React.Component {
 
@@ -45,6 +46,7 @@ export default class IndexComponent extends React.Component {
           </Col>
           <Col xs={12} md={6} lg={6}>
             <CreatePageWizard />
+            <Pages />
           </Col>
         </Row>
       </div>

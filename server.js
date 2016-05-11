@@ -174,7 +174,8 @@ app.get('/api/profile', api.profile);
 app.get('/api/profile/photos', api.getPhotos);
 app.delete('/api/profile/photos/:photoid', api.deletePhoto);
 app.post('/api/profile/img', upload.single('file'), api.uploadPhoto);
-app.post('/api/page', api.createPage);
+app.post('/api/pages', api.createPage);
+app.get('/api/pages', api.getPages);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
 app.get('*', (req, res) => {

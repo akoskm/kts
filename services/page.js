@@ -32,7 +32,7 @@ const pageApi = {
         owner: req.user
       }, function (err, doc) {
         if (err) {
-          req.app.logger.error('Error while saving image', err);
+          req.app.logger.error('Error while saving page', err);
           workflow.outcome.errors.push('Cannot create page');
           return workflow.emit('response');
         }
@@ -42,6 +42,25 @@ const pageApi = {
     });
 
     workflow.emit('validatePage');
+  },
+
+  getPages(req, res, next) {
+    const workflow = workflowFactory(req, res);
+
+    workflow.on('getPages', function () {
+      mongoose.model('Page').find({ owner: req.user }, function (err, doc) {
+        if (err) {
+          req.app.logger.error('Error while fetching pages', err);
+          workflow.outcome.errors.push('Cannot fetch pages');
+          return workflow.emit('response');
+        }
+
+        workflow.outcome.result = doc;
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.emit('getPages');
   }
 };
 
