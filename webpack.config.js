@@ -27,7 +27,7 @@ module.exports = {
   noInfo: true, // set to false to see a list of every file being bundled.
   entry: [
     `webpack-hot-middleware/client`,
-    './client-render.js'
+    './src/client-render.js'
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -40,7 +40,8 @@ module.exports = {
         test: /\.js?$/,
         loader: 'babel',
         query: babelSettings,
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        include: path.join(__dirname, 'src')
       },
       {
         test: /\.(less)$/,

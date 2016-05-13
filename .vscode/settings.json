@@ -6,6 +6,7 @@
       "logs/*.*": true,
       "npm-debug.log": true,
       "config.js": true,
-      "uploads": true
+      "uploads": true,
+      "out": true
   }
 }

@@ -20,7 +20,7 @@ import { api } from './api';
 import schema from './schema';
 import DataWrapper from './datawrapper';
 import webpack from 'webpack';
-import webpackConfig from './webpack.config';
+import webpackConfig from '../webpack.config';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import multer  from 'multer';
@@ -58,7 +58,7 @@ mongoose.connect('mongodb://localhost/kts');
 const LocalStrategy = require('passport-local').Strategy;
 
 // logger configuration
-log4js.configure('config/log4js.json');
+log4js.configure('./src/config/log4js.json');
 const logger = log4js.getLogger();
 
 const mongoStore = connectMongo(session);
@@ -89,7 +89,7 @@ if (nodeEnv === 'development') {
 }
 
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use('/static', express.static(path.join(__dirname, 'uploads')));
+app.use('/static', express.static(path.join(__dirname, '../uploads')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser(config.cryptoKey));
