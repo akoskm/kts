@@ -32,7 +32,7 @@ class Photo extends React.Component {
   }
 
   render() {
-    let url = '/static/' + this.props.userid + '_img/' + this.props.filename;
+    let url = '/static/' + this.props.nameslug + '_img/' + this.props.filename;
     return (
       <Col xd={3} md={3} lg={3}>
         <div className='thumbnail'>
@@ -71,7 +71,7 @@ class Photo extends React.Component {
 }
 
 Photo.propTypes = {
-  userid: React.PropTypes.object.isRequired,
+  nameslug: React.PropTypes.object.isRequired,
   filename: React.PropTypes.object.isRequired,
   index: React.PropTypes.object.isRequired,
   photoid: React.PropTypes.object.isRequired,

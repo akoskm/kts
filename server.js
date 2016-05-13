@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
     if (!req.user || !req.user._id) {
       cb('User not found');
     } else {
-      const userdir = path.join(__dirname, 'uploads/', req.user._id + '_img');
+      const userdir = path.join(__dirname, 'uploads/', req.params.nameslug + '_img');
       fs.mkdir(userdir, function (err) { // returns with error if already exists
         cb(null, userdir);
       });
@@ -173,12 +173,12 @@ app.post('/api/logout', api.signout);
 app.get('/api/profile', api.profile);
 
 app.delete('/api/profile/photos/:photoid', api.deletePhoto);
-app.post('/api/profile/img', upload.single('file'), api.uploadPhoto);
 
 app.post('/api/pages', api.createPage);
 app.get('/api/pages', api.getPages);
 app.get('/api/pages/:nameslug', api.findPage);
 app.get('/api/pages/:nameslug/photos', api.getPhotos);
+app.post('/api/pages/:nameslug/photos', upload.single('file'), api.uploadPhoto);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
 let sendHtml = function (res, props, context) {
@@ -191,7 +191,7 @@ let sendHtml = function (res, props, context) {
       <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
     </head>
     <script>
-      window.APP_STATE = ${context};
+      window.APP_STATE = '${context}';
     </script>
     <body>
       <div id="app">${markup}</div>

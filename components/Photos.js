@@ -49,15 +49,16 @@ class Photos extends React.Component {
   }
 
   render() {
-    let self = this;
-    let photos = this.state.photos;
+    const self = this;
+    const photos = this.state.photos;
+    const nameslug = this.props.nameslug;
     let markup;
     if (photos && photos.length > 0) {
       markup = photos.map(function (image, i) {
         return (
           <Photo index={i}
             photoid={image._id}
-            userid={self.state._id}
+            nameslug={nameslug}
             filename={image.filename}
             onItemClick={self.onItemClick}
           />

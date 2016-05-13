@@ -97,7 +97,7 @@ const pageApi = {
     const workflow = workflowFactory(req, res);
 
     workflow.on('imageLookup', function () {
-      mongoose.model('User').findOne({
+      mongoose.model('Page').findOne({
         nameslug: req.params.nameslug
       }, '_id photos', function (err, doc) {
         if (err) {

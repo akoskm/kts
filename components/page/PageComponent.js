@@ -3,6 +3,7 @@ import $ from 'jquery';
 
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
+import DropzoneComponent from 'react-dropzone-component';
 
 import Photos from '../Photos';
 
@@ -16,8 +17,11 @@ class PageComponent extends React.Component {
       initialState = JSON.parse(initialStateStr);
     }
     this.state = {
-      page: initialState
+      page: initialState,
+      files: []
     };
+
+    this.onItemClick = this.onItemClick.bind(this);
   }
 
   componentDidMount() {
@@ -36,12 +40,55 @@ class PageComponent extends React.Component {
     this.serverRequest.abort();
   }
 
+  onItemClick(i) {
+    this.state.files.splice(i, 1);
+    this.setState({
+      files: this.state.files
+    });
+  }
+
+  getUploadURL() {
+    const nameslug = this.props.routeParams.nameslug;
+    return '/api/pages/' + nameslug + '/photos';
+  }
+
   render() {
+    let callbackArray = [
+      function () {
+        console.log('Look Ma, I\'m a callback in an array!');
+      },
+      function () {
+        console.log('Wooooow!');
+      }
+    ];
+    let eventHandlers = {
+      // All of these receive the event as first parameter:
+      drop: callbackArray
+    };
+    let componentConfig = {
+      iconFiletypes: ['.jpg', '.png', '.gif'],
+      showFiletypeIcon: true,
+      postUrl: this.getUploadURL()
+    };
+
+    let djsConfig = {
+      addRemoveLinks: true,
+      acceptedFiles: 'image/jpeg,image/png,image/gif'
+    };
+
     return (
       <div>
         <Row>
           <Col xs={12} lg={12} md={12}>
             <h1>{this.state.page.name}</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} md={6} lg={6}>
+              <DropzoneComponent djsConfig={djsConfig}
+                config={componentConfig}
+                eventHandlers={eventHandlers}
+              />
           </Col>
         </Row>
         <Row>
