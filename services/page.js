@@ -109,6 +109,79 @@ const pageApi = {
     });
 
     workflow.emit('imageLookup');
+  },
+
+  uploadPhoto(req, res, next) {
+    const workflow = workflowFactory(req, res);
+    const file = req.file;
+
+    workflow.on('upload', function () {
+      fs.readFile(file.path, function (err, data) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        if (file.size / 1000000 > 1) {
+          workflow.outcome.errors.push('Maximum file size is 1MB');
+          return workflow.emit('response');
+        }
+
+        let query = {
+          $push: {
+            photos: {
+              filename: file.filename,
+              name: file.originalname,
+              contentType: file.mimetype,
+              size: file.size
+            }
+          }
+        };
+
+        mongoose.model('Page').findOneAndUpdate({
+          owner: req.user,
+          nameslug: req.params.nameslug
+        }, query, function (err, doc) {
+          if (err) {
+            req.app.logger.error('Error while saving image', err);
+            workflow.outcome.errors.push('Cannot save image');
+            return workflow.emit('response');
+          }
+          workflow.outcome.result = 'Uploaded';
+          return workflow.emit('response');
+        });
+      });
+    });
+
+    workflow.emit('upload');
+  },
+
+  deletePhoto(req, res, next) {
+    const workflow = workflowFactory(req, res);
+
+    workflow.on('deletePicture', function () {
+      let query = {
+        $pull: {
+          photos: {
+            _id: req.params.photoid
+          }
+        }
+      };
+
+      mongoose.model('Page').findOneAndUpdate({
+        owner: req.user,
+        nameslug: req.params.nameslug
+      }, query, function (err, doc) {
+        if (err) {
+          req.app.logger.error('Error while removing image', err);
+          workflow.outcome.errors.push('Cannot delete image');
+          return workflow.emit('response');
+        }
+        workflow.outcome.result = 'Deleted';
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.emit('deletePicture');
   }
 };
 
