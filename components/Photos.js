@@ -18,9 +18,9 @@ class Photos extends React.Component {
   }
 
   componentDidMount() {
-    let nameslug = this.props.nameslug;
+    const nameslug = this.props.nameslug;
     this.serverRequest = $.get('/api/pages/' + nameslug + '/photos', function (response) {
-      let data = response.result;
+      const data = response.result;
       if (response.success && data) {
         this.setState({
           _id: data._id,
@@ -35,12 +35,13 @@ class Photos extends React.Component {
   }
 
   onItemClick(photoid, index) {
+    const nameslug = this.props.nameslug;
     this.state.photos.splice(index, 1);
     this.setState({
       photos: this.state.photos
     });
     return $.ajax({
-      url: '/api/profile/photos/' + photoid,
+      url: '/api/pages/' + nameslug + '/photos/' + photoid,
       type: 'DELETE',
       success(response) {
         console.log(response);

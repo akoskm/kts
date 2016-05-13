@@ -172,13 +172,12 @@ app.post('/api/login', api.signin);
 app.post('/api/logout', api.signout);
 app.get('/api/profile', api.profile);
 
-app.delete('/api/profile/photos/:photoid', api.deletePhoto);
-
 app.post('/api/pages', api.createPage);
 app.get('/api/pages', api.getPages);
 app.get('/api/pages/:nameslug', api.findPage);
 app.get('/api/pages/:nameslug/photos', api.getPhotos);
 app.post('/api/pages/:nameslug/photos', upload.single('file'), api.uploadPhoto);
+app.delete('/api/pages/:nameslug/photos/:photoid', api.deletePhoto);
 
 /* main router for reactjs components, supporting both client and server side rendering*/
 let sendHtml = function (res, props, context) {
