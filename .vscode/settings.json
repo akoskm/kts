@@ -1,0 +1,11 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+  "files.exclude": {
+      "dist": true,
+      "node_modules": true,
+      "logs/*.*": true,
+      "npm-debug.log": true,
+      "config.js": true,
+      "uploads": true
+  }
+}
