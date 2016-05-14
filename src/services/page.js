@@ -182,6 +182,10 @@ const pageApi = {
     });
 
     workflow.emit('deletePicture');
+  },
+
+  updateTags(req, res, next) {
+
   }
 };
 

@@ -19,15 +19,21 @@ class Photo extends React.Component {
       tags: []
     };
 
-    this._onClick = this._onClick.bind(this);
+    this._onDelete = this._onDelete.bind(this);
+    this._onSave = this._onSave.bind(this);
     this._handleSelectChange = this._handleSelectChange.bind(this);
   }
 
-  _onClick() {
+  _onSave() {
+    console.log(this.state);
+  }
+
+  _onDelete() {
     this.props.onItemClick(this.props.photoid, this.props.index);
   }
 
   _handleSelectChange(value) {
+    debugger;
     this.setState({ tags: value });
   }
 
@@ -56,13 +62,14 @@ class Photo extends React.Component {
             </FormGroup>
             <FormGroup>
               <Button
+                onClick={this._onSave}
                 className='btn btn-primary'
                 role='button'
                 type='button'
               >
                 Save
               </Button>
-              <Button onClick={this._onClick}
+              <Button onClick={this._onDelete}
                 className='btn btn-danger'
                 role='button'
                 type='button'

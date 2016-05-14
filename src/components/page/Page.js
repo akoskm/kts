@@ -5,9 +5,9 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import DropzoneComponent from 'react-dropzone-component';
 
-import Photos from '../Photos';
+import Photos from '../photo/Photos';
 
-class PageComponent extends React.Component {
+class Page extends React.Component {
 
   constructor(props, context) {
     super(props, context);
@@ -103,9 +103,9 @@ class PageComponent extends React.Component {
   }
 }
 
-PageComponent.propTypes = {
+Page.propTypes = {
   params: React.PropTypes.object.isRequired,
   routeParams: React.PropTypes.object.isRequired
 };
 
-export default PageComponent;
+export default Page;

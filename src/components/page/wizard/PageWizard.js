@@ -11,12 +11,12 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 
-import WizardWelcome from './WizardWelcome';
-import NameForm from './NameForm';
-import AddressForm from './AddressForm';
-import SummaryForm from './SummaryForm';
-import WizardResult from './WizardResult';
-import Progress from './Progress';
+import WizardStart from './WizardStart';
+import NameStep from './steps/NameStep';
+import AddressStep from './steps/AddressStep';
+import SummaryStep from './steps/SummaryStep';
+import WizardFinish from './WizardFinish';
+import Progress from './WizardProgress';
 import Controls from './Controls';
 
 export default class CreatePageWizard extends React.Component {
@@ -116,13 +116,13 @@ export default class CreatePageWizard extends React.Component {
     switch (this.state.step) {
     case 0:
       return (
-        <WizardWelcome startWizard={this.handleStartWizard}/>
+        <WizardStart startWizard={this.handleStartWizard}/>
       );
     case 1:
       return (
         <div>
           <Progress step={this.state.step}/>
-          <NameForm
+          <NameStep
             validationState={this.getNameValidationState()}
             value={this.state.page.name}
             handleChange={this.handleChange}
@@ -139,7 +139,7 @@ export default class CreatePageWizard extends React.Component {
       return (
         <div>
           <Progress step={this.state.step}/>
-          <AddressForm
+          <AddressStep
             page={this.state.page}
             handleChange={this.handleChange}
             validateNotEmpty={this.validateNotEmpty}
@@ -156,7 +156,7 @@ export default class CreatePageWizard extends React.Component {
       return (
         <div>
           <Progress step={this.state.step}/>
-          <SummaryForm
+          <SummaryStep
             page={this.state.page}
           />
           <Controls
@@ -170,11 +170,11 @@ export default class CreatePageWizard extends React.Component {
       );
     case 4:
       return (
-        <WizardResult page={this.state.page} url={this.state.url} closeWizard={this.resetWizard}/>
+        <WizardFinish page={this.state.page} url={this.state.url} closeWizard={this.resetWizard}/>
       );
     default:
       return (
-        <WizardWelcome startWizard={this.handleStartWizard}/>
+        <WizardStart startWizard={this.handleStartWizard}/>
       );
     }
   }

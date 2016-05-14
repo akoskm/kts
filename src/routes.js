@@ -5,7 +5,7 @@ import AboutComponent from './components/about';
 import ProfileComponent from './components/profile';
 import ActivationComponent from './components/activation';
 import SignInComponent from './components/signin';
-import PageComponent from './components/page/PageComponent';
+import Page from './components/page/Page';
 
 const routes = {
   path: '',
@@ -37,7 +37,7 @@ const routes = {
     },
     {
       path: '/page/:nameslug',
-      component: PageComponent
+      component: Page
     }
   ]
 };

@@ -7,7 +7,7 @@ import Photos from './Photos';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
-import CreatePageWizard from './page/wizard/CreatePageWizard';
+import CreatePageWizard from './page/wizard/PageWizard';
 import Pages from './page/Pages';
 
 export default class IndexComponent extends React.Component {
