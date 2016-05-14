@@ -8,6 +8,7 @@
             "program": "${workspaceRoot}/src/server.js",
             "stopOnEntry": false,
             "args": ["--debug"],
+            "port": 5858,
             "cwd": "${workspaceRoot}",
             "preLaunchTask": null,
             "runtimeExecutable": null,
