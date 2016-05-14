@@ -57,8 +57,6 @@ const LocalStrategy = require('passport-local').Strategy;
 
 logger.initLogger(config);
 
-logger.instance.info('{} u funny', 'akos');
-
 const mongoStore = connectMongo(session);
 const sessionConfig = {
   // according to https://github.com/expressjs/session#resave
