@@ -37,33 +37,40 @@ class Photo extends React.Component {
       <Col xd={3} md={3} lg={3}>
         <div className='thumbnail'>
           <Image src={url}/>
-        </div>
-        <div className='caption'>
-          <FormGroup>
-            <ControlLabel>Tags</ControlLabel>
-            <Select
-              multi
-              value={this.state.tags}
-              placeholder='Select your tags'
-              onChange={this._handleSelectChange}
-              options={[
-                { value: 'one', label: 'One' },
-                { value: 'two', label: 'Two' },
-                { value: 'three', label: 'Three' },
-                { value: 'four', label: 'Four' },
-                { value: 'five', label: 'Five' }
-              ]}
-            />
-          </FormGroup>
-          <p>
-            <Button onClick={this._onClick}
-              className='btn btn-primary'
-              role='button'
-              type='button'
-            >
-              Delete
-            </Button>
-          </p>
+          <div className='caption'>
+            <FormGroup>
+              <ControlLabel>Tags</ControlLabel>
+              <Select
+                multi
+                value={this.state.tags}
+                placeholder='Select your tags'
+                onChange={this._handleSelectChange}
+                options={[
+                  { value: 'one', label: 'One' },
+                  { value: 'two', label: 'Two' },
+                  { value: 'three', label: 'Three' },
+                  { value: 'four', label: 'Four' },
+                  { value: 'five', label: 'Five' }
+                ]}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Button
+                className='btn btn-primary'
+                role='button'
+                type='button'
+              >
+                Save
+              </Button>
+              <Button onClick={this._onClick}
+                className='btn btn-danger'
+                role='button'
+                type='button'
+              >
+                Delete
+              </Button>
+            </FormGroup>
+          </div>
         </div>
       </Col>
     );

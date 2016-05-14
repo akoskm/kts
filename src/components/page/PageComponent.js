@@ -85,10 +85,11 @@ class PageComponent extends React.Component {
         </Row>
         <Row>
           <Col xs={12} md={6} lg={6}>
-              <DropzoneComponent djsConfig={djsConfig}
-                config={componentConfig}
-                eventHandlers={eventHandlers}
-              />
+            <h4>Upload Photos</h4>
+            <DropzoneComponent djsConfig={djsConfig}
+              config={componentConfig}
+              eventHandlers={eventHandlers}
+            />
           </Col>
         </Row>
         <Row>
