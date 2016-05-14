@@ -11,12 +11,10 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import csrf from 'csurf';
 import React from 'react';
-import { renderToString } from 'react-dom/server';
-import { match, RoutingContext } from 'react-router';
 import log4js from 'log4js';
 import CustomStrategy from './util/passport/strategy-local';
-import { routes } from './routes';
-import { api } from './api';
+
+import api from './api';
 import schema from './schema';
 import DataWrapper from './datawrapper';
 import webpack from 'webpack';
@@ -162,64 +160,65 @@ passport.deserializeUser(function (_id, done) {
   }
 });
 
-/* non-react routes */
-app.post('/api/register', api.register);
-app.post('/api/activate', api.activate);
-app.post('/api/login', api.signin);
-app.post('/api/logout', api.signout);
-app.get('/api/profile', api.profile);
+api(app, upload);
+// /* non-react routes */
+// app.post('/api/register', api.register);
+// app.post('/api/activate', api.activate);
+// app.post('/api/login', api.signin);
+// app.post('/api/logout', api.signout);
+// app.get('/api/profile', api.profile);
 
-app.post('/api/pages', api.createPage);
-app.get('/api/pages', api.getPages);
-app.get('/api/pages/:nameslug', api.findPage);
-app.get('/api/pages/:nameslug/photos', api.getPhotos);
-app.post('/api/pages/:nameslug/photos', upload.single('file'), api.uploadPhoto);
-app.delete('/api/pages/:nameslug/photos/:photoid', api.deletePhoto);
+// app.post('/api/pages', api.createPage);
+// app.get('/api/pages', api.getPages);
+// app.get('/api/pages/:nameslug', api.findPage);
+// app.get('/api/pages/:nameslug/photos', api.getPhotos);
+// app.post('/api/pages/:nameslug/photos', upload.single('file'), api.uploadPhoto);
+// app.delete('/api/pages/:nameslug/photos/:photoid', api.deletePhoto);
 
-/* main router for reactjs components, supporting both client and server side rendering*/
-let sendHtml = function (res, props, context) {
-  const markup = renderToString(<RoutingContext {...props} params={{ context }}/>);
-  res.send(`
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <title>KTS</title>
-      <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
-    </head>
-    <script>
-      window.APP_STATE = '${context}';
-    </script>
-    <body>
-      <div id="app">${markup}</div>
-      <script src="/dist/bundle.js"></script>
-    </body>
-  </html>
-  `);
-};
+// /* main router for reactjs components, supporting both client and server side rendering*/
+// let sendHtml = function (res, props, context) {
+//   const markup = renderToString(<RoutingContext {...props} params={{ context }}/>);
+//   res.send(`
+//   <!DOCTYPE html>
+//   <html>
+//     <head>
+//       <title>KTS</title>
+//       <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
+//     </head>
+//     <script>
+//       window.APP_STATE = '${context}';
+//     </script>
+//     <body>
+//       <div id="app">${markup}</div>
+//       <script src="/dist/bundle.js"></script>
+//     </body>
+//   </html>
+//   `);
+// };
 
-app.get('*', (req, res, next) => {
-  match({ routes, location: req.url }, (err, redirectLocation, props) => {
-    if (err) {
-      res.status(500).send(err.message);
-    } else if (redirectLocation) {
-      res.redirect(302, redirectLocation.pathname + redirectLocation.search);
-    } else if (props) {
-      let context = '';
+// app.get('*', (req, res, next) => {
+//   match({ routes, location: req.url }, (err, redirectLocation, props) => {
+//     if (err) {
+//       res.status(500).send(err.message);
+//     } else if (redirectLocation) {
+//       res.redirect(302, redirectLocation.pathname + redirectLocation.search);
+//     } else if (props) {
+//       let context = '';
 
-      if (props.params.nameslug) {
-        api._findPage(props.params.nameslug, logger, function (err, doc) {
-          context = JSON.stringify(doc);
-          sendHtml(res, props, context);
-        });
-      } else {
-        sendHtml(res, props, context);
-      }
+//       if (props.params.nameslug) {
+//         api._findPage(props.params.nameslug, logger, function (err, doc) {
+//           context = JSON.stringify(doc);
+//           sendHtml(res, props, context);
+//         });
+//       } else {
+//         sendHtml(res, props, context);
+//       }
 
-    } else {
-      res.sendStatus(404);
-    }
-  });
-});
+//     } else {
+//       res.sendStatus(404);
+//     }
+//   });
+// });
 
 // app-wide stuff
 app.logger = logger;
