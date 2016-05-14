@@ -57,7 +57,7 @@ class AppComponent extends React.Component {
     return (
       <div>
         <Header username={username} {...this.props}/>
-        <div className='main-container'>
+        <div className='main-container container'>
           { this.props.children }
           <hr/>
         </div>

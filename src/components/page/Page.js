@@ -79,13 +79,11 @@ class Page extends React.Component {
     return (
       <div>
         <Row>
-          <Col xs={12} lg={12} md={12}>
-            <h1>{this.state.page.name}</h1>
-          </Col>
-        </Row>
-        <Row>
           <Col xs={12} md={6} lg={6}>
-            <h4>Upload Photos</h4>
+            <h1>{this.state.page.name}</h1>
+            <h4>{this.state.page.address}</h4>
+          </Col>
+          <Col xs={12} md={6} lg={6}>
             <DropzoneComponent djsConfig={djsConfig}
               config={componentConfig}
               eventHandlers={eventHandlers}

@@ -13,7 +13,9 @@ let pageSchema = new mongoose.Schema({
     name: { type: String },
     contentType: { type: String },
     size: { type: Number },
-    tags: []
+    tags: [],
+    // ability to publis photos and/or albums
+    published: { type: Boolean, required: true, default: false }
   }]
 });
 pageSchema.set('autoIndex', (process.env.NODE_ENV === 'development'));
