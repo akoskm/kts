@@ -3,6 +3,8 @@ import $ from 'jquery';
 
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
+import Button from 'react-bootstrap/lib/Button';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import Photo from './Photo';
 
 class Photos extends React.Component {
@@ -11,15 +13,17 @@ class Photos extends React.Component {
     super(props);
 
     this.state = {
-      photos: []
+      photos: [],
+      selected: []
     };
 
-    this.onItemClick = this.onItemClick.bind(this);
+    this.onDeleteClick = this.onDeleteClick.bind(this);
+    this.onPhotoSelect = this.onPhotoSelect.bind(this);
   }
 
   componentDidMount() {
     const nameslug = this.props.nameslug;
-    this.serverRequest = $.get('/api/pages/' + nameslug + '/photos', function (response) {
+    this.serverRequest = $.get('/api/pages/' + nameslug + '/photos', (response) => {
       const data = response.result;
       if (response.success && data) {
         this.setState({
@@ -27,14 +31,14 @@ class Photos extends React.Component {
           photos: data.photos
         });
       }
-    }.bind(this));
+    });
   }
 
   componentWillUnmount() {
     this.serverRequest.abort();
   }
 
-  onItemClick(photoid, index) {
+  onDeleteClick(photoid, index) {
     const nameslug = this.props.nameslug;
     this.state.photos.splice(index, 1);
     this.setState({
@@ -49,13 +53,35 @@ class Photos extends React.Component {
     });
   }
 
+  onPhotoSelect(photoid, index) {
+    // const photo = this.state.photos.filter((value, i) => {
+    //   return i === index;
+    // });
+    // if (photo && photo.length === 1) {
+    //   photo[0].selected = !!photo[0].selected;
+    const selected = this.state.selected;
+    const found = selected.indexOf(index);
+    if (found > -1) {
+      selected.splice(found, 1);
+    } else {
+      selected.push(index);
+    }
+    this.setState({
+      selected
+    });
+  }
+
   render() {
     const self = this;
     const photos = this.state.photos;
     const nameslug = this.props.nameslug;
     let markup;
     if (photos && photos.length > 0) {
-      markup = photos.map(function (image, i) {
+      markup = photos.map((image, i) => {
+        let selected = 'nselected';
+        if (this.state.selected.indexOf(i) > -1) {
+          selected = 'selected';
+        }
         return (
           <Photo index={i}
             photoid={image._id}
@@ -63,7 +89,9 @@ class Photos extends React.Component {
             tags={image.tags}
             nameslug={nameslug}
             filename={image.filename}
-            onItemClick={self.onItemClick}
+            onDeleteClick={self.onDeleteClick}
+            onPhotoSelect={self.onPhotoSelect}
+            className={selected}
           />
         );
       });
@@ -71,9 +99,18 @@ class Photos extends React.Component {
       markup = <Col md={12}>No Photos found.</Col>;
     }
     return (
-      <Row>
-        {markup}
-      </Row>
+      <div>
+        <Row>
+          <Col md={12}>
+            <ButtonToolbar>
+              <Button>Create Album</Button>
+            </ButtonToolbar>
+          </Col>
+        </Row>
+        <Row>
+          {markup}
+        </Row>
+      </div>
     );
   }
 }

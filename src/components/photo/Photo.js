@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Image from 'react-bootstrap/lib/Image';
 import Select from 'react-select';
@@ -22,6 +23,7 @@ class Photo extends React.Component {
     };
 
     this._onDelete = this._onDelete.bind(this);
+    this._onPhotoSelect = this._onPhotoSelect.bind(this);
     this._onSave = this._onSave.bind(this);
     this._handleSelectChange = this._handleSelectChange.bind(this);
     this._handleNameChange = this._handleNameChange.bind(this);
@@ -39,7 +41,11 @@ class Photo extends React.Component {
   }
 
   _onDelete() {
-    this.props.onItemClick(this.props.photoid, this.props.index);
+    this.props.onDeleteClick(this.props.photoid, this.props.index);
+  }
+
+  _onPhotoSelect() {
+    this.props.onPhotoSelect(this.props.photoid, this.props.index);
   }
 
   _handleSelectChange(value) {
@@ -53,10 +59,11 @@ class Photo extends React.Component {
   }
 
   render() {
-    let url = '/static/' + this.props.nameslug + '_img/' + this.props.filename;
+    const url = '/static/' + this.props.nameslug + '_img/' + this.props.filename;
+    const className = 'thumbnail ' + this.props.className;
     return (
       <Col xs={12} md={3} lg={3}>
-        <div className='thumbnail'>
+        <div className={className} onClick={this._onPhotoSelect}>
           <Image src={url}/>
           <div className='caption'>
             <FormGroup>
@@ -83,7 +90,7 @@ class Photo extends React.Component {
                 ]}
               />
             </FormGroup>
-            <FormGroup>
+            <ButtonToolbar>
               <Button
                 onClick={this._onSave}
                 className='btn btn-primary'
@@ -99,7 +106,7 @@ class Photo extends React.Component {
               >
                 Delete
               </Button>
-            </FormGroup>
+            </ButtonToolbar>
           </div>
         </div>
       </Col>
@@ -112,9 +119,11 @@ Photo.propTypes = {
   filename: React.PropTypes.object.isRequired,
   index: React.PropTypes.object.isRequired,
   photoid: React.PropTypes.object.isRequired,
-  onItemClick: React.PropTypes.object.isRequired,
+  onDeleteClick: React.PropTypes.func.isRequired,
+  onPhotoSelect: React.PropTypes.func.isRequired,
   tags: React.PropTypes.object.isRequired,
-  name: React.PropTypes.object.isRequired
+  name: React.PropTypes.object.isRequired,
+  className: React.PropTypes.object.isRequired
 };
 
 export default Photo;
