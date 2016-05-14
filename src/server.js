@@ -14,7 +14,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { match, RoutingContext } from 'react-router';
 import log4js from 'log4js';
-import CustomStrategy from './strategy-local';
+import CustomStrategy from './util/passport/strategy-local';
 import { routes } from './routes';
 import { api } from './api';
 import schema from './schema';
