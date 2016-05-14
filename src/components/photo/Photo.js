@@ -9,7 +9,9 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Checkbox from 'react-bootstrap/lib/Checkbox';
 import Image from 'react-bootstrap/lib/Image';
+
 import Select from 'react-select';
 
 class Photo extends React.Component {
@@ -40,7 +42,7 @@ class Photo extends React.Component {
     });
   }
 
-  _onDelete() {
+  _onDelete(e) {
     this.props.onDeleteClick(this.props.photoid, this.props.index);
   }
 
@@ -63,8 +65,8 @@ class Photo extends React.Component {
     const className = 'thumbnail ' + this.props.className;
     return (
       <Col xs={12} md={3} lg={3}>
-        <div className={className} onClick={this._onPhotoSelect}>
-          <Image src={url}/>
+        <div className={className}>
+          <Image src={url} onClick={this._onPhotoSelect}/>
           <div className='caption'>
             <FormGroup>
               <ControlLabel>Name</ControlLabel>
