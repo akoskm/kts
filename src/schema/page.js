@@ -8,6 +8,7 @@ let pageSchema = new mongoose.Schema({
   nameslug: { type: String, required: true, unique: true },
   address: { type: String, required: true },
   photos: [{
+    originalFilename: { type: String },
     filename: { type: String },
     name: { type: String },
     contentType: { type: String },
