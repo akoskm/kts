@@ -3,11 +3,7 @@
   "files.exclude": {
       "node_modules": true,
       "logs/*.*": true,
-      "npm-debug.log": true
-  },
-
-  "search.exclude": {
-      "node_modules": true,
+      "npm-debug.log": true,
       "dist": true
   }
 }
