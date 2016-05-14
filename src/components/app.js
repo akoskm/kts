@@ -4,7 +4,7 @@ import { Container } from 'flux/utils';
 import $ from 'jquery';
 import { Link } from 'react-router';
 
-import type Immutable from 'immutable';
+import Immutable from 'immutable';
 import User from '../stores/user/User';
 import UserStore from '../stores/user/UserStore';
 import { dispatch } from '../stores/user/UserDispatcher';

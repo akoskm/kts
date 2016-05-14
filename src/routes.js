@@ -1,10 +1,9 @@
 import AppComponent from './components/app';
-import IndexComponent from './components/index';
-import RegisterComponent from './components/register';
-import AboutComponent from './components/about';
-import ProfileComponent from './components/profile';
-import ActivationComponent from './components/activation';
-import SignInComponent from './components/signin';
+import IndexComponent from './components/site/index';
+import RegisterComponent from './components/site/register';
+import ProfileComponent from './components/site/profile';
+import ActivationComponent from './components/site/activation';
+import SignInComponent from './components/site/signin';
 import Page from './components/page/Page';
 
 const routes = {
@@ -26,10 +25,6 @@ const routes = {
     {
       path: '/profile',
       component: ProfileComponent
-    },
-    {
-      path: '/about',
-      component: AboutComponent
     },
     {
       path: '/activation/:token',

@@ -3,7 +3,6 @@ import UserStore from '../stores/user/UserStore';
 
 import Button from 'react-bootstrap/lib/Button';
 import Input from 'react-bootstrap/lib/Input';
-import Photos from './Photos';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
