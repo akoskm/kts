@@ -54,11 +54,6 @@ class Photos extends React.Component {
   }
 
   onPhotoSelect(photoid, index) {
-    // const photo = this.state.photos.filter((value, i) => {
-    //   return i === index;
-    // });
-    // if (photo && photo.length === 1) {
-    //   photo[0].selected = !!photo[0].selected;
     const selected = this.state.selected;
     const found = selected.indexOf(index);
     if (found > -1) {
