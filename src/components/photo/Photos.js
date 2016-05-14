@@ -5,6 +5,8 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Button from 'react-bootstrap/lib/Button';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+
 import Photo from './Photo';
 
 class Photos extends React.Component {
@@ -67,15 +69,29 @@ class Photos extends React.Component {
   }
 
   render() {
-    const self = this;
     const photos = this.state.photos;
     const nameslug = this.props.nameslug;
+    const selectedPhotos = this.state.selected;
+    let createAlbumText = 'Create Album';
+    let selectedCount = null;
+    let createAlbumDisabled = true;
+    if (selectedPhotos) {
+      selectedCount = selectedPhotos.length;
+      if (selectedCount > 0) {
+        createAlbumDisabled = false;
+        createAlbumText = createAlbumText + ' (' + selectedCount + ')';
+      }
+    }
     let markup;
     if (photos && photos.length > 0) {
       markup = photos.map((image, i) => {
-        let selected = 'nselected';
-        if (this.state.selected.indexOf(i) > -1) {
-          selected = 'selected';
+        let selected = '';
+        if (selectedPhotos && selectedPhotos.length > 0) {
+          if (selectedPhotos.indexOf(i) > -1) {
+            selected = 'selected';
+          } else {
+            selected = 'nselected';
+          }
         }
         return (
           <Photo index={i}
@@ -84,8 +100,8 @@ class Photos extends React.Component {
             tags={image.tags}
             nameslug={nameslug}
             filename={image.filename}
-            onDeleteClick={self.onDeleteClick}
-            onPhotoSelect={self.onPhotoSelect}
+            onDeleteClick={this.onDeleteClick}
+            onPhotoSelect={this.onPhotoSelect}
             className={selected}
           />
         );
@@ -97,9 +113,11 @@ class Photos extends React.Component {
       <div>
         <Row>
           <Col md={12}>
-            <ButtonToolbar>
-              <Button>Create Album</Button>
-            </ButtonToolbar>
+            <FormGroup>
+              <ButtonToolbar>
+                <Button disabled={createAlbumDisabled}>{createAlbumText}</Button>
+              </ButtonToolbar>
+            </FormGroup>
           </Col>
         </Row>
         <Row>
