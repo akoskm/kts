@@ -131,10 +131,11 @@ const pageApi = {
         let query = {
           $push: {
             photos: {
-              filename: file.filename,
+              size: file.size,
               name: file.originalname,
+              filename: file.filename,
               contentType: file.mimetype,
-              size: file.size
+              originalFilename: file.originalname
             }
           }
         };
