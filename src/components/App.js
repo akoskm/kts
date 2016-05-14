@@ -9,7 +9,7 @@ import User from '../stores/user/User';
 import UserStore from '../stores/user/UserStore';
 import { dispatch } from '../stores/user/UserDispatcher';
 
-import Header from './header';
+import Header from './Header';
 
 class AppComponent extends React.Component {
 

@@ -1,9 +1,9 @@
-import AppComponent from './components/app';
-import IndexComponent from './components/site/index';
-import RegisterComponent from './components/site/register';
-import ProfileComponent from './components/site/profile';
-import ActivationComponent from './components/site/activation';
-import SignInComponent from './components/site/signin';
+import AppComponent from './components/App';
+import IndexComponent from './components/Index';
+import RegisterComponent from './components/site/Register';
+import ProfileComponent from './components/Profile';
+import ActivationComponent from './components/site/Activation';
+import SignInComponent from './components/Signin';
 import Page from './components/page/Page';
 
 const routes = {
