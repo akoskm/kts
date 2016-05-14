@@ -1,12 +1,15 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "files.exclude": {
-      "dist": true,
       "node_modules": true,
       "logs/*.*": true,
       "npm-debug.log": true,
-      "config.js": true,
-      "uploads": true,
-      "out": true
+      "config.js": true
+  },
+
+  "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "dist": true
   }
 }

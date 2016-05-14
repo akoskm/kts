@@ -79,10 +79,7 @@ if (nodeEnv === 'development') {
     publicPath: webpackConfig.output.publicPath,
 
     // pretty colored output
-    stats: { colors: true },
-
-    // Set to false to display a list of each file that is being bundled.
-    noInfo: true
+    stats: { colors: true }
   }));
 
   app.use(webpackHotMiddleware(compiler));
