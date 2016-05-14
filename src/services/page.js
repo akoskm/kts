@@ -1,3 +1,5 @@
+import { logger } from '../util/logger';
+
 import fs from 'fs';
 import workflowFactory from '../util/workflow';
 import mongoose from 'mongoose';
@@ -32,7 +34,7 @@ const pageApi = {
         owner: req.user
       }, function (err, doc) {
         if (err) {
-          req.app.logger.error('Error while saving page', err);
+          logger.instance.error('Error while saving page', err);
           workflow.outcome.errors.push('Cannot create page');
           return workflow.emit('response');
         }
@@ -50,7 +52,7 @@ const pageApi = {
     workflow.on('getPages', function () {
       mongoose.model('Page').find({ owner: req.user }, function (err, doc) {
         if (err) {
-          req.app.logger.error('Error while fetching pages', err);
+          logger.instance.error('Error while fetching pages', err);
           workflow.outcome.errors.push('Cannot fetch pages');
           return workflow.emit('response');
         }
@@ -68,7 +70,7 @@ const pageApi = {
     const self = this;
 
     workflow.on('findPage', function () {
-      pageApi._findPage(req.params.nameslug, req.app.logger, function (err, doc) {
+      pageApi._findPage(req.params.nameslug, logger.instance, function (err, doc) {
         if (err) {
           workflow.outcome.errors.push(err);
           return workflow.emit('response');
@@ -101,7 +103,7 @@ const pageApi = {
         nameslug: req.params.nameslug
       }, '_id photos', function (err, doc) {
         if (err) {
-          req.app.logger.error('Cannot get photos', err);
+          logger.instance.error('Cannot get photos', err);
         }
         workflow.outcome.result = doc;
         return workflow.emit('response');
@@ -142,7 +144,7 @@ const pageApi = {
           nameslug: req.params.nameslug
         }, query, function (err, doc) {
           if (err) {
-            req.app.logger.error('Error while saving image', err);
+            logger.instance.error('Error while saving image', err);
             workflow.outcome.errors.push('Cannot save image');
             return workflow.emit('response');
           }
@@ -172,7 +174,7 @@ const pageApi = {
         nameslug: req.params.nameslug
       }, query, function (err, doc) {
         if (err) {
-          req.app.logger.error('Error while removing image', err);
+          logger.instance.error('Error while removing image', err);
           workflow.outcome.errors.push('Cannot delete image');
           return workflow.emit('response');
         }

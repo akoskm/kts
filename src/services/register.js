@@ -1,3 +1,5 @@
+import { logger } from '../util/logger';
+
 import sendmail from '../util/sendmail';
 import workflow from '../util/workflow';
 import mongoose from 'mongoose';
@@ -12,7 +14,7 @@ export default (req, res) => {
       username: req.body.email
     }, function (err, user) {
       if (err) {
-        req.app.logger.error('Cannot lookup email', err);
+        logger.instance.error('Cannot lookup email', err);
       }
       if (user) {
         wf.outcome.errors.push('Email is already taken');
@@ -25,7 +27,7 @@ export default (req, res) => {
   wf.on('createToken', function () {
     crypto.randomBytes(21, function (err, buf) {
       if (err) {
-        req.app.logger.error('Error generating random bytes:', err);
+        logger.instance.error('Error generating random bytes:', err);
       }
 
       let token = buf.toString('hex');
@@ -46,7 +48,7 @@ export default (req, res) => {
       token: wf.token
     }, function (err, user) {
       if (err) {
-        req.app.logger.error('Error while creating user', err);
+        logger.instance.error('Error while creating user', err);
         wf.outcome.errors.push('Unable to create User');
       }
 
@@ -72,14 +74,14 @@ export default (req, res) => {
         projectName: req.app.config.projectName
       },
       success(message) {
-        req.app.logger.info(message);
+        logger.instance.info(message);
         wf.outcome.result = {
           success: true, message: 'Request sent, check your Inbox!'
         };
         return wf.emit('response');
       },
       error(err) {
-        req.app.logger.error(err);
+        logger.instance.error(err);
         wf.outcome.errors.push('Failed to send signup email');
         return wf.emit('response');
       }

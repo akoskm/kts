@@ -11,8 +11,8 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import csrf from 'csurf';
 import React from 'react';
-import log4js from 'log4js';
 import CustomStrategy from './util/passport/strategy-local';
+import { logger } from './util/logger';
 
 import api from './api';
 import schema from './schema';
@@ -55,9 +55,9 @@ mongoose.connect('mongodb://localhost/kts');
 // passpost strategy
 const LocalStrategy = require('passport-local').Strategy;
 
-// logger configuration
-log4js.configure('./src/config/log4js.json');
-const logger = log4js.getLogger();
+logger.initLogger(config);
+
+logger.instance.info('{} u funny', 'akos');
 
 const mongoStore = connectMongo(session);
 const sessionConfig = {
@@ -164,12 +164,11 @@ passport.deserializeUser(function (_id, done) {
 api(app, upload);
 
 // app-wide stuff
-app.logger = logger;
 app.config = config;
 
 const server = http.createServer(app);
 
 server.listen(PORT);
 server.on('listening', () => {
-  logger.info('Listening on', PORT);
+  logger.instance.info('Listening on', PORT);
 });

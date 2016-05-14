@@ -1,19 +1,8 @@
+import { logger } from '../util/logger';
+
 import emailjs from 'emailjs/email';
 
 export default (req, res, options) => {
-  /* options = {
-    from: String,
-    to: String,
-    cc: String,
-    bcc: String,
-    text: String,
-    textPath String,
-    html: String,
-    htmlPath: String,
-    attachments: [String],
-    success: Function,
-    error: Function
-  } */
 
   let htmlMessage = '';
   let textMessage = '';
@@ -52,7 +41,7 @@ export default (req, res, options) => {
     renderers,
     function (err, results) {
       if (err) {
-        req.app.logger.error(err);
+        logger.instance.error(err);
         options.error('Email template render failed.', err);
         return;
       }
@@ -82,7 +71,7 @@ export default (req, res, options) => {
         attachment: attachments
       }, function (err, message) {
         if (err) {
-          req.app.logger.error(err);
+          logger.instance.error(err);
           options.error('Email failed to send.');
           return;
         } else {

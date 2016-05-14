@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import workflowFactory from '../util/workflow';
+import { logger } from '../util/logger';
 
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
@@ -34,13 +35,13 @@ export default (req, res) => {
   workflow.on('hash', function () {
     bcrypt.genSalt(10, function (err, salt) {
       if (err) {
-        req.app.logger.error('error generating salt:', err);
+        logger.instance.error('error generating salt:', err);
         return returnUnknownException();
       }
 
       bcrypt.hash(password, salt, function (err, hash) {
         if (err) {
-          req.app.logger.error('error generating hash', err);
+          logger.instance.error('error generating hash', err);
           return returnUnknownException();
         }
         workflow.hash = hash;
@@ -60,7 +61,7 @@ export default (req, res) => {
       token: null
     }, function (err, user) {
       if (err) {
-        req.app.logger.error('error during settings active flag and password', err);
+        logger.instance.error('error during settings active flag and password', err);
         workflow.outcome.errors.push('User activation failed');
         return workflow.emit('response');
       }
