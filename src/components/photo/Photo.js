@@ -24,6 +24,7 @@ class Photo extends React.Component {
     this._onDelete = this._onDelete.bind(this);
     this._onSave = this._onSave.bind(this);
     this._handleSelectChange = this._handleSelectChange.bind(this);
+    this._handleNameChange = this._handleNameChange.bind(this);
   }
 
   _onSave() {
@@ -45,6 +46,12 @@ class Photo extends React.Component {
     this.setState({ tags: value });
   }
 
+  _handleNameChange(e) {
+    this.setState({
+      name: e.target.value
+    });
+  }
+
   render() {
     let url = '/static/' + this.props.nameslug + '_img/' + this.props.filename;
     return (
@@ -53,8 +60,12 @@ class Photo extends React.Component {
           <Image src={url}/>
           <div className='caption'>
             <FormGroup>
-              <ControlLabel>Filename</ControlLabel>
-              <FormControl type='text' value={this.state.name} />
+              <ControlLabel>Name</ControlLabel>
+              <FormControl
+                type='text'
+                value={this.state.name}
+                onChange={this._handleNameChange}
+              />
             </FormGroup>
             <FormGroup>
               <ControlLabel>Tags</ControlLabel>
