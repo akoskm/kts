@@ -64,8 +64,8 @@ export default (req, res) => {
       from: req.app.config.smtp.from.name + ' <' + req.app.config.smtp.from.address + '>',
       to: req.body.email,
       subject: 'Sign Up to ' + req.app.config.projectName,
-      textPath: 'signup/email-text',
-      htmlPath: 'signup/email-html',
+      textPath: './signup/email-text',
+      htmlPath: './signup/email-html',
       locals: {
         username: req.body.email,
         link: req.protocol + '://' + req.headers.host + '/activation/' + wf.token + '/',

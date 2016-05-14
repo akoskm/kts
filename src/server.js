@@ -25,13 +25,20 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import multer  from 'multer';
 
+// determine environment type
+const nodeEnv = process.env.NODE_ENV || 'development';
+
+// app configuration
+const config = require('./config').default;
+const PORT = config.port;
+
 // configure storage for photos
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     if (!req.user || !req.user._id) {
       cb('User not found');
     } else {
-      const userdir = path.join(__dirname, 'uploads/', req.params.nameslug + '_img');
+      const userdir = path.join(config.workingDir, 'uploads/', req.params.nameslug + '_img');
       fs.mkdir(userdir, function (err) { // returns with error if already exists
         cb(null, userdir);
       });
@@ -39,13 +46,6 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage });
-
-// determine environment type
-const nodeEnv = process.env.NODE_ENV || 'development';
-
-// app configuration
-const config = require('./config').default;
-const PORT = config.port;
 
 // initialize the express app
 const app = express();
