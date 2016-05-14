@@ -12,12 +12,12 @@ class Pages extends React.Component {
   }
 
   componentDidMount() {
-    this.serverRequest = $.get('/api/pages', function (response) {
+    this.serverRequest = $.get('/api/pages', (response) => {
       let data = response.result;
       this.setState({
         pages: data
       });
-    }.bind(this));
+    });
   }
 
   componentWillUnmount() {
@@ -25,7 +25,6 @@ class Pages extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <h4>Your Pages</h4>
