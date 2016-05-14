@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 
 import Button from 'react-bootstrap/lib/Button';
 import Input from 'react-bootstrap/lib/Input';
@@ -16,7 +17,8 @@ class Photo extends React.Component {
     super(props);
 
     this.state = {
-      tags: []
+      name: this.props.name,
+      tags: this.props.tags
     };
 
     this._onDelete = this._onDelete.bind(this);
@@ -25,7 +27,14 @@ class Photo extends React.Component {
   }
 
   _onSave() {
-    console.log(this.state);
+    $.ajax({
+      url: '/api/pages/' + this.props.nameslug + '/photos/' + this.props.photoid,
+      data: this.state,
+      type: 'PUT',
+      success: (response) => {
+        console.log(response);
+      }
+    });
   }
 
   _onDelete() {
@@ -33,7 +42,6 @@ class Photo extends React.Component {
   }
 
   _handleSelectChange(value) {
-    debugger;
     this.setState({ tags: value });
   }
 
@@ -44,6 +52,10 @@ class Photo extends React.Component {
         <div className='thumbnail'>
           <Image src={url}/>
           <div className='caption'>
+            <FormGroup>
+              <ControlLabel>Filename</ControlLabel>
+              <FormControl type='text' value={this.state.name} />
+            </FormGroup>
             <FormGroup>
               <ControlLabel>Tags</ControlLabel>
               <Select
@@ -89,7 +101,9 @@ Photo.propTypes = {
   filename: React.PropTypes.object.isRequired,
   index: React.PropTypes.object.isRequired,
   photoid: React.PropTypes.object.isRequired,
-  onItemClick: React.PropTypes.object.isRequired
+  onItemClick: React.PropTypes.object.isRequired,
+  tags: React.PropTypes.object.isRequired,
+  name: React.PropTypes.object.isRequired
 };
 
 export default Photo;

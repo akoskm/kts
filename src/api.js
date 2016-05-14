@@ -24,6 +24,7 @@ export default (app, upload) => {
   app.get('/api/pages/:nameslug/photos', pageApi.getPhotos);
   app.post('/api/pages/:nameslug/photos', upload.single('file'), pageApi.uploadPhoto);
   app.delete('/api/pages/:nameslug/photos/:photoid', pageApi.deletePhoto);
+  app.put('/api/pages/:nameslug/photos/:photoid', pageApi.updatePhoto);
 
   /* main router for reactjs components, supporting both client and server side rendering*/
   let sendHtml = function (res, props, context) {

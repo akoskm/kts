@@ -58,6 +58,7 @@ class Photos extends React.Component {
       markup = photos.map(function (image, i) {
         return (
           <Photo index={i}
+            name={image.name}
             photoid={image._id}
             nameslug={nameslug}
             filename={image.filename}

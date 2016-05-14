@@ -174,8 +174,8 @@ const pageApi = {
         nameslug: req.params.nameslug
       }, query, function (err, doc) {
         if (err) {
-          logger.instance.error('Error while removing image', err);
-          workflow.outcome.errors.push('Cannot delete image');
+          logger.instance.error('Error while removing photo', err);
+          workflow.outcome.errors.push('Cannot delete photo');
           return workflow.emit('response');
         }
         workflow.outcome.result = 'Deleted';
@@ -186,8 +186,34 @@ const pageApi = {
     workflow.emit('deletePicture');
   },
 
-  updateTags(req, res, next) {
+  updatePhoto(req, res, next) {
+    const workflow = workflowFactory(req, res);
 
+    workflow.on('updatePhoto', function () {
+      const fieldsToSet = {
+        $set: {
+          'photos.$.name': req.body.name,
+          'photos.$.tags': req.body.tags
+        }
+      };
+
+      mongoose.model('Page').findOneAndUpdate({
+        owner: req.user,
+        nameslug: req.params.nameslug,
+        'photos._id': req.params.photoid
+      }, fieldsToSet, function (err, doc) {
+        if (err) {
+          logger.instance.error('Error while updating photo', err);
+          workflow.outcome.errors.push('Cannot delete photo');
+          return workflow.emit('response');
+        }
+
+        workflow.outcome.result = 'Updated';
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.emit('updatePhoto');
   }
 };
 
