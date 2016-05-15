@@ -48,8 +48,16 @@ div.thumbnail {
 
 div.create-album-toolbar {
 
-  form.form-inline div.form-group {
-    margin-bottom: 15px;
+  form.form-inline {
+    p {
+      display: inline-block;
+      padding-top: 7px;
+      margin-bottom: 0px;
+    }
+
+    div.form-group {
+      margin-bottom: 15px;
+    }
   }
 
   &.fixed-top {

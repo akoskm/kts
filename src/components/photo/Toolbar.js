@@ -131,7 +131,7 @@ class Toolbar extends React.Component {
             <Form inline>
               {createAlbumButton}
               {' '}
-              {hint}
+              <p>{hint}</p>
               {' '}
               <div className='pull-right'>
                 {newAlbumButton}
