@@ -19,16 +19,20 @@ class Photos extends React.Component {
 
     this.state = {
       photos: [],
-      selected: []
+      selected: [],
+      toolbarClass: 'inline create-album-toolbar'
     };
 
     this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onPhotoSelect = this.onPhotoSelect.bind(this);
     this.onCreateAlbum = this.onCreateAlbum.bind(this);
+    this.handleAlbumNameChange = this.handleAlbumNameChange.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
     const nameslug = this.props.nameslug;
+    window.addEventListener('scroll', this.handleScroll);
     this.serverRequest = $.get('/api/pages/' + nameslug + '/photos', (response) => {
       const data = response.result;
       if (response.success && data) {
@@ -83,22 +87,36 @@ class Photos extends React.Component {
     });
   }
 
+  handleScroll() {
+    let scrollTop = event.srcElement.body.scrollTop;
+    if (scrollTop > 220) {
+      $('div.create-album-toolbar').addClass('fixed-top container');
+    } else {
+      $('div.create-album-toolbar').removeClass('fixed-top container');
+    }
+  }
+
+  handleAlbumNameChange(e) {
+    this.setState({
+      newAlbumName: e.target.value
+    });
+  }
+
   render() {
     const photos = this.state.photos;
     const nameslug = this.props.nameslug;
     const selectedPhotos = this.state.selected;
-    let createAlbumText = 'Selected ';
+    let createAlbumText;
     let selectedCount = null;
     let creatingAlbum = false;
     let newAlbumButton = '';
     if (selectedPhotos) {
       selectedCount = selectedPhotos.length;
-      createAlbumText = createAlbumText + selectedCount;
       if (selectedCount === 1) {
         // createAlbumDisabled = false;
-        createAlbumText = createAlbumText + ' photo.';
+        createAlbumText = 'Selected 1 photo.';
       } else if (selectedCount > 1) {
-        createAlbumText = createAlbumText + ' photos.';
+        createAlbumText = 'Selected ' + selectedCount + ' photos.';
       }
     }
     if (this.state.newAlbumName) {
@@ -107,7 +125,7 @@ class Photos extends React.Component {
         <FormGroup>
           <ControlLabel>How you would like to call it?</ControlLabel>
           {' '}
-          <FormControl value={this.state.newAlbumName}/>
+          <FormControl value={this.state.newAlbumName} onChange={this.handleAlbumNameChange}/>
           {' '}
           <Button
             className='btn btn-success'
@@ -120,8 +138,6 @@ class Photos extends React.Component {
             role='button'
             type='button'
           >Cancel</Button>
-          {' '}
-          {createAlbumText}
         </FormGroup>
       );
     }
@@ -154,7 +170,7 @@ class Photos extends React.Component {
     }
     return (
       <div>
-        <Row>
+        <Row className='create-album-toolbar'>
           <Col md={12}>
             <FormGroup>
               <Form inline>
@@ -165,7 +181,12 @@ class Photos extends React.Component {
                 >
                   Create Album
                 </Button>
-                {' '}{newAlbumButton}
+                {' '}
+                {createAlbumText}
+                {' '}
+                <div className='pull-right'>
+                  {newAlbumButton}
+                </div>
               </Form>
             </FormGroup>
           </Col>

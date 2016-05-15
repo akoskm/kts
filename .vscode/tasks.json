@@ -5,7 +5,7 @@
     "tasks": [
         {
             "args": ["src", "--out-dir", "dist", "-w", "--source-maps"],
-            "taskName": "watch",
+            "taskName": "babel-watch",
             "suppressTaskName": true,
             "isBuildCommand": true,
             "isWatching": true

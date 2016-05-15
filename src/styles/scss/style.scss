@@ -45,3 +45,11 @@ div.thumbnail {
   -ms-transition: opacity 300ms linear;
   transition: opacity 300ms linear;
 }
+
+div.create-album-toolbar.fixed-top {
+  position: fixed;
+  top: 10px;
+  z-index: 100;
+  padding-top: 15px;
+  background-color: #9c9c9c;
+}
