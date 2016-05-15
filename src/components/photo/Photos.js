@@ -108,7 +108,11 @@ class Photos extends React.Component {
     }
     return (
       <div>
-        <Toolbar nameslug={nameslug} selectedPhotos={this.state.selected} handleCancelAlbum={this.handleCancelAlbum}/>
+        <Toolbar
+          nameslug={nameslug}
+          selectedPhotos={this.state.selected}
+          handleCancelAlbum={this.handleCancelAlbum}
+        />
         <Row>
           {markup}
         </Row>
