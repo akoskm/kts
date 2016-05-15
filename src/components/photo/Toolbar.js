@@ -23,6 +23,7 @@ class Toolbar extends React.Component {
 
     this.onCreateAlbum = this.onCreateAlbum.bind(this);
     this.handleAlbumNameChange = this.handleAlbumNameChange.bind(this);
+    this.handleOkAlbum = this.handleOkAlbum.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +34,10 @@ class Toolbar extends React.Component {
     this.setState({
       newAlbumName: 'Untitled Album'
     });
+  }
+
+  handleOkAlbum() {
+    console.log(this.state.newAlbumName);
   }
 
   handleAlbumNameChange(e) {
@@ -55,22 +60,14 @@ class Toolbar extends React.Component {
     let newAlbumButton = '';
     let createAlbumText;
     let selectedCount = null;
-
     const selectedPhotos = this.props.selectedPhotos;
-    if (selectedPhotos) {
-      selectedCount = selectedPhotos.length;
-      if (selectedCount === 1) {
-        // createAlbumDisabled = false;
-        createAlbumText = 'Selected 1 photo.';
-      } else if (selectedCount > 1) {
-        createAlbumText = 'Selected ' + selectedCount + ' photos.';
-      }
-    }
+
     if (this.state.newAlbumName) {
       creatingAlbum = true;
+      createAlbumText = 'Select photos you want to add to the album by clicking on them.';
       newAlbumButton = (
         <FormGroup>
-          <ControlLabel>How you would like to call it?</ControlLabel>
+          <ControlLabel>Album name</ControlLabel>
           {' '}
           <FormControl value={this.state.newAlbumName} onChange={this.handleAlbumNameChange}/>
           {' '}
@@ -78,6 +75,7 @@ class Toolbar extends React.Component {
             className='btn btn-success'
             role='button'
             type='button'
+            onClick={this.handleOkAlbum}
           >Ok</Button>
           {' '}
           <Button
@@ -88,6 +86,17 @@ class Toolbar extends React.Component {
         </FormGroup>
       );
     }
+
+    if (selectedPhotos) {
+      selectedCount = selectedPhotos.length;
+      if (selectedCount === 1) {
+        // createAlbumDisabled = false;
+        createAlbumText = 'Selected 1 photo.';
+      } else if (selectedCount > 1) {
+        createAlbumText = 'Selected ' + selectedCount + ' photos.';
+      }
+    }
+
     return (
       <Row className='create-album-toolbar'>
         <Col md={12}>
