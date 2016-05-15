@@ -9,6 +9,9 @@ import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import Form from 'react-bootstrap/lib/Form';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 
 import Photo from './Photo';
 
@@ -22,6 +25,8 @@ class Toolbar extends React.Component {
     };
 
     this.onCreateAlbum = this.onCreateAlbum.bind(this);
+    this.onSelectExistingAlbum = this.onSelectExistingAlbum.bind(this);
+    this.onSetSelected = this.onSetSelected.bind(this);
     this.handleAlbumNameChange = this.handleAlbumNameChange.bind(this);
     this.handleOkAlbum = this.handleOkAlbum.bind(this);
     this.handleCancelAlbum = this.handleCancelAlbum.bind(this);
@@ -38,16 +43,42 @@ class Toolbar extends React.Component {
     });
   }
 
+  onSelectExistingAlbum() {
+    this.setState({
+      creatingAlbum: true,
+      existing: true
+    });
+  }
+
+  onSetSelected(e) {
+    this.setState({
+      selected: e.target.value
+    });
+  }
+
   handleOkAlbum() {
     let query = {
       name: this.state.albumName,
       photos: this.props.selectedPhotos
     };
-    $.post('/api/pages/' + this.props.nameslug + '/albums', query).done(function (data) {
-      if (data.success) {
-        console.log(data);
-      }
-    });
+    if (!this.state.existing) {
+      let url = '/api/pages/' + this.props.nameslug + '/albums';
+      $.post(url, query).done(function (data) {
+        if (data.success) {
+          console.log(data);
+        }
+      });
+    } else {
+      let url = '/api/pages/' + this.props.nameslug + '/albums/' + this.state.selected;
+      $.ajax({
+        url,
+        data: query,
+        type: 'PUT',
+        success: (response) => {
+          console.log(response);
+        }
+      });
+    }
   }
 
   handleCancelAlbum() {
@@ -77,16 +108,13 @@ class Toolbar extends React.Component {
     let createAlbumButton = '';
     let newAlbumButton = '';
     let hint;
+    let form = '';
     let selectedCount = null;
     const selectedPhotos = this.props.selectedPhotos;
 
     if (creatingAlbum) {
-      hint = 'Select photos you want to add to the album by clicking on them, then click on OK';
-      newAlbumButton = (
-        <FormGroup>
-          <ControlLabel>Album name</ControlLabel>
-          {' '}
-          <FormControl value={this.state.albumName} onChange={this.handleAlbumNameChange}/>
+      let newAlbumControls = (
+        <span>
           {' '}
           <Button
             className='btn btn-success'
@@ -101,19 +129,50 @@ class Toolbar extends React.Component {
             type='button'
             onClick={this.handleCancelAlbum}
           >Cancel</Button>
-        </FormGroup>
+        </span>
       );
-    } else {
-      createAlbumButton = (
-        <Button
-          className='btn btn-primary'
-          disabled={creatingAlbum}
-          onClick={this.onCreateAlbum}
-        >
-          Create Album
-        </Button>
-      );
+      if (!this.state.existing) {
+        newAlbumButton = (
+          <span>
+            <ControlLabel>New Album name</ControlLabel>
+            {' '}
+            <FormControl value={this.state.albumName} onChange={this.handleAlbumNameChange}/>
+            {newAlbumControls}
+          </span>
+        );
+      } else {
+        let albums = this.props.albums;
+        let albumsMarkup = albums.map((album) => {
+          return (
+            <option value={album._id}>{album.name}</option>
+          );
+        });
+        newAlbumButton = (
+          <span>
+            <ControlLabel>Select an album</ControlLabel>
+            {' '}
+            <FormControl componentClass='select' placeholder='select' onChange={this.onSetSelected}>
+              {albumsMarkup}
+            </FormControl>
+            {newAlbumControls}
+          </span>
+        );
+      }
     }
+    createAlbumButton = (
+      <FormGroup>
+        <DropdownButton
+          title='Add to'
+          bsStyle='primary'
+          disabled={creatingAlbum}
+        >
+          <MenuItem eventKey='1' onClick={this.onCreateAlbum}>New Album</MenuItem>
+          <MenuItem eventKey='2' onClick={this.onSelectExistingAlbum}>Existing Album</MenuItem>
+        </DropdownButton>
+        {' '}
+        {newAlbumButton}
+      </FormGroup>
+    );
     if (selectedPhotos) {
       selectedCount = selectedPhotos.length;
       if (selectedCount === 1) {
@@ -124,30 +183,41 @@ class Toolbar extends React.Component {
       }
     }
 
+    if (selectedCount > 0) {
+      form = (
+        <Form inline>
+          {createAlbumButton}
+          <div className='pull-right'>
+            <Button
+              className='btn btn-danger'
+              disabled={creatingAlbum}
+            >
+              <Glyphicon glyph='trash' />
+            </Button>
+          </div>
+        </Form>
+      );
+    } else {
+      form = (
+        <p>Select photos you want to organize by clicking on them.</p>
+      );
+    }
+
     return (
-      <Row className='create-album-toolbar'>
-        <Col md={12}>
-          <FormGroup>
-            <Form inline>
-              {createAlbumButton}
-              {' '}
-              <p>{hint}</p>
-              {' '}
-              <div className='pull-right'>
-                {newAlbumButton}
-              </div>
-            </Form>
-          </FormGroup>
-        </Col>
-      </Row>
-    );
+        <Row className='create-album-toolbar'>
+          <Col md={12}>
+            {form}
+          </Col>
+        </Row>
+      );
   }
 }
 
 Toolbar.propTypes = {
   handleCancelAlbum: React.PropTypes.func.isRequired,
   selectedPhotos: React.PropTypes.object.isRequired,
-  nameslug: React.PropTypes.object.isRequired
+  nameslug: React.PropTypes.object.isRequired,
+  albums: React.PropTypes.object.isRequired
 };
 
 export default Toolbar;

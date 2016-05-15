@@ -29,7 +29,7 @@ class Page extends React.Component {
 
   componentDidMount() {
     let nameslug = this.props.routeParams.nameslug;
-    this.serverRequest = $.get('/api/pages/' + nameslug, function (response) {
+    this.pageRequest = $.get('/api/pages/' + nameslug, function (response) {
       let data = response.result;
       if (response.success) {
         this.setState({
@@ -37,10 +37,19 @@ class Page extends React.Component {
         });
       }
     }.bind(this));
+
+    const url = '/api/pages/' + this.props.routeParams.nameslug + '/albums';
+    this.albumsRequest = $.get(url, (response) => {
+      let data = response.albums;
+      this.setState({
+        albums: data
+      });
+    });
   }
 
   componentWillUnmount() {
-    this.serverRequest.abort();
+    this.pageRequest.abort();
+    this.albumsRequest.abort();
   }
 
   onItemClick(i) {
@@ -106,7 +115,7 @@ class Page extends React.Component {
                   <h4>Photos</h4>
                 </Col>
               </Row>
-              <Photos nameslug={this.props.routeParams.nameslug} album={this.state.album}/>
+              <Photos nameslug={this.props.routeParams.nameslug} album={this.state.album} albums={this.state.albums}/>
           </Col>
           <Col md={2}>
             <Row>
@@ -115,6 +124,7 @@ class Page extends React.Component {
               </Col>
             </Row>
             <Albums
+              albums={this.state.albums}
               handleAlbumSelect={this.handleAlbumSelect}
               nameslug={this.props.routeParams.nameslug}
             />

@@ -30,6 +30,7 @@ export default (app, upload) => {
 
   app.get('/api/pages/:nameslug/albums', albumApi.getAlbums);
   app.post('/api/pages/:nameslug/albums', albumApi.createAlbum);
+  app.put('/api/pages/:nameslug/albums/:albumid', albumApi.updateAlbum);
 
   /* main router for reactjs components, supporting both client and server side rendering*/
   let sendHtml = function (res, props, context) {
@@ -40,6 +41,7 @@ export default (app, upload) => {
       <head>
         <title>KTS</title>
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
+        <meta name=viewport content="width=device-width, initial-scale=1">
       </head>
       <script>
         window.APP_STATE = '${context}';

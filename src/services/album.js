@@ -42,8 +42,50 @@ const albumApi = {
         owner: req.user
       }, query, function (err, doc) {
         if (err) {
-          logger.instance.error('Error while saving album', err);
+          logger.instance.error('Error while creating album', err);
           workflow.outcome.errors.push('Cannot create album');
+          return workflow.emit('response');
+        }
+        workflow.outcome.result = doc;
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.emit('validateAlbum');
+  },
+
+  updateAlbum(req, res, next) {
+    let workflow = workflowFactory(req, res);
+
+    workflow.on('validateAlbum', function () {
+      const album = req.body;
+
+      if (!album.photos || album.photos.length < 1) {
+        workflow.outcome.errors.push('Cannot create empty album');
+      }
+
+      if (workflow.hasErrors()) {
+        return workflow.emit('response');
+      }
+
+      workflow.album = album;
+      workflow.emit('updateAlbum');
+    });
+
+    workflow.on('updateAlbum', function () {
+      let query = {
+        $pushAll: {
+          'albums.$.photos':  workflow.album.photos
+        }
+      };
+      mongoose.model('Page').update({
+        'albums._id': req.params.albumid,
+        nameslug: req.params.nameslug,
+        owner: req.user
+      }, query, function (err, doc) {
+        if (err) {
+          logger.instance.error('Error while updating album', err);
+          workflow.outcome.errors.push('Cannot updating album');
           return workflow.emit('response');
         }
         workflow.outcome.result = doc;

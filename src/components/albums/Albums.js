@@ -12,22 +12,21 @@ class Albums extends React.Component {
     super(props);
 
     this.state = {
-      albums: [],
       selected: null
     };
 
     this.handleAlbumSelect = this.handleAlbumSelect.bind(this);
   }
 
-  componentDidMount() {
-    const url = '/api/pages/' + this.props.nameslug + '/albums';
-    this.serverRequest = $.get(url, (response) => {
-      let data = response.albums;
-      this.setState({
-        albums: data
-      });
-    });
-  }
+  // componentDidMount() {
+  //   const url = '/api/pages/' + this.props.nameslug + '/albums';
+  //   this.serverRequest = $.get(url, (response) => {
+  //     let data = response.albums;
+  //     this.setState({
+  //       albums: data
+  //     });
+  //   });
+  // }
 
   handleAlbumSelect(album) {
     let newAlbumState = album;
@@ -42,8 +41,8 @@ class Albums extends React.Component {
 
   render() {
     let markup = 'No Albums found.';
-    let albums = this.state.albums;
-    if (albums.length > 0) {
+    let albums = this.props.albums;
+    if (albums && albums.length > 0) {
       markup = albums.map((album) => {
         let active = false;
         if (this.state.selected) {
@@ -64,6 +63,7 @@ class Albums extends React.Component {
 
 Albums.propTypes = {
   nameslug: React.PropTypes.object.isRequired,
+  albums: React.PropTypes.object.isRequired,
   handleAlbumSelect: React.PropTypes.object.isRequired
 };
 

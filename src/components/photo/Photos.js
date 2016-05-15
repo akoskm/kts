@@ -119,6 +119,7 @@ class Photos extends React.Component {
       <div>
         <Toolbar
           nameslug={nameslug}
+          albums={this.props.albums}
           selectedPhotos={this.state.selected}
           handleCancelAlbum={this.handleCancelAlbum}
         />
@@ -132,6 +133,7 @@ class Photos extends React.Component {
 
 Photos.propTypes = {
   nameslug: React.PropTypes.object.isRequired,
+  albums: React.PropTypes.object.isRequired,
   album: React.PropTypes.object.isRequired
 };
 
