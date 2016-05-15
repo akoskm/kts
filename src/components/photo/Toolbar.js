@@ -18,12 +18,13 @@ class Toolbar extends React.Component {
     super(props);
 
     this.state = {
-      newAlbumName: ''
+      albumName: ''
     };
 
     this.onCreateAlbum = this.onCreateAlbum.bind(this);
     this.handleAlbumNameChange = this.handleAlbumNameChange.bind(this);
     this.handleOkAlbum = this.handleOkAlbum.bind(this);
+    this.handleCancelAlbum = this.handleCancelAlbum.bind(this);
   }
 
   componentDidMount() {
@@ -32,17 +33,33 @@ class Toolbar extends React.Component {
 
   onCreateAlbum() {
     this.setState({
-      newAlbumName: 'Untitled Album'
+      creatingAlbum: true,
+      albumName: 'Untitled Album'
     });
   }
 
   handleOkAlbum() {
-    console.log(this.state.newAlbumName);
+    console.log(this.state.albumName);
+    $.post('/api/pages/' + this.props.nameslug + '/album', this.state.page).done(function (data) {
+      if (data.success) {
+        self.setState({
+          step: self.state.step + 1,
+          url: '/' + data.result.nameslug
+        });
+      }
+    });
+  }
+
+  handleCancelAlbum() {
+    this.setState({
+      creatingAlbum: false
+    });
+    this.props.handleCancelAlbum();
   }
 
   handleAlbumNameChange(e) {
     this.setState({
-      newAlbumName: e.target.value
+      albumName: e.target.value
     });
   }
 
@@ -56,20 +73,19 @@ class Toolbar extends React.Component {
   }
 
   render() {
-    let creatingAlbum = false;
+    let creatingAlbum = this.state.creatingAlbum;
     let newAlbumButton = '';
     let createAlbumText;
     let selectedCount = null;
     const selectedPhotos = this.props.selectedPhotos;
 
-    if (this.state.newAlbumName) {
-      creatingAlbum = true;
+    if (creatingAlbum) {
       createAlbumText = 'Select photos you want to add to the album by clicking on them.';
       newAlbumButton = (
         <FormGroup>
           <ControlLabel>Album name</ControlLabel>
           {' '}
-          <FormControl value={this.state.newAlbumName} onChange={this.handleAlbumNameChange}/>
+          <FormControl value={this.state.albumName} onChange={this.handleAlbumNameChange}/>
           {' '}
           <Button
             className='btn btn-success'
@@ -82,11 +98,11 @@ class Toolbar extends React.Component {
             className='btn btn-warning'
             role='button'
             type='button'
+            onClick={this.handleCancelAlbum}
           >Cancel</Button>
         </FormGroup>
       );
     }
-
     if (selectedPhotos) {
       selectedCount = selectedPhotos.length;
       if (selectedCount === 1) {
@@ -124,7 +140,9 @@ class Toolbar extends React.Component {
 }
 
 Toolbar.propTypes = {
-  selectedPhotos: React.PropTypes.object.isRequired
+  handleCancelAlbum: React.PropTypes.func.isRequired,
+  selectedPhotos: React.PropTypes.object.isRequired,
+  nameslug: React.PropTypes.object.isRequired
 };
 
 export default Toolbar;

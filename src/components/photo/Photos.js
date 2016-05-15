@@ -20,6 +20,7 @@ class Photos extends React.Component {
 
     this.onDeleteClick = this.onDeleteClick.bind(this);
     this.onPhotoSelect = this.onPhotoSelect.bind(this);
+    this.handleCancelAlbum = this.handleCancelAlbum.bind(this);
   }
 
   componentDidMount() {
@@ -57,18 +58,19 @@ class Photos extends React.Component {
   onPhotoSelect(photoid, index) {
     const selected = this.state.selected;
     const found = selected.indexOf(index);
-    let newAlbumName = this.state.newAlbumName;
     if (found > -1) {
       selected.splice(found, 1);
-      if (selected.length === 0) {
-        newAlbumName = null;
-      }
     } else {
       selected.push(index);
     }
     this.setState({
-      selected,
-      newAlbumName
+      selected
+    });
+  }
+
+  handleCancelAlbum() {
+    this.setState({
+      selected: []
     });
   }
 
@@ -106,7 +108,7 @@ class Photos extends React.Component {
     }
     return (
       <div>
-        <Toolbar selectedPhotos={this.state.selected}/>
+        <Toolbar nameslug={nameslug} selectedPhotos={this.state.selected} handleCancelAlbum={this.handleCancelAlbum}/>
         <Row>
           {markup}
         </Row>
