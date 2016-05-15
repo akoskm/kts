@@ -74,13 +74,14 @@ class Toolbar extends React.Component {
 
   render() {
     let creatingAlbum = this.state.creatingAlbum;
+    let createAlbumButton = '';
     let newAlbumButton = '';
-    let createAlbumText;
+    let hint;
     let selectedCount = null;
     const selectedPhotos = this.props.selectedPhotos;
 
     if (creatingAlbum) {
-      createAlbumText = 'Select photos you want to add to the album by clicking on them.';
+      hint = 'Select photos you want to add to the album by clicking on them, then click on OK';
       newAlbumButton = (
         <FormGroup>
           <ControlLabel>Album name</ControlLabel>
@@ -102,14 +103,24 @@ class Toolbar extends React.Component {
           >Cancel</Button>
         </FormGroup>
       );
+    } else {
+      createAlbumButton = (
+        <Button
+          className='btn btn-primary'
+          disabled={creatingAlbum}
+          onClick={this.onCreateAlbum}
+        >
+          Create Album
+        </Button>
+      );
     }
     if (selectedPhotos) {
       selectedCount = selectedPhotos.length;
       if (selectedCount === 1) {
         // createAlbumDisabled = false;
-        createAlbumText = 'Selected 1 photo.';
+        hint = 'Selected 1 photo.';
       } else if (selectedCount > 1) {
-        createAlbumText = 'Selected ' + selectedCount + ' photos.';
+        hint = 'Selected ' + selectedCount + ' photos.';
       }
     }
 
@@ -118,15 +129,9 @@ class Toolbar extends React.Component {
         <Col md={12}>
           <FormGroup>
             <Form inline>
-              <Button
-                className='btn btn-primary'
-                disabled={creatingAlbum}
-                onClick={this.onCreateAlbum}
-              >
-                Create Album
-              </Button>
+              {createAlbumButton}
               {' '}
-              {createAlbumText}
+              {hint}
               {' '}
               <div className='pull-right'>
                 {newAlbumButton}
