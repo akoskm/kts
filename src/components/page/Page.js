@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/lib/Col';
 import DropzoneComponent from 'react-dropzone-component';
 
 import Photos from '../photo/Photos';
+import Albums from '../albums/Albums';
 
 class Page extends React.Component {
 
@@ -18,10 +19,12 @@ class Page extends React.Component {
     }
     this.state = {
       page: initialState,
+      album: null,
       files: []
     };
 
     this.onItemClick = this.onItemClick.bind(this);
+    this.handleAlbumSelect = this.handleAlbumSelect.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +53,12 @@ class Page extends React.Component {
   getUploadURL() {
     const nameslug = this.props.routeParams.nameslug;
     return '/api/pages/' + nameslug + '/photos';
+  }
+
+  handleAlbumSelect(album) {
+    this.setState({
+      album
+    });
   }
 
   render() {
@@ -91,11 +100,26 @@ class Page extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col md={12}>
-            <h4>Photos</h4>
+          <Col md={10}>
+              <Row>
+                <Col md={12}>
+                  <h4>Photos</h4>
+                </Col>
+              </Row>
+              <Photos nameslug={this.props.routeParams.nameslug} album={this.state.album}/>
+          </Col>
+          <Col md={2}>
+            <Row>
+              <Col md={12}>
+                <h4>Albums</h4>
+              </Col>
+            </Row>
+            <Albums
+              handleAlbumSelect={this.handleAlbumSelect}
+              nameslug={this.props.routeParams.nameslug}
+            />
           </Col>
         </Row>
-        <Photos nameslug={this.props.routeParams.nameslug}/>
       </div>
     );
   }

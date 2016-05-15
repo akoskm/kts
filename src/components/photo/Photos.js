@@ -77,9 +77,16 @@ class Photos extends React.Component {
   }
 
   render() {
-    const photos = this.state.photos;
+    let photos = this.state.photos;
+    const album = this.props.album;
     const nameslug = this.props.nameslug;
     const selectedPhotos = this.state.selected;
+
+    if (album) {
+      photos = photos.filter((photo) => {
+        return album.photos.indexOf(photo._id) > -1;
+      });
+    }
 
     let markup;
     if (photos && photos.length > 0) {
@@ -124,7 +131,8 @@ class Photos extends React.Component {
 }
 
 Photos.propTypes = {
-  nameslug: React.PropTypes.object.isRequired
+  nameslug: React.PropTypes.object.isRequired,
+  album: React.PropTypes.object.isRequired
 };
 
 export default Photos;

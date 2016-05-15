@@ -28,6 +28,7 @@ export default (app, upload) => {
   app.delete('/api/pages/:nameslug/photos/:photoid', pageApi.deletePhoto);
   app.put('/api/pages/:nameslug/photos/:photoid', pageApi.updatePhoto);
 
+  app.get('/api/pages/:nameslug/albums', albumApi.getAlbums);
   app.post('/api/pages/:nameslug/albums', albumApi.createAlbum);
 
   /* main router for reactjs components, supporting both client and server side rendering*/

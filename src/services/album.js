@@ -52,6 +52,28 @@ const albumApi = {
     });
 
     workflow.emit('validateAlbum');
+  },
+
+  getAlbums(req, res, next) {
+    const workflow = workflowFactory(req, res);
+
+    workflow.on('getAlbums', function () {
+      mongoose.model('Page').findOne({
+        nameslug: req.params.nameslug,
+        owner: req.user
+      }, 'albums', function (err, doc) {
+        if (err) {
+          logger.instance.error('Cannot retrieve albums', err);
+          workflow.outcome.errors.push('Cannot retrieve albums');
+          return workflow.emit('response');
+        }
+
+        workflow.outcome.albums = doc.albums;
+        workflow.emit('response');
+      });
+    });
+
+    workflow.emit('getAlbums');
   }
 };
 
