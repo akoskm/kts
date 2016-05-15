@@ -39,13 +39,13 @@ class Toolbar extends React.Component {
   }
 
   handleOkAlbum() {
-    console.log(this.state.albumName);
-    $.post('/api/pages/' + this.props.nameslug + '/album', this.state.page).done(function (data) {
+    let query = {
+      name: this.state.albumName,
+      photos: this.props.selectedPhotos
+    };
+    $.post('/api/pages/' + this.props.nameslug + '/albums', query).done(function (data) {
       if (data.success) {
-        self.setState({
-          step: self.state.step + 1,
-          url: '/' + data.result.nameslug
-        });
+        console.log(data);
       }
     });
   }

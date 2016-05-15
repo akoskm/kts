@@ -16,6 +16,11 @@ let pageSchema = new mongoose.Schema({
     tags: [],
     // ability to publis photos and/or albums
     published: { type: Boolean, required: true, default: false }
+  }],
+  albums: [{
+    name: { type: String },
+    cover: { type: mongoose.Schema.Types.ObjectId, ref: 'User.photos' },
+    photos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User.photos' }]
   }]
 });
 pageSchema.set('autoIndex', (process.env.NODE_ENV === 'development'));

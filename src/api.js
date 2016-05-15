@@ -5,6 +5,7 @@ import signin from './services/signin';
 import signout from './services/signout';
 import { profileApi } from './services/profile';
 import { pageApi } from './services/page';
+import { albumApi } from './services/album';
 import { renderToString } from 'react-dom/server';
 import { routes } from './routes';
 import { match, RoutingContext } from 'react-router';
@@ -21,10 +22,13 @@ export default (app, upload) => {
   app.post('/api/pages', pageApi.createPage);
   app.get('/api/pages', pageApi.getPages);
   app.get('/api/pages/:nameslug', pageApi.findPage);
+
   app.get('/api/pages/:nameslug/photos', pageApi.getPhotos);
   app.post('/api/pages/:nameslug/photos', upload.single('file'), pageApi.uploadPhoto);
   app.delete('/api/pages/:nameslug/photos/:photoid', pageApi.deletePhoto);
   app.put('/api/pages/:nameslug/photos/:photoid', pageApi.updatePhoto);
+
+  app.post('/api/pages/:nameslug/albums', albumApi.createAlbum);
 
   /* main router for reactjs components, supporting both client and server side rendering*/
   let sendHtml = function (res, props, context) {
