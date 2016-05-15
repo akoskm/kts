@@ -40,11 +40,13 @@ class Photos extends React.Component {
     this.serverRequest.abort();
   }
 
-  onDeleteClick(photoid, index) {
+  onDeleteClick(photoid) {
     const nameslug = this.props.nameslug;
-    this.state.photos.splice(index, 1);
+    let photos = this.state.photos.filter(element => {
+      return element._id !== photoid;
+    });
     this.setState({
-      photos: this.state.photos
+      photos
     });
     return $.ajax({
       url: '/api/pages/' + nameslug + '/photos/' + photoid,
@@ -55,13 +57,13 @@ class Photos extends React.Component {
     });
   }
 
-  onPhotoSelect(photoid, index) {
+  onPhotoSelect(photoid) {
     const selected = this.state.selected;
-    const found = selected.indexOf(index);
+    const found = selected.indexOf(photoid);
     if (found > -1) {
       selected.splice(found, 1);
     } else {
-      selected.push(index);
+      selected.push(photoid);
     }
     this.setState({
       selected
@@ -84,7 +86,7 @@ class Photos extends React.Component {
       markup = photos.map((image, i) => {
         let selected = '';
         if (selectedPhotos && selectedPhotos.length > 0) {
-          if (selectedPhotos.indexOf(i) > -1) {
+          if (selectedPhotos.indexOf(image._id) > -1) {
             selected = 'selected';
           } else {
             selected = 'nselected';
