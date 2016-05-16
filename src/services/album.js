@@ -60,6 +60,10 @@ const albumApi = {
     workflow.on('validateAlbum', function () {
       const album = req.body;
 
+      if (!req.params.albumid) {
+        workflow.outcome.errors.push('Album ID is missing');
+      }
+
       if (!album.photos || album.photos.length < 1) {
         workflow.outcome.errors.push('Cannot create empty album');
       }
@@ -85,7 +89,7 @@ const albumApi = {
       }, query, function (err, doc) {
         if (err) {
           logger.instance.error('Error while updating album', err);
-          workflow.outcome.errors.push('Cannot updating album');
+          workflow.outcome.errors.push('Cannot update album');
           return workflow.emit('response');
         }
         workflow.outcome.result = doc;

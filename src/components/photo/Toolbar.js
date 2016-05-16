@@ -39,14 +39,15 @@ class Toolbar extends React.Component {
   onCreateAlbum() {
     this.setState({
       creatingAlbum: true,
-      albumName: 'Untitled Album'
+      existing: false
     });
   }
 
   onSelectExistingAlbum() {
     this.setState({
       creatingAlbum: true,
-      existing: true
+      existing: true,
+      selected: this.props.albums[0]._id
     });
   }
 
@@ -57,8 +58,12 @@ class Toolbar extends React.Component {
   }
 
   handleOkAlbum() {
+    let albumName = this.state.albumName;
+    if (!albumName) {
+      albumName = 'Untitled album';
+    }
     let query = {
-      name: this.state.albumName,
+      name: albumName,
       photos: this.props.selectedPhotos
     };
     if (!this.state.existing) {
@@ -110,6 +115,7 @@ class Toolbar extends React.Component {
     let hint;
     let form = '';
     let selectedCount = null;
+    let noExistingAlbums = !this.props.albums || this.props.albums.length < 1;
     const selectedPhotos = this.props.selectedPhotos;
 
     if (creatingAlbum) {
@@ -136,7 +142,12 @@ class Toolbar extends React.Component {
           <span>
             <ControlLabel>New Album name</ControlLabel>
             {' '}
-            <FormControl value={this.state.albumName} onChange={this.handleAlbumNameChange}/>
+            <FormControl
+              value={this.state.albumName}
+              onChange={this.handleAlbumNameChange}
+              placeholder='Untitled album'
+              autoFocus
+            />
             {newAlbumControls}
           </span>
         );
@@ -166,8 +177,11 @@ class Toolbar extends React.Component {
           bsStyle='primary'
           disabled={creatingAlbum}
         >
-          <MenuItem eventKey='1' onClick={this.onCreateAlbum}>New Album</MenuItem>
-          <MenuItem eventKey='2' onClick={this.onSelectExistingAlbum}>Existing Album</MenuItem>
+          <MenuItem onClick={this.onCreateAlbum}>New Album</MenuItem>
+          <MenuItem
+            onClick={this.onSelectExistingAlbum}
+            disabled={noExistingAlbums}
+          >Existing Album</MenuItem>
         </DropdownButton>
         {' '}
         {newAlbumButton}
