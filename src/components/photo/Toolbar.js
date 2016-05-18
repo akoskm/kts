@@ -99,13 +99,16 @@ class Toolbar extends React.Component {
   }
 
   handleRemoveFromAlbum() {
-    let selected = this.props.selectedPhotos;
+    const selected = this.props.selectedPhotos;
+    const selectedAlbum = this.props.selectedAlbum;
     if (selected && selected.length > 0) {
-      let url = '/api/pages/' + this.props.nameslug + '/albums/batch';
+      let url = '/api/pages/' + this.props.nameslug + '/albums/' + selectedAlbum._id + '?pull=true';
       $.ajax({
         url,
-        data: selected,
-        type: 'DELETE',
+        data: {
+          photos: selected
+        },
+        type: 'PUT',
         success: (response) => {
           console.log(response);
         }
@@ -245,8 +248,10 @@ class Toolbar extends React.Component {
 Toolbar.propTypes = {
   handleCancelAlbum: React.PropTypes.func.isRequired,
   selectedPhotos: React.PropTypes.object.isRequired,
+  selectedAlbum: React.PropTypes.object.isRequired,
   nameslug: React.PropTypes.object.isRequired,
-  albums: React.PropTypes.object.isRequired
+  albums: React.PropTypes.object.isRequired,
+  albumPhotos: React.PropTypes.object.isRequired
 };
 
 export default Toolbar;

@@ -120,6 +120,8 @@ class Photos extends React.Component {
         <Toolbar
           nameslug={nameslug}
           albums={this.props.albums}
+          albumPhotos={photos}
+          selectedAlbum={album}
           selectedPhotos={this.state.selected}
           handleCancelAlbum={this.handleCancelAlbum}
         />

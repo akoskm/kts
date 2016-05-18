@@ -77,11 +77,22 @@ const albumApi = {
     });
 
     workflow.on('updateAlbum', function () {
-      let query = {
-        $pushAll: {
-          'albums.$.photos':  workflow.album.photos
-        }
-      };
+      let query;
+
+      if (req.query.pull) {
+        query = {
+          $pullAll: {
+            'albums.$.photos':  workflow.album.photos
+          }
+        };
+      } else {
+        query = {
+          $pushAll: {
+            'albums.$.photos':  workflow.album.photos
+          }
+        };
+      }
+
       mongoose.model('Page').update({
         'albums._id': req.params.albumid,
         nameslug: req.params.nameslug,
