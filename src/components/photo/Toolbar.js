@@ -13,8 +13,6 @@ import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 
-import Photo from './Photo';
-
 class Toolbar extends React.Component {
 
   constructor(props) {
@@ -30,6 +28,7 @@ class Toolbar extends React.Component {
     this.handleAlbumNameChange = this.handleAlbumNameChange.bind(this);
     this.handleOkAlbum = this.handleOkAlbum.bind(this);
     this.handleCancelAlbum = this.handleCancelAlbum.bind(this);
+    this.handleRemoveFromAlbum = this.handleRemoveFromAlbum.bind(this);
   }
 
   componentDidMount() {
@@ -97,6 +96,21 @@ class Toolbar extends React.Component {
     this.setState({
       albumName: e.target.value
     });
+  }
+
+  handleRemoveFromAlbum() {
+    let selected = this.props.selectedPhotos;
+    if (selected && selected.length > 0) {
+      let url = '/api/pages/' + this.props.nameslug + '/albums/batch';
+      $.ajax({
+        url,
+        data: selected,
+        type: 'DELETE',
+        success: (response) => {
+          console.log(response);
+        }
+      });
+    }
   }
 
   handleScroll() {
@@ -205,6 +219,7 @@ class Toolbar extends React.Component {
             <Button
               className='btn btn-danger'
               disabled={creatingAlbum}
+              onClick={this.handleRemoveFromAlbum}
             >
               <Glyphicon glyph='trash' />
             </Button>
