@@ -16,7 +16,6 @@ import { logger } from './util/logger';
 
 import api from './api';
 import schema from './schema';
-import DataWrapper from './datawrapper';
 import webpack from 'webpack';
 import webpackConfig from '../webpack.config';
 import webpackDevMiddleware from 'webpack-dev-middleware';
