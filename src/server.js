@@ -35,7 +35,7 @@ const storage = multer.diskStorage({
     if (!req.user || !req.user._id) {
       cb('User not found');
     } else {
-      const userdir = path.join(config.workingDir, 'uploads/', req.params.nameslug + '_img');
+      const userdir = path.join(__dirname, '../uploads', req.params.nameslug + '_img');
       fs.mkdir(userdir, function (err) { // returns with error if already exists
         cb(null, userdir);
       });
@@ -49,7 +49,7 @@ const app = express();
 
 // postgresql connection
 // const db = new Sequelize('postgres://kts:kts@localhost/kts');
-mongoose.connect('mongodb://localhost/kts');
+mongoose.connect('mongodb://kts:kts@localhost/kts');
 
 // passpost strategy
 const LocalStrategy = require('passport-local').Strategy;
