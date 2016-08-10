@@ -29,7 +29,7 @@ class AddressForm extends React.Component {
             onChange={this.props.handleChange}
           />
           <FormControl.Feedback />
-          <HelpBlock>Required.</HelpBlock>
+          <HelpBlock>Required</HelpBlock>
         </FormGroup>
       </form>
     );

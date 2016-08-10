@@ -28,7 +28,7 @@ class NameForm extends React.Component {
               onChange={this.props.handleChange}
             />
             <FormControl.Feedback />
-            <HelpBlock>Name must be at least 5 characters long.</HelpBlock>
+            <HelpBlock>Name must be at least 5 characters long</HelpBlock>
           </FormGroup>
         </form>
     );
