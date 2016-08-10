@@ -67,7 +67,7 @@ export default class CreatePageWizard extends React.Component {
       if (data.success) {
         self.setState({
           step: self.state.step + 1,
-          url: '/' + data.result.nameslug
+          url: '/page/' + data.result.nameslug
         });
       }
     });
