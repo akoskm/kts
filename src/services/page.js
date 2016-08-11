@@ -138,6 +138,7 @@ const pageApi = {
       }
 
       mongoose.model('Page').findOne({
+        owner: req.user,
         nameslug: req.params.nameslug
       }, function (err, page) {
         if (err) throw err;
@@ -210,31 +211,43 @@ const pageApi = {
   updatePhoto(req, res, next) {
     const workflow = workflowFactory(req, res);
 
-    workflow.on('updatePhoto', function () {
-      const fieldsToSet = {
-        $set: {
-          'photos.$.name': req.body.name,
-          'photos.$.tags': req.body.tags
-        }
-      };
-
-      mongoose.model('Page').findOneAndUpdate({
+    workflow.on('validate', function () {
+      mongoose.model('Page').findOne({
         owner: req.user,
-        nameslug: req.params.nameslug,
-        'photos._id': req.params.photoid
-      }, fieldsToSet, function (err, doc) {
+        nameslug: req.params.nameslug
+      }, function (err, page) {
         if (err) {
-          logger.instance.error('Error while updating photo', err);
-          workflow.outcome.errors.push('Cannot delete photo');
+          logger.instance.error('Page doesn\'t exist', err);
+          workflow.outcome.errors.push('An error occurred');
           return workflow.emit('response');
         }
 
-        workflow.outcome.result = 'Updated';
-        return workflow.emit('response');
+        workflow.outcome.page = page;
+        return workflow.emit('updatePhoto');
       });
     });
 
-    workflow.emit('updatePhoto');
+    workflow.on('updatePhoto', function () {
+      const query = {
+        name: req.body.name,
+        tags: req.body.tags
+      };
+      mongoose.model('Photo').findByIdAndUpdate(
+        req.params.photoid,
+        query,
+        function (err, doc) {
+          if (err) {
+            logger.instance.error('Error while updating photo', err);
+            workflow.outcome.errors.push('Cannot delete photo');
+            return workflow.emit('response');
+          }
+
+          workflow.outcome.result = 'Updated';
+          return workflow.emit('response');
+        });
+    });
+
+    workflow.emit('validate');
   }
 };
 
