@@ -10,7 +10,7 @@ let photoSchema = new mongoose.Schema({
   tags: [],
     // ability to publis photos and/or albums
   published: { type: Boolean, required: true, default: false },
-  page: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Page' }]
+  page: { type: mongoose.Schema.Types.ObjectId, ref: 'Page' }
 });
 photoSchema.set('autoIndex', (process.env.NODE_ENV === 'development'));
 photoSchema.plugin(URLSlugs('name', { field: 'nameslug' }));
