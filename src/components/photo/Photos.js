@@ -29,8 +29,7 @@ class Photos extends React.Component {
       const data = response.result;
       if (response.success && data) {
         this.setState({
-          _id: data._id,
-          photos: data.photos
+          photos: data
         });
       }
     });

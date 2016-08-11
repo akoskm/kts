@@ -98,24 +98,57 @@ const pageApi = {
   getPhotos(req, res, next) {
     const workflow = workflowFactory(req, res);
 
-    workflow.on('imageLookup', function () {
+    workflow.on('pageLookup', function () {
       mongoose.model('Page').findOne({
         nameslug: req.params.nameslug
-      }, '_id photos', function (err, doc) {
+      }, '_id', function (err, page) {
         if (err) {
           logger.instance.error('Cannot get photos', err);
         }
-        workflow.outcome.result = doc;
+        if (!page) {
+          workflow.outcome.errors.push('Page doesn\'t exist');
+          workflow.emit('response');
+        } else {
+          workflow.page = page;
+          workflow.emit('imageLookup');
+        }
+      });
+    });
+
+    workflow.on('imageLookup', function () {
+      mongoose.model('Photo').find({
+        page: workflow.page._id
+      }, function (err, photos) {
+        workflow.outcome.result = photos;
         return workflow.emit('response');
       });
     });
 
-    workflow.emit('imageLookup');
+    workflow.emit('pageLookup');
   },
 
   uploadPhoto(req, res, next) {
     const workflow = workflowFactory(req, res);
     const file = req.file;
+
+    workflow.on('validate', function () {
+      if (file.size / 1000000 > 1) {
+        workflow.outcome.errors.push('Maximum file size is 1MB');
+        return workflow.emit('response');
+      }
+
+      mongoose.model('Page').findOne({
+        nameslug: req.params.nameslug
+      }, function (err, page) {
+        if (err) throw err;
+        if (!page) {
+          workflow.outcome.errors.push('Page doesn\t exist');
+          return workflow.emit('response');
+        }
+        workflow.page = page;
+        workflow.emit('upload');
+      });
+    });
 
     workflow.on('upload', function () {
       fs.readFile(file.path, function (err, data) {
@@ -123,27 +156,14 @@ const pageApi = {
           return workflow.emit('exception', err);
         }
 
-        if (file.size / 1000000 > 1) {
-          workflow.outcome.errors.push('Maximum file size is 1MB');
-          return workflow.emit('response');
-        }
-
-        let query = {
-          $push: {
-            photos: {
-              size: file.size,
-              name: file.originalname,
-              filename: file.filename,
-              contentType: file.mimetype,
-              originalFilename: file.originalname
-            }
-          }
-        };
-
-        mongoose.model('Page').findOneAndUpdate({
-          owner: req.user,
-          nameslug: req.params.nameslug
-        }, query, function (err, doc) {
+        mongoose.model('Photo').create({
+          size: file.size,
+          name: file.originalname,
+          filename: file.filename,
+          contentType: file.mimetype,
+          originalFilename: file.originalname,
+          page: workflow.page._id
+        }, function (err, doc) {
           if (err) {
             logger.instance.error('Error while saving image', err);
             workflow.outcome.errors.push('Cannot save image');
@@ -155,7 +175,7 @@ const pageApi = {
       });
     });
 
-    workflow.emit('upload');
+    workflow.emit('validate');
   },
 
   deletePhoto(req, res, next) {
