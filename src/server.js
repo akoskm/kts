@@ -80,6 +80,13 @@ if (nodeEnv === 'development') {
   app.use(webpackHotMiddleware(compiler));
 }
 
+let allowCrossDomain = (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:4000');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+};
+app.use(allowCrossDomain);
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/static', express.static(path.join(__dirname, '../uploads')));
 app.use(bodyParser.json());
