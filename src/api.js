@@ -6,6 +6,7 @@ import signout from './services/signout';
 import { profileApi } from './services/profile';
 import { pageApi } from './services/page';
 import { albumApi } from './services/album';
+import { searchApi } from './services/search';
 import { renderToString } from 'react-dom/server';
 import { routes } from './routes';
 import { match, RoutingContext } from 'react-router';
@@ -31,6 +32,8 @@ export default (app, upload) => {
   app.get('/api/pages/:nameslug/albums', albumApi.getAlbums);
   app.post('/api/pages/:nameslug/albums', albumApi.createAlbum);
   app.put('/api/pages/:nameslug/albums/:albumid', albumApi.updateAlbum);
+
+  app.get('/api/search', searchApi.filterPhotos);
 
   /* main router for reactjs components, supporting both client and server side rendering*/
   let sendHtml = function (res, props, context) {
