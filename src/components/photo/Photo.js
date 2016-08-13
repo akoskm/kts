@@ -32,9 +32,18 @@ class Photo extends React.Component {
   }
 
   _onSave() {
+    let request = {
+      name: this.state.name,
+      tags: []
+    };
+    if (this.state.tags) {
+      request.tags = this.state.tags.map(function (tag) {
+        return tag.value;
+      });
+    }
     $.ajax({
       url: '/api/pages/' + this.props.nameslug + '/photos/' + this.props.photoid,
-      data: this.state,
+      data: request,
       type: 'PUT',
       success: (response) => {
         console.log(response);
