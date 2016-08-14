@@ -27,7 +27,7 @@ const searchApi = {
     workflow.on('filter', function () {
       let tags = [];
       let queryTags = req.query.tags;
-      if (!workflow.page && (!tags || tags.length < 1)) {
+      if (!workflow.page && (!queryTags || queryTags.length < 1)) {
         return workflow.emit('response');
       }
       /**
