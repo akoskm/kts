@@ -53,7 +53,7 @@ const searchApi = {
           };
         }
       }
-      mongoose.model('Photo').find(query, function (err, doc) {
+      mongoose.model('Photo').find(query).populate('page', 'nameslug').exec(function (err, doc) {
         if (err) {
           logger.instance.error('Error while filtering photos', err);
           workflow.outcome.errors.push('An error occurred');
