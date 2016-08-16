@@ -28,7 +28,7 @@ const searchApi = {
       let tags = [];
       let queryTags = req.query.tags;
       if (!workflow.page && (!queryTags || queryTags.length < 1)) {
-        return workflow.emit('response');
+        return workflow.emit('initialResponse');
       }
       /**
        * TODO
@@ -54,6 +54,21 @@ const searchApi = {
         }
       }
       mongoose.model('Photo').find(query).populate('page', 'nameslug').exec(function (err, doc) {
+        if (err) {
+          logger.instance.error('Error while filtering photos', err);
+          workflow.outcome.errors.push('An error occurred');
+          return workflow.emit('response');
+        }
+        workflow.outcome.result = doc;
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.on('initialResponse', function () {
+      mongoose.model('Photo').find({})
+      .sort('-createdOn')
+      .populate('page', 'nameslug')
+      .exec(function (err, doc) {
         if (err) {
           logger.instance.error('Error while filtering photos', err);
           workflow.outcome.errors.push('An error occurred');
