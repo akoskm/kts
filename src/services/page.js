@@ -163,7 +163,8 @@ const pageApi = {
           filename: file.filename,
           contentType: file.mimetype,
           originalFilename: file.originalname,
-          page: workflow.page._id
+          page: workflow.page._id,
+          createdBy: req.user
         }, function (err, doc) {
           if (err) {
             logger.instance.error('Error while saving image', err);
