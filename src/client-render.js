@@ -11,7 +11,7 @@ import 'react-flexgrid/lib/flexgrid.css';
 import 'bootstrap/less/bootstrap.less';
 import 'react-dropzone-component/styles/filepicker.css';
 import 'react-dropzone-component/example/styles/example.css';
-import 'react-dropzone-component/node_modules/dropzone/dist/dropzone.css';
+import 'dropzone/dist/dropzone.css';
 import 'react-select/dist/react-select.css';
 
 ReactDOM.render(
