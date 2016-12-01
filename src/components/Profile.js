@@ -2,7 +2,7 @@ import React from 'react';
 import UserStore from '../stores/user/UserStore';
 
 import Button from 'react-bootstrap/lib/Button';
-import Input from 'react-bootstrap/lib/Input';
+import FormControl from 'react-bootstrap/lib/FormControl';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
@@ -33,11 +33,11 @@ export default class IndexComponent extends React.Component {
         <Row>
           <Col xs={12} md={6} lg={6}>
             <div>
-              <Input
+              <FormControl
                 type='text'
                 placeholder='Name'
               />
-              <Input
+              <FormControl
                 type='text'
                 placeholder='Email'
               />

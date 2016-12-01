@@ -2,7 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 
 import Button from 'react-bootstrap/lib/Button';
-import Input from 'react-bootstrap/lib/Input';
+import FormControl from 'react-bootstrap/lib/FormControl';
 
 class ActivationComponent extends React.Component {
 
@@ -42,7 +42,7 @@ class ActivationComponent extends React.Component {
         <p>Hi!</p>
         <form className='activationForm' onSubmit={this.handleSubmit}>
           <div>
-            <Input
+            <FormControl
               id='pass'
               placeholder='Password'
               type='password'
@@ -51,7 +51,7 @@ class ActivationComponent extends React.Component {
             />
           </div>
           <div>
-            <Input
+            <FormControl
               id='repass'
               placeholder='Repeat Password'
               type='password'

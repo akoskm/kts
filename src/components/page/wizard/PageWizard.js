@@ -1,15 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
 
-import Button from 'react-bootstrap/lib/Button';
-import Input from 'react-bootstrap/lib/Input';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
-import HelpBlock from 'react-bootstrap/lib/HelpBlock';
-import Row from 'react-bootstrap/lib/Row';
-import Col from 'react-bootstrap/lib/Col';
-import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
-
 import WizardStart from './WizardStart';
 import NameStep from './steps/NameStep';
 import AddressStep from './steps/AddressStep';

@@ -3,8 +3,11 @@ import $ from 'jquery';
 import { Navigation } from 'react-router';
 import { dispatch } from '../stores/user/UserDispatcher';
 
+import HelpBlock from 'react-bootstrap/lib/HelpBlock';
+import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Button from 'react-bootstrap/lib/Button';
-import Input from 'react-bootstrap/lib/Input';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
@@ -64,22 +67,24 @@ class SignInComponent extends React.Component {
       <Row>
         <Col md={3}>
           <form className='registrationForm' onSubmit={this.handleSubmit}>
-            <Input
-              id='email'
-              placeholder='Username'
-              type='text'
-              value={this.state.email}
-              onChange={this.handleEmailChange}
-              errorText={this.state.emailError}
-            />
-            <Input
-              id='passw'
-              placeholder='Password'
-              type='password'
-              value={this.state.passw}
-              onChange={this.handlePassChange}
-              errorText={this.state.passwError}
-            />
+            <FormGroup controlId='email' validationState={!this.state.emailError}>
+              <ControlLabel>Username</ControlLabel>
+              <FormControl
+                type='text'
+                value={this.state.email}
+                onChange={this.handleEmailChange}
+              />
+              <HelpBlock>{this.state.emailError}</HelpBlock>
+            </FormGroup>
+            <FormGroup controlId='passw' validationState={!this.state.passwError}>
+              <ControlLabel>Password</ControlLabel>
+              <FormControl
+                type='password'
+                value={this.state.passw}
+                onChange={this.handlePassChange}
+              />
+              <HelpBlock>{this.state.passwError}</HelpBlock>
+            </FormGroup>
             <Button type='submit' secondary>Log in</Button>
           </form>
         </Col>

@@ -2,7 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 
 import Button from 'react-bootstrap/lib/Button';
-import Input from 'react-bootstrap/lib/Input';
+import FormControl from 'react-bootstrap/lib/FormControl';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
@@ -46,7 +46,7 @@ export default class RegisterComponent extends React.Component {
           <p>Fill out the registration form</p>
           <form className='registrationForm' onSubmit={this.handleSubmit}>
             <div>
-              <Input
+              <FormControl
                 id='email'
                 placeholder='Email'
                 type='text'
@@ -56,7 +56,7 @@ export default class RegisterComponent extends React.Component {
               />
             </div>
             <div>
-              <Input
+              <FormControl
                 id='tel'
                 placeholder='Phone'
                 type='phone'
