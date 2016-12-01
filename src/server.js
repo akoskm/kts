@@ -72,12 +72,15 @@ if (nodeEnv === 'development') {
   app.use(webpackDevMiddleware(compiler, {
     // Dev middleware can't access config, so we provide publicPath
     publicPath: webpackConfig.output.publicPath,
-
+    hot: true,
+    historyApiFallback: true,
     // pretty colored output
     stats: { colors: true }
   }));
 
-  app.use(webpackHotMiddleware(compiler));
+  app.use(webpackHotMiddleware(compiler, {
+    log: console.log
+  }));
 }
 
 let allowCrossDomain = (req, res, next) => {

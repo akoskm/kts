@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router';
+import { AppContainer } from 'react-hot-loader';
 
-import { routes } from './routes';
-
-import createBrowserHistory from 'history/lib/createBrowserHistory';
+import MainComponent from './components/Main';
 
 import './styles/scss/style.scss';
 import 'react-flexgrid/lib/flexgrid.css';
@@ -15,6 +13,20 @@ import 'dropzone/dist/dropzone.css';
 import 'react-select/dist/react-select.css';
 
 ReactDOM.render(
-  <Router routes={routes} history={createBrowserHistory()} />,
+  <AppContainer>
+    <MainComponent />
+  </AppContainer>,
   document.getElementById('app')
 );
+
+if (module.hot) {
+  module.hot.accept('./components/Main', () => {
+    const NextMain = require('./components/Main').default;
+    ReactDOM.render(
+      <AppContainer>
+        <NextMain />
+      </AppContainer>,
+      document.getElementById('app')
+    );
+  });
+}

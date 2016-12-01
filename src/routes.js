@@ -1,5 +1,5 @@
 import AppComponent from './components/App';
-import IndexComponent from './components/Index';
+import WelcomeComponent from './components/Welcome';
 import RegisterComponent from './components/site/Register';
 import ProfileComponent from './components/Profile';
 import ActivationComponent from './components/site/Activation';
@@ -12,7 +12,7 @@ const routes = {
   childRoutes: [
     {
       path: '/',
-      component: IndexComponent
+      component: WelcomeComponent
     },
     {
       path: '/signup',

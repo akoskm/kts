@@ -1,33 +1,17 @@
 const path = require('path');
 const webpack = require('webpack');
-const babelSettings = {
-  presets: ['react', 'es2015'],
-  env: {
-    development: {
-      plugins: [
-        ['react-transform', {
-          transforms: [
-            {
-              transform: 'react-transform-hmr',
-              imports: ['react'],
-              locals: ['module']
-            }
-          ]
-        }]
-      ]
-    }
-  }
-};
+const config = require('./src/config');
 
 module.exports = {
   debug: true,
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
   // eval cuts size to 50%, alternative is cheap-module-eval-source-map
-  devtool: 'cheap-module-eval-source-map',
-  noInfo: true, // set to false to see a list of every file being bundled.
+  devtool: 'eval',
   entry: [
-    `webpack-hot-middleware/client`,
-    './src/client-render.js'
+    'webpack-hot-middleware/client',
+    'react-hot-loader/patch',
+    // 'webpack/hot/dev-server',
+    './src/client-render'
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -38,8 +22,7 @@ module.exports = {
     loaders: [
       {
         test: /\.js?$/,
-        loader: 'babel',
-        query: babelSettings,
+        loaders: ['babel'],
         exclude: /node_modules/,
         include: path.join(__dirname, 'src')
       },
@@ -71,7 +54,7 @@ module.exports = {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ]
