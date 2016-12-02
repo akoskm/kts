@@ -39,8 +39,10 @@ class SignInComponent extends React.Component {
     });
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit(event) {
+    if (event)
+      event.preventDefault();
+
     let emailSet = !!this.state.email;
     let passwSet = !!this.state.passw;
     if (emailSet && passwSet) {
@@ -62,6 +64,8 @@ class SignInComponent extends React.Component {
             errorMessage: data.message
           });
         }
+      }).catch(err => {
+        console.log(err)
       });
     }
     this.setState({
@@ -93,7 +97,7 @@ class SignInComponent extends React.Component {
     return (
       <Row>
         <Col md={3}>
-          <form className='registrationForm'>
+          <form className='registrationForm' onSubmit={this.handleSubmit}>
             <FormGroup controlId='email' validationState={emailErrorClass}>
               <ControlLabel>Username</ControlLabel>
               <FormControl
@@ -113,7 +117,7 @@ class SignInComponent extends React.Component {
               {passwHelp}
             </FormGroup>
             {alert}
-            <Button type='submit' onClick={this.handleSubmit}>Log in</Button>
+            <Button type='submit'>Log in</Button>
           </form>
         </Col>
       </Row>

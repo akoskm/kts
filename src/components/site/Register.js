@@ -31,8 +31,8 @@ export default class RegisterComponent extends React.Component {
     });
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit(event) {
+    event.preventDefault();
     console.log('send to server', this.state);
     request.post('/api/register').send(this.state).done(function (data) {
       console.log('success', data);
