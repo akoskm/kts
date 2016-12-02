@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/lib/Col';
 import CreatePageWizard from './page/wizard/PageWizard';
 import Pages from './page/Pages';
 
-export default class IndexComponent extends React.Component {
+export default class Profile extends React.Component {
 
   constructor(props) {
     super(props);
