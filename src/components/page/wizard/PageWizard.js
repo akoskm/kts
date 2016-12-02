@@ -52,13 +52,16 @@ export default class CreatePageWizard extends React.Component {
   }
 
   submitWizard() {
-    const self = this;
-    console.log('send to server', this.state.page);
-    $.post('/api/pages', this.state.page).done(function (data) {
+    $.post('/api/pages', this.state.page).done((data) => {
       if (data.success) {
-        self.setState({
-          step: self.state.step + 1,
-          url: '/page/' + data.result.nameslug
+        let nameslug = data.result.nameslug;
+        this.setState({
+          step: this.state.step + 1,
+          url: `/page/${nameslug}`
+        });
+        this.props.onWizardComplete({
+          nameslug,
+          name: this.state.page.name
         });
       }
     });
