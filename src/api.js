@@ -38,6 +38,7 @@ export default (app, upload) => {
   /* main router for reactjs components, supporting both client and server side rendering*/
   let sendHtml = function (res, props, context) {
     const markup = renderToString(<RoutingContext {...props} params={{ context }}/>);
+    const state = JSON.stringify(context);
     res.send(`
     <!DOCTYPE html>
     <html>
@@ -47,7 +48,7 @@ export default (app, upload) => {
         <meta name=viewport content="width=device-width, initial-scale=1">
       </head>
       <script>
-        window.APP_STATE = '${context}';
+        window.APP_STATE = ${state};
       </script>
       <body>
         <div id="app">${markup}</div>
@@ -57,7 +58,7 @@ export default (app, upload) => {
     `);
   };
 
-  app.get('*', (req, res, next) => {
+  app.get('*', (req, res) => {
     match({ routes, location: req.url }, (err, redirectLocation, props) => {
       if (err) {
         res.status(500).send(err.message);
