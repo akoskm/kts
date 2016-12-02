@@ -1,9 +1,8 @@
 import React from 'react';
+import request from 'superagent';
 import { dispatch } from '../stores/user/UserDispatcher';
 import UserStore from '../stores/user/UserStore';
 import { Link } from 'react-router';
-
-import $ from 'jquery';
 
 import Nav from 'react-bootstrap/lib/Nav';
 import Navbar from 'react-bootstrap/lib/Navbar';
@@ -30,25 +29,26 @@ class HeaderComponent extends React.Component {
     this.signOut = this.signOut.bind(this);
   }
 
-  goToSignIn(e) {
+  goToSignIn() {
     this.props.history.pushState(null, '/signin');
   }
 
-  goToSignUp(e) {
+  goToSignUp() {
     this.props.history.pushState(null, '/signup');
   }
 
-  goToProfile(e) {
+  goToProfile() {
     this.props.history.pushState(null, '/profile');
   }
 
-  goToLanding(e) {
+  goToLanding() {
     this.props.history.pushState(null, '/');
   }
 
-  signOut(e) {
+  signOut() {
     let self = this;
-    $.post('/api/logout', this.state).done(function (data) {
+    request.post('/api/logout').send(this.state).then(response => {
+      const data = response.body;
       if (data.success) {
         dispatch({
           type: 'user/logout'
@@ -99,8 +99,7 @@ class HeaderComponent extends React.Component {
 }
 
 HeaderComponent.propTypes = {
-  history: React.PropTypes.object.isRequired,
-  username: React.PropTypes.string.isRequired
+  history: React.PropTypes.object.isRequired
 };
 
 export default HeaderComponent;

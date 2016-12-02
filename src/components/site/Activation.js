@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -31,7 +31,7 @@ class ActivationComponent extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     console.log('send to server', this.state);
-    $.post('/api/activate', this.state).done(function (data) {
+    request.post('/api/activate').send(this.state).then(function (data) {
       console.log('success', data);
     });
   }

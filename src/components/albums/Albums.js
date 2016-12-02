@@ -1,8 +1,6 @@
 import React from 'react';
-import $ from 'jquery';
 
 import ListGroup from 'react-bootstrap/lib/ListGroup';
-import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
 
 import Album from './Album';
 
@@ -17,16 +15,6 @@ class Albums extends React.Component {
 
     this.handleAlbumSelect = this.handleAlbumSelect.bind(this);
   }
-
-  // componentDidMount() {
-  //   const url = '/api/pages/' + this.props.nameslug + '/albums';
-  //   this.serverRequest = $.get(url, (response) => {
-  //     let data = response.albums;
-  //     this.setState({
-  //       albums: data
-  //     });
-  //   });
-  // }
 
   handleAlbumSelect(album) {
     let newAlbumState = album;

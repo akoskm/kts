@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -29,18 +29,20 @@ class Page extends React.Component {
 
   componentDidMount() {
     let nameslug = this.props.routeParams.nameslug;
-    this.pageRequest = $.get('/api/pages/' + nameslug, function (response) {
-      let data = response.result;
+    this.pageRequest = request.get(`/api/pages/${nameslug}`);
+    this.pageRequest.then(response => {
+      let data = response.body.result;
       if (response.success) {
         this.setState({
           page: data
         });
       }
-    }.bind(this));
+    });
 
     const url = '/api/pages/' + this.props.routeParams.nameslug + '/albums';
-    this.albumsRequest = $.get(url, (response) => {
-      let data = response.albums;
+    this.albumsRequest = request.get(url);
+    this.albumsRequest.then(response => {
+      let data = response.body.albums;
       this.setState({
         albums: data
       });

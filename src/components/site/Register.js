@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
@@ -34,7 +34,7 @@ export default class RegisterComponent extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     console.log('send to server', this.state);
-    $.post('/api/register', this.state).done(function (data) {
+    request.post('/api/register').send(this.state).done(function (data) {
       console.log('success', data);
     });
   }

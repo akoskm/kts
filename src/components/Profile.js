@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 
 import UserStore from '../stores/user/UserStore';
 
@@ -31,8 +31,9 @@ export default class Profile extends React.Component {
   }
 
   componentDidMount() {
-    this.serverRequest = $.get('/api/pages').done((response) => {
-      let data = response.result;
+    this.serverRequest = request.get('/api/pages');
+    this.serverRequest.then(response => {
+      let data = response.body.result;
       this.setState({
         pages: data
       });

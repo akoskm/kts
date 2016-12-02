@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 
 import Button from 'react-bootstrap/lib/Button';
 import Row from 'react-bootstrap/lib/Row';
@@ -40,17 +40,14 @@ class Photo extends React.Component {
         return tag.value;
       });
     }
-    $.ajax({
-      url: '/api/pages/' + this.props.nameslug + '/photos/' + this.props.photoid,
-      data: request,
-      type: 'PUT',
-      success: (response) => {
+    request.put(`/api/pages/${this.props.nameslug}/photos/${this.props.photoid}`)
+      .send(request)
+      .then(response => {
         console.log(response);
-      }
-    });
+      });
   }
 
-  _onDelete(e) {
+  _onDelete() {
     this.props.onDeleteClick(this.props.photoid, this.props.index);
   }
 

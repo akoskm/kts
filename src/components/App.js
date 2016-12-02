@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
+import request from 'superagent';
 import { Container } from 'flux/utils';
 
-import $ from 'jquery';
 import { Link } from 'react-router';
 
 import Immutable from 'immutable';
@@ -22,7 +22,8 @@ class AppComponent extends React.Component {
 
   componentDidMount() {
     let self = this;
-    $.get('/api/profile').done(function (data) {
+    request.get('/api/profile').then(response => {
+      const data = response.body;
       if (data.success) {
         let user = data.user;
         dispatch({

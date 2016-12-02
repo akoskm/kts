@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -67,21 +67,16 @@ class Toolbar extends React.Component {
     };
     if (!this.state.existing) {
       let url = '/api/pages/' + this.props.nameslug + '/albums';
-      $.post(url, query).done(function (data) {
-        if (data.success) {
+      request.post(url).send(query).then(data => {
+        if (data.body.success) {
           console.log(data);
         }
       });
     } else {
       let url = '/api/pages/' + this.props.nameslug + '/albums/' + this.state.selected;
-      $.ajax({
-        url,
-        data: query,
-        type: 'PUT',
-        success: (response) => {
+      request.put(url).send(query).then( response => {
           console.log(response);
-        }
-      });
+        });
     }
   }
 
@@ -103,25 +98,20 @@ class Toolbar extends React.Component {
     const selectedAlbum = this.props.selectedAlbum;
     if (selected && selected.length > 0) {
       let url = '/api/pages/' + this.props.nameslug + '/albums/' + selectedAlbum._id + '?pull=true';
-      $.ajax({
-        url,
-        data: {
-          photos: selected
-        },
-        type: 'PUT',
-        success: (response) => {
+      request.put(url).send({ photos: selected })
+        .then( response => {
           console.log(response);
-        }
-      });
+        });
     }
   }
 
-  handleScroll() {
-    let scrollTop = event.srcElement.body.scrollTop;
+  handleScroll(e) {
+    let scrollTop = e.srcElement.body.scrollTop;
     if (scrollTop > 220) {
-      $('div.create-album-toolbar').addClass('fixed-top container');
+      // left to do without $
+      // $('div.create-album-toolbar').addClass('fixed-top container');
     } else {
-      $('div.create-album-toolbar').removeClass('fixed-top container');
+      // $('div.create-album-toolbar').removeClass('fixed-top container');
     }
   }
 

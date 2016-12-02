@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 
 import WizardStart from './WizardStart';
 import NameStep from './steps/NameStep';
@@ -52,7 +52,8 @@ export default class CreatePageWizard extends React.Component {
   }
 
   submitWizard() {
-    $.post('/api/pages', this.state.page).done((data) => {
+    request.post('/api/pages').send(this.state.page).then(response => {
+      const data = response.body;
       if (data.success) {
         let nameslug = data.result.nameslug;
         this.setState({

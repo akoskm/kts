@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 import { dispatch } from '../stores/user/UserDispatcher';
 
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
@@ -39,11 +39,13 @@ class SignInComponent extends React.Component {
     });
   }
 
-  handleSubmit() {
+  handleSubmit(e) {
+    e.preventDefault();
     let emailSet = !!this.state.email;
     let passwSet = !!this.state.passw;
     if (emailSet && passwSet) {
-      $.post('/api/login', this.state).done((data) => {
+      request.post('/api/login').send(this.state).then( response => {
+        const data = response.body;
         if (data.success) {
           let user = data.user;
           this.setState({

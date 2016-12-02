@@ -1,5 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
+import request from 'superagent';
 
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
@@ -25,8 +25,9 @@ class Photos extends React.Component {
 
   componentDidMount() {
     const nameslug = this.props.nameslug;
-    this.serverRequest = $.get('/api/pages/' + nameslug + '/photos', (response) => {
-      const data = response.result;
+    this.serverRequest = request.get(`/api/pages/${nameslug}/photos`);
+    this.serverRequest.then( response => {
+      const data = response.body.result;
       if (response.success && data) {
         this.setState({
           photos: data
@@ -47,13 +48,10 @@ class Photos extends React.Component {
     this.setState({
       photos
     });
-    return $.ajax({
-      url: '/api/pages/' + nameslug + '/photos/' + photoid,
-      type: 'DELETE',
-      success(response) {
+    return request.del(`/api/pages/${nameslug}/photos/${photoid}`)
+      .then( response => {
         console.log(response);
-      }
-    });
+      });
   }
 
   onPhotoSelect(photoid) {

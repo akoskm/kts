@@ -35,7 +35,6 @@
     "flux": "^2.1.1",
     "history": "^1.17.0",
     "immutable": "^3.7.6",
-    "jquery": "^2.2.0",
     "log4js": "^0.6.29",
     "mongoose": "^4.4.14",
     "mongoose-url-slugs": "^0.2.1",
@@ -51,7 +50,8 @@
     "react-flexgrid": "^0.7.0",
     "react-router": "^1.0.0",
     "react-select": "^1.0.0-beta13",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "superagent": "^3.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
