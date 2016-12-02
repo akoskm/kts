@@ -61,11 +61,13 @@
     "babel-preset-react": "^6.16.0",
     "babel-tape-runner": "^2.0.1",
     "css-loader": "^0.23.1",
+    "enzyme": "^2.6.0",
     "eslint": "^3.11.1",
     "eslint-plugin-react": "^6.7.0",
     "extend-tape": "^1.2.0",
     "faucet": "0.0.1",
     "file-loader": "^0.8.5",
+    "jest-enzyme": "^2.0.0",
     "less": "^2.6.1",
     "less-loader": "^2.2.2",
     "node-sass": "^3.4.2",
@@ -81,5 +83,13 @@
     "webpack-dev-middleware": "^1.8.4",
     "webpack-dev-server": "^1.16.2",
     "webpack-hot-middleware": "^2.13.2"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "node_modules/jest-enzyme/lib/index.js",
+    "unmockedModulePathPatterns": [
+      "react",
+      "enzyme",
+      "jasmine-enzyme"
+    ]
   }
 }

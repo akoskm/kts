@@ -39,8 +39,7 @@ class SignInComponent extends React.Component {
     });
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit() {
     let emailSet = !!this.state.email;
     let passwSet = !!this.state.passw;
     if (emailSet && passwSet) {
