@@ -3,6 +3,8 @@ import request from 'superagent';
 
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
@@ -32,9 +34,9 @@ export default class RegisterComponent extends React.Component {
   }
 
   handleSubmit(event) {
-    event.preventDefault();
-    console.log('send to server', this.state);
-    request.post('/api/register').send(this.state).done(function (data) {
+    if (event)
+      event.preventDefault();
+    request.post('/api/register').send(this.state).then(function (data) {
       console.log('success', data);
     });
   }
@@ -43,31 +45,25 @@ export default class RegisterComponent extends React.Component {
     return (
       <Row>
         <Col md={3}>
-          <p>Fill out the registration form</p>
+          <p>Please, fill out the registration form</p>
           <form className='registrationForm' onSubmit={this.handleSubmit}>
-            <div>
+            <FormGroup controlId='email'>
+              <ControlLabel>Email</ControlLabel>
               <FormControl
-                id='email'
-                placeholder='Email'
                 type='text'
                 value={this.state.email}
                 onChange={this.handleEmailChange}
-                errorText={this.state.emailError}
               />
-            </div>
-            <div>
+            </FormGroup>
+            <FormGroup controlId='tel'>
+              <ControlLabel>Phone</ControlLabel>
               <FormControl
-                id='tel'
-                placeholder='Phone'
                 type='phone'
                 value={this.state.phone}
                 onChange={this.handlePhoneChange}
-                errorText={this.state.phoneError}
               />
-            </div>
-            <div>
-              <Button type='submit' secondary>Register</Button>
-            </div>
+            </FormGroup>
+            <Button type='submit' secondary>Register</Button>
           </form>
         </Col>
       </Row>
