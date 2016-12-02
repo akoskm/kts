@@ -1,7 +1,6 @@
 import React from 'react';
 import UserStore from '../stores/user/UserStore';
 
-import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
