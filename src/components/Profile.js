@@ -1,7 +1,8 @@
 import React from 'react';
+import $ from 'jquery';
+
 import UserStore from '../stores/user/UserStore';
 
-import FormControl from 'react-bootstrap/lib/FormControl';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
@@ -22,8 +23,31 @@ export default class IndexComponent extends React.Component {
       open: false,
       labelText: 'Sign In',
       username: '',
-      user: currentState.user
+      user: currentState.user,
+      pages: []
     };
+
+    this.handleWizardComplete = this.handleWizardComplete.bind(this);
+  }
+
+  componentDidMount() {
+    this.serverRequest = $.get('/api/pages').done((response) => {
+      let data = response.result;
+      this.setState({
+        pages: data
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.serverRequest.abort();
+  }
+
+  handleWizardComplete(newPage) {
+    let pages = this.state.pages.concat([newPage]);
+    this.setState({
+      pages
+    })
   }
 
   render() {
@@ -31,20 +55,8 @@ export default class IndexComponent extends React.Component {
       <div>
         <Row>
           <Col xs={12} md={6} lg={6}>
-            <div>
-              <FormControl
-                type='text'
-                placeholder='Name'
-              />
-              <FormControl
-                type='text'
-                placeholder='Email'
-              />
-            </div>
-          </Col>
-          <Col xs={12} md={6} lg={6}>
-            <CreatePageWizard />
-            <Pages />
+            <CreatePageWizard onWizardComplete={this.handleWizardComplete}/>
+            <Pages pages={this.state.pages}/>
           </Col>
         </Row>
       </div>
