@@ -4,8 +4,6 @@
 
 import type { Action } from './UserActions';
 
-import $ from 'jquery';
-
 import Immutable from 'immutable';
 import { MapStore } from 'flux/utils';
 import User from './User';

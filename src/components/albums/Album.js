@@ -1,7 +1,5 @@
 import React from 'react';
-import $ from 'jquery';
 
-import ListGroup from 'react-bootstrap/lib/ListGroup';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
 
 class Album extends React.Component {
