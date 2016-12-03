@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Alert from 'react-bootstrap/lib/Alert';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
@@ -36,12 +37,25 @@ export default class RegisterComponent extends React.Component {
   handleSubmit(event) {
     if (event)
       event.preventDefault();
-    request.post('/api/register').send(this.state).then(function (data) {
-      console.log('success', data);
+    request.post('/api/register')
+      .send(this.state)
+      .then(response => {
+        const data = response.body;
+        this.setState({
+          error: data.success,
+          message: data.message
+        })
     });
   }
 
   render() {
+    let alert;
+    let style = this.state.error ? 'danger' : 'success';
+    if (this.state.message) {
+      alert = (<Alert bsStyle={style}>
+        <p>{this.state.message}</p>
+      </Alert>);
+    }
     return (
       <Row>
         <Col md={3}>
@@ -63,6 +77,7 @@ export default class RegisterComponent extends React.Component {
                 onChange={this.handlePhoneChange}
               />
             </FormGroup>
+            {alert}
             <Button type='submit' secondary>Register</Button>
           </form>
         </Col>
