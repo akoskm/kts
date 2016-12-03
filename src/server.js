@@ -50,6 +50,7 @@ const app = express();
 // postgresql connection
 // const db = new Sequelize('postgres://kts:kts@localhost/kts');
 mongoose.connect('mongodb://kts:kts@localhost/kts');
+mongoose.Promise = global.Promise;
 
 // passpost strategy
 const LocalStrategy = require('passport-local').Strategy;
