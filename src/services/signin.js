@@ -1,9 +1,8 @@
 import { logger } from '../util/logger';
-import crypto from 'crypto';
-import bcrypt from 'bcrypt';
 
 export default (req, res) => {
 
+  // asd
   const email = req.body.email;
   const password = req.body.passw;
 
