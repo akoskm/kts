@@ -1,5 +1,7 @@
 import React from 'react';
 import request from 'superagent';
+
+import UserActionTypes from '../stores/user/UserActionTypes';
 import { dispatch } from '../stores/user/UserDispatcher';
 
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
@@ -55,7 +57,7 @@ class SignInComponent extends React.Component {
             status: user.status
           });
           dispatch({
-            type: 'user/login',
+            type: UserActionTypes.LOGIN,
             user
           });
           this.props.history.pushState(null, '/profile');

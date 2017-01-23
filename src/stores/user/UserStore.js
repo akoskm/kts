@@ -1,49 +1,48 @@
-/*
- * @flow
- */
+import { ReduceStore } from 'flux/utils';
 
-import type { Action } from './UserActions';
-
-import Immutable from 'immutable';
-import { MapStore } from 'flux/utils';
 import User from './User';
+import UserActionTypes from './UserActionTypes';
 import UserDispatcher from './UserDispatcher';
 
 // Set up the store, If we didn't care about order we could just use MapStore
-type State = User;
+class UserStore extends ReduceStore {
 
-class UserStore extends MapStore<string, User> {
+  constructor() {
+    super(UserDispatcher);
+  }
 
-  getInitialState(): State {
+  getInitialState() {
+    // return Immutable.OrderedMap();
     return {};
   }
 
-  reduce(state: State, action: Action): State {
+  reduce(state, action) {
     switch (action.type) {
-    case 'user/login':
-      this._user = action.user;
-      return state;
-    case 'user/logout':
-      delete this._user;
-      return state;
-    default:
-      return state;
+      case UserActionTypes.LOGIN:
+        this._user = action.user;
+        return state;
+
+      case UserActionTypes.LOGOUT:
+        delete this._user;
+        return state;
+
+      default:
+        return state;
     }
   }
 
-  getLoggedInUser(): User {
+  getLoggedInUser() {
     if (this._user) {
       return this._user;
     }
     return {};
   }
 
-  isLoggedIn(): boolean {
+  isLoggedIn() {
     return !!this._user;
   }
 }
 
 // Export a singleton instance of the store, could do this some other way if
 // you want to avoid singletons.
-const instance = new UserStore(UserDispatcher);
-export default instance;
+export default new UserStore();

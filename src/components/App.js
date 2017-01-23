@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import Immutable from 'immutable';
 import User from '../stores/user/User';
 import UserStore from '../stores/user/UserStore';
+import UserActionTypes from '../stores/user/UserActionTypes';
 import { dispatch } from '../stores/user/UserDispatcher';
 
 import Header from './Header';
@@ -27,7 +28,7 @@ class AppComponent extends React.Component {
       if (data.success) {
         let user = data.user;
         dispatch({
-          type: 'user/login',
+          type: UserActionTypes.LOGIN,
           user
         });
         self.setState({
