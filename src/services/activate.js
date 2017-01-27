@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import workflowFactory from '../util/workflow';
 import { logger } from '../util/logger';
 
-const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 
 export default (req, res) => {
@@ -66,7 +65,7 @@ export default (req, res) => {
         return workflow.emit('response');
       }
       if (!user) {
-        workflow.outcome.errors.push('User is already active');
+        workflow.outcome.errors.push('Invalid activation link');
         return workflow.emit('response');
       }
       workflow.outcome.result = 'User activation successful';

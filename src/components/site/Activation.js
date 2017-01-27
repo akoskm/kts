@@ -17,7 +17,7 @@ class ActivationComponent extends React.Component {
     this.state = {
       token: this.props.params.token,
       alerts: [],
-      sent: false,
+      success: false,
       pass: '',
       repass: '',
       passSet: '',
@@ -65,11 +65,19 @@ class ActivationComponent extends React.Component {
           errorMessage: 'Passwords don\'t match'
         })
       } else {
-        // request.post('/api/activate').send(this.state).then((data) => {
-        //   this.setState({
-        //     alerts: data.alerts
-        //   });
-        // });
+        request.post('/api/activate').send(this.state).then((data) => {
+          const res = data.body;
+          if (res.errors.length > 0) {
+            this.setState({
+              success: res.success,
+              errorMessage: res.errors[0]
+            })
+          } else {
+            this.setState({
+              success: res.success
+            });
+          }
+        });
       }
     } else {
       this.setState({
@@ -103,7 +111,7 @@ class ActivationComponent extends React.Component {
         <p>{this.state.errorMessage}</p>
       </Alert>);
     } else {
-      if (this.state.sent) {
+      if (this.state.success) {
         alert = successAlert;
         activateButton = '';
       }
