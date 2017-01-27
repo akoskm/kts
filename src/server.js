@@ -26,7 +26,7 @@ import multer  from 'multer';
 const nodeEnv = process.env.NODE_ENV || 'development';
 
 // app configuration
-const config = require('./config').default;
+const config = require('./config');
 const PORT = config.port;
 
 // configure storage for photos
