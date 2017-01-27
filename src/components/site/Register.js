@@ -58,8 +58,8 @@ export default class RegisterComponent extends React.Component {
     }
     return (
       <Row>
-        <Col md={3}>
-          <p>Please, fill out the registration form</p>
+        <Col md={4}>
+          <p>Fill out the registration form and click Sign Up.</p>
           <form className='registrationForm' onSubmit={this.handleSubmit}>
             <FormGroup controlId='email'>
               <ControlLabel>Email</ControlLabel>
@@ -78,7 +78,7 @@ export default class RegisterComponent extends React.Component {
               />
             </FormGroup>
             {alert}
-            <Button type='submit' secondary>Register</Button>
+            <Button type='submit' secondary>Sign Up</Button>
           </form>
         </Col>
       </Row>
