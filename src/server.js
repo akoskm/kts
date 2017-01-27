@@ -3,14 +3,12 @@ import path from 'path';
 import express from 'express';
 import http from 'http';
 import bodyParser from 'body-parser';
-import favicon from 'serve-favicon';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
 import mongoose from 'mongoose';
 import passport from 'passport';
 import csrf from 'csurf';
-import React from 'react';
 import CustomStrategy from './util/passport/strategy-local';
 import { logger } from './util/logger';
 
@@ -48,9 +46,13 @@ const upload = multer({ storage });
 const app = express();
 
 // postgresql connection
-// const db = new Sequelize('postgres://kts:kts@localhost/kts');
-mongoose.connect('mongodb://kts:kts@localhost/kts');
 mongoose.Promise = global.Promise;
+mongoose.connect(config.mongodb.uri).then(() => {
+  console.log('connected to mongoose');
+}).catch((error) => {
+  console.log(error);
+  process.exit(1);
+});
 
 // passpost strategy
 const LocalStrategy = require('passport-local').Strategy;
